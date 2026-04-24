@@ -36,12 +36,45 @@ body.force-light { --bg:#f1f1f1; --ui:rgba(0,0,0,.32); --ui-hi:rgba(0,0,0,.72); 
 html,body { width:100%; height:100%; background:var(--bg); color:var(--ui-hi); overflow:hidden; cursor:none; font-family:var(--mono); transition:background 1.2s ease; }
 
 #cur { position:fixed; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); mix-blend-mode:difference; }
-#cur-h { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); height:1px; width:13px; background:#fff; transition:width .1s; }
-#cur-v { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:1px; height:13px; background:#fff; transition:height .1s; }
+#cur-h { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); height:1px; width:13px; background:#fff; transition:width .18s, opacity .18s; }
+#cur-v { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:1px; height:13px; background:#fff; transition:height .18s, opacity .18s; }
 #cur.pressed #cur-h { width:22px; }
 #cur.pressed #cur-v { height:22px; }
-#cur.hover   #cur-h { width:17px; opacity:.65; }
-#cur.hover   #cur-v { height:17px; opacity:.65; }
+#cur.hover #cur-h { width:9px; opacity:.5; }
+#cur.hover #cur-v { height:9px; opacity:.5; }
+
+/* SVG ring arc — draws CW from 12 o'clock on hover, rewinds CCW on leave */
+#cur-ring {
+  position:absolute;
+  top:50%; left:50%;
+  transform:translate(-50%,-50%) rotate(-90deg);
+  width:28px; height:28px;
+  pointer-events:none;
+  overflow:visible;
+}
+#cur-ring circle {
+  fill:none;
+  stroke:#fff;
+  stroke-width:1;
+  stroke-linecap:round;
+  r:12; cx:14; cy:14;
+  stroke-dasharray:75.4;
+  stroke-dashoffset:75.4;
+  opacity:0;
+  transition:stroke-dashoffset 0.52s cubic-bezier(0.4,0,0.2,1),
+             opacity 0.2s;
+}
+#cur.hover #cur-ring circle {
+  stroke-dashoffset:0;
+  opacity:1;
+}
+#cur.ring-out #cur-ring circle {
+  stroke-dashoffset:-75.4;
+  opacity:0;
+  transition:stroke-dashoffset 0.42s cubic-bezier(0.4,0,0.2,1),
+             opacity 0.3s 0.15s;
+}
+
 .trail { position:fixed; pointer-events:none; z-index:9998; width:2px; height:2px; border-radius:50%; background:rgba(255,255,255,.5); transform:translate(-50%,-50%); mix-blend-mode:difference; }
 
 #fs-mode { position:fixed; inset:0; z-index:1; }
@@ -98,15 +131,40 @@ html,body { width:100%; height:100%; background:var(--bg); color:var(--ui-hi); o
 #name-colon { cursor:none; transition:color .2s; }
 #name-colon:hover { color:var(--ui-hi); }
 
-#intro-body { overflow:hidden; max-height:0; transition:max-height .38s cubic-bezier(.4,0,.2,1),opacity .3s,padding .38s cubic-bezier(.4,0,.2,1); opacity:0; margin-top:.3rem; max-width:320px; }
-#intro-body.open { max-height:320px; opacity:1; padding:.65rem .9rem .7rem; }
-#intro-inner { background:var(--panel-bg); backdrop-filter:blur(12px) saturate(1.3); -webkit-backdrop-filter:blur(12px) saturate(1.3); border-radius:6px; border:1px solid rgba(255,255,255,.07); width:100%; }
-#intro-text { font-size:clamp(.58rem,.78vw,.68rem); line-height:1.82; color:var(--ui-cap); letter-spacing:.03em; }
+#intro-body { overflow:hidden; max-height:0; transition:max-height .38s cubic-bezier(.4,0,.2,1),opacity .3s,padding .38s cubic-bezier(.4,0,.2,1); opacity:0; margin-top:.3rem; max-width:340px; }
+#intro-body.open { max-height:400px; opacity:1; padding:.65rem .9rem .7rem; }
+#intro-inner { background:var(--panel-bg); backdrop-filter:blur(12px) saturate(1.3); -webkit-backdrop-filter:blur(12px) saturate(1.3); border-radius:6px; border:1px solid rgba(255,255,255,.07); width:100%; padding:.8rem 1.1rem .9rem; }
+#intro-text { font-size:clamp(.58rem,.78vw,.68rem); line-height:1.95; color:var(--ui-cap); letter-spacing:.03em; }
+
+/* role switcher — fixed-width slot prevents text reflow */
+#role-slot {
+  display:inline-block;
+  position:relative;
+  height:1.5em;
+  vertical-align:middle;
+  overflow:visible;
+}
+#role-slot .role-word {
+  position:absolute;
+  left:0;
+  top:50%;
+  transform:translateY(calc(-50% + 4px));
+  white-space:nowrap;
+  color:var(--ui-hi);
+  opacity:0;
+  transition:opacity .35s cubic-bezier(.4,0,.2,1), transform .35s cubic-bezier(.4,0,.2,1);
+  pointer-events:none;
+}
+#role-slot .role-word.active {
+  opacity:1;
+  transform:translateY(-50%);
+}
 
 #top-right { display:flex; align-items:center; gap:1.8rem; pointer-events:all; }
 #fs-counter { font-size:clamp(.55rem,.78vw,.68rem); color:var(--ui); letter-spacing:.1em; }
-#theme-btn { background:none; border:none; cursor:none; font-family:var(--mono); font-size:clamp(.5rem,.7vw,.6rem); letter-spacing:.13em; text-transform:uppercase; color:var(--ui); transition:color .25s; padding:0; }
-#theme-btn:hover { color:var(--ui-hi); }
+#theme-btn { background:none; border:none; cursor:none; padding:0; display:flex; align-items:center; justify-content:center; }
+#theme-btn:hover #theme-sq { opacity:.9; }
+#theme-sq { transition:fill .3s, stroke .3s, opacity .3s; opacity:.55; }
 #grid-toggle { background:none; border:none; cursor:none; display:flex; flex-direction:column; gap:2.5px; padding:2px; opacity:.45; transition:opacity .25s; }
 #grid-toggle:hover { opacity:.85; }
 #grid-toggle .row2 { display:flex; gap:2.5px; }
@@ -142,8 +200,8 @@ html,body { width:100%; height:100%; background:var(--bg); color:var(--ui-hi); o
 #work-title-year { font-size:.65em; vertical-align:super; opacity:.55; letter-spacing:.05em; }
 
 #info-body { overflow:hidden; max-height:0; transition:max-height .38s cubic-bezier(.4,0,.2,1),opacity .3s,padding .38s cubic-bezier(.4,0,.2,1); opacity:0; }
-#info-body.open { max-height:260px; opacity:1; padding:.65rem .9rem .7rem; }
-#info-inner { display:inline-block; background:var(--panel-bg); backdrop-filter:blur(12px) saturate(1.3); -webkit-backdrop-filter:blur(12px) saturate(1.3); border-radius:6px; border:1px solid rgba(255,255,255,.07); width:100%; }
+#info-body.open { max-height:260px; opacity:1; padding:.5rem .9rem .65rem; }
+#info-inner { display:inline-block; background:var(--panel-bg); backdrop-filter:blur(12px) saturate(1.3); -webkit-backdrop-filter:blur(12px) saturate(1.3); border-radius:6px; border:1px solid rgba(255,255,255,.07); width:100%; padding:.7rem 1rem .75rem; }
 #caption-text { font-size:clamp(.58rem,.78vw,.68rem); line-height:1.75; color:var(--ui-cap); letter-spacing:.04em; }
 #caption-text a { color:var(--ui-hi); text-decoration:none; border-bottom:1px solid var(--ui); transition:border-color .2s; cursor:none; pointer-events:all; }
 #caption-text a:hover { border-color:var(--ui-hi); }
@@ -197,10 +255,8 @@ html,body { width:100%; height:100%; background:var(--bg); color:var(--ui-hi); o
 .ld:nth-child(3) { animation-delay:.4s; }
 @keyframes lp { 0%,100%{opacity:.2;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
 
-/* click nav zones */
-#click-prev,#click-next { position:fixed; top:0; bottom:0; width:50%; z-index:20; cursor:none; }
-#click-prev { left:0; }
-#click-next { right:0; }
+/* click nav — full screen = advance forward */
+#click-next { position:fixed; inset:0; z-index:20; cursor:none; }
 
 /* hidden canvas for color sampling */
 #color-canvas { display:none; }
@@ -209,11 +265,14 @@ html,body { width:100%; height:100%; background:var(--bg); color:var(--ui-hi); o
 <body>
 
 <canvas id="color-canvas"></canvas>
-<div id="cur"><div id="cur-h"></div><div id="cur-v"></div></div>
+<div id="cur">
+  <div id="cur-h"></div>
+  <div id="cur-v"></div>
+  <svg id="cur-ring" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><circle/></svg>
+</div>
 <div id="load"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>
 <div id="fs-mode"></div>
 <div id="scrim"></div>
-<div id="click-prev"></div>
 <div id="click-next"></div>
 
 <div id="top-bar">
@@ -226,7 +285,7 @@ html,body { width:100%; height:100%; background:var(--bg); color:var(--ui-hi); o
     </div>
     <div id="intro-body">
       <div id="intro-inner">
-        <p id="intro-text">Nio Jin is a multidisciplinary artist and designer in the Communication Design BFA program at Parsons School of Design at The New School. Working across print, digital environments, and audio, their practice treats medium as part of thought rather than boundary. The work moves between rational systems and emotional resonance.</p>
+        <p id="intro-text">is&nbsp;<span id="role-slot"></span>&nbsp;who believed design is not just an output, but a living logic system. Rooted in the intersection of creative technology and systemic storytelling, deconstruct the underlying "code" of perception. Auditing hidden logics and defining sensory rituals.</p>
       </div>
     </div>
   </div>
@@ -241,7 +300,11 @@ html,body { width:100%; height:100%; background:var(--bg); color:var(--ui-hi); o
       <span id="albl">sound off</span>
     </button>
     <div id="fs-counter"></div>
-    <button id="theme-btn">◐</button>
+    <button id="theme-btn" title="cycle theme">
+      <svg id="theme-sq" width="9" height="9" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
+        <rect id="theme-sq-rect" x="0.5" y="0.5" width="8" height="8" rx="0" fill="none" stroke="currentColor" stroke-width="1"/>
+      </svg>
+    </button>
     <button id="grid-toggle">
       <div class="row2"><span></span><span></span><span></span></div>
       <div class="row2"><span></span><span></span><span></span></div>
@@ -296,6 +359,7 @@ const ITEMS = [
 
 let cur=0, muted=true, gridOpen=false, infoOpen=false, introOpen=false;
 let isTransitioning = false;
+let themeMode = 'color'; // 'color' | 'dark' | 'light' — declared early, set properly by applyTheme()
 const slides=[];
 const fsMode=document.getElementById('fs-mode'),scrim=document.getElementById('scrim'),counter=document.getElementById('fs-counter');
 const captionEl=document.getElementById('caption-text');
@@ -314,6 +378,19 @@ const curEl=document.getElementById('cur'),load=document.getElementById('load');
 const colorCanvas=document.getElementById('color-canvas');
 const colorCtx=colorCanvas.getContext('2d',{willReadFrequently:true});
 
+/* cursor ring helpers — hoisted so they're available to all event bindings below */
+let ringOutTimer=null;
+function curHoverIn(){
+  clearTimeout(ringOutTimer);
+  curEl.classList.remove('ring-out');
+  curEl.classList.add('hover');
+}
+function curHoverOut(){
+  curEl.classList.remove('hover');
+  curEl.classList.add('ring-out');
+  ringOutTimer=setTimeout(()=>curEl.classList.remove('ring-out'),500);
+}
+
 gridSiteTitle.textContent=PAGE.siteTitle;
 if(PAGE.backUrl){
   const nt=document.getElementById('name-text');
@@ -327,11 +404,55 @@ const nameTimeEl=document.getElementById('name-time');
 function updateClock(){const n=new Date();nameTimeEl.textContent=String(n.getHours()).padStart(2,'0')+'·'+String(n.getMinutes()).padStart(2,'0')+'·'+String(n.getSeconds()).padStart(2,'0');}
 setInterval(updateClock,1000);updateClock();
 
+/* role switcher — edit ROLES to add/remove identities.
+   Set an:true for words starting with a vowel sound. */
+   const ROLES = [
+  { word:'human',           an:false },
+  { word:'visual designer', an:false },
+  { word:'artist',          an:true  },
+  { word:'analyist',        an:true  },
+  { word:'non-binary',      an:false },
+];
+
+(function initRoles(){
+  const slot = document.getElementById('role-slot');
+  const probe = document.createElement('span');
+  probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-family:var(--mono);font-size:clamp(.58rem,.78vw,.68rem);letter-spacing:.03em;';
+  document.body.appendChild(probe);
+  let maxW = 0;
+  ROLES.forEach(r => {
+    probe.textContent = (r.an ? 'an ' : 'a ') + r.word;
+    maxW = Math.max(maxW, probe.offsetWidth);
+  });
+  document.body.removeChild(probe);
+  slot.style.width = (maxW + 2) + 'px';
+
+  // Build spans — each contains "a/an word" as a unit
+  ROLES.forEach((r, i) => {
+    const sp = document.createElement('span');
+    sp.className = 'role-word' + (i === 0 ? ' active' : '');
+    // article styled slightly dimmer, word brighter
+    sp.innerHTML = `<span style="opacity:.55">${r.an ? 'an' : 'a'}</span> ${r.word}`;
+    slot.appendChild(sp);
+  });
+
+  let roleIdx = 0;
+  const words = slot.querySelectorAll('.role-word');
+
+  function nextRole() {
+    words[roleIdx].classList.remove('active');
+    roleIdx = (roleIdx + 1) % ROLES.length;
+    words[roleIdx].classList.add('active');
+  }
+
+  setInterval(nextRole, 2200);
+})();
+
 /* intro panel */
 const nameColon=document.getElementById('name-colon'),introBody=document.getElementById('intro-body');
 nameColon.addEventListener('click',()=>{introOpen=!introOpen;introBody.classList.toggle('open',introOpen);nameColon.style.color=introOpen?'var(--ui-hi)':'';showUI();});
-nameColon.addEventListener('mouseenter',()=>curEl.classList.add('hover'));
-nameColon.addEventListener('mouseleave',()=>curEl.classList.remove('hover'));
+nameColon.addEventListener('mouseenter',curHoverIn);
+nameColon.addEventListener('mouseleave',curHoverOut);
 
 /* build slides */
 ITEMS.forEach((item,i)=>{
@@ -350,8 +471,8 @@ ITEMS.forEach((item,i)=>{
   else if(item.type==='youtube'){const img=document.createElement('img');img.src=`https://img.youtube.com/vi/${item.youtubeId}/mqdefault.jpg`;img.alt='';img.loading='lazy';cell.appendChild(img);const b=document.createElement('span');b.className='vid-badge';b.textContent='video';cell.appendChild(b);}
   if(item.title){const lbl=document.createElement('div');lbl.className='grid-item-label';lbl.textContent=item.title;cell.appendChild(lbl);}
   cell.addEventListener('click',()=>{closeGrid();goTo(i);});
-  cell.addEventListener('mouseenter',()=>curEl.classList.add('hover'));
-  cell.addEventListener('mouseleave',()=>curEl.classList.remove('hover'));
+  cell.addEventListener('mouseenter',curHoverIn);
+  cell.addEventListener('mouseleave',curHoverOut);
   gridCont.appendChild(cell);
 });
 
@@ -397,15 +518,12 @@ function sampleDominantColor(source){
 }
 
 function applyAdaptiveBg(color){
-  if(!color) return;
-  // Darken significantly for bg — we want ambience, not saturation bleed
-  // Scale down toward dark while keeping hue
+  if(!color || themeMode !== 'color') return;
   const factor=0.22;
   const r=Math.round(color.r*factor);
   const g=Math.round(color.g*factor);
   const b=Math.round(color.b*factor);
   document.body.style.setProperty('--bg',`rgb(${r},${g},${b})`);
-  // Also update scrim color to match
   document.body.style.setProperty('--scrim-clr',`rgba(${r},${g},${b},0.55)`);
 }
 
@@ -437,11 +555,13 @@ function scheduleColorSample(slideEl, item){
 // Periodic re-sample for currently playing video
 function startPeriodicSample(){
   clearTimeout(bgColorTimer);
+  if(themeMode !== 'color') return;
   const item=ITEMS[cur];
   const slide=slides[cur];
   if(item.type==='video' && slide._vid){
     const vid=slide._vid;
     const doSample=()=>{
+      if(themeMode !== 'color') return;
       if(vid.readyState>=2 && !vid.paused){
         const color=sampleDominantColor(vid);
         applyAdaptiveBg(color);
@@ -551,10 +671,10 @@ function linkify(t){return t.replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target
 function openInfo(){infoOpen=true;infoWorkTitle.classList.add('open');infoBody.classList.add('open');}
 function closeInfo(){infoOpen=false;infoWorkTitle.classList.remove('open');infoBody.classList.remove('open');}
 infoWorkTitle.addEventListener('click',()=>infoOpen?closeInfo():openInfo());
-infoWorkTitle.addEventListener('mouseenter',()=>curEl.classList.add('hover'));
-infoWorkTitle.addEventListener('mouseleave',()=>curEl.classList.remove('hover'));
-watchFullLink.addEventListener('mouseenter',()=>curEl.classList.add('hover'));
-watchFullLink.addEventListener('mouseleave',()=>curEl.classList.remove('hover'));
+infoWorkTitle.addEventListener('mouseenter',curHoverIn);
+infoWorkTitle.addEventListener('mouseleave',curHoverOut);
+watchFullLink.addEventListener('mouseenter',curHoverIn);
+watchFullLink.addEventListener('mouseleave',curHoverOut);
 
 function setMuted(m){
   muted=m;
@@ -567,16 +687,59 @@ function setMuted(m){
 function ytMute(iframe,m){try{iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:m?'mute':'unMute',args:[]}),'*');}catch(e){}}
 audioBtn.addEventListener('click',()=>setMuted(!muted));
 
-let themePref=window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark';
-function applyTheme(t){themePref=t;document.body.classList.remove('force-dark','force-light');document.body.classList.add(t==='dark'?'force-dark':'force-light');}
-document.getElementById('theme-btn').addEventListener('click',()=>applyTheme(themePref==='dark'?'light':'dark'));
+// 3 modes: 'color' (adaptive bg, dark text vars), 'dark' (pure black), 'light' (pure white)
+const themeSqRect = document.getElementById('theme-sq-rect');
+const themeSq = document.getElementById('theme-sq');
+
+function applyTheme(mode) {
+  themeMode = mode;
+  document.body.classList.remove('force-dark','force-light','force-color');
+
+  if (mode === 'dark') {
+    document.body.classList.add('force-dark');
+    // lock bg to pure dark, stop adaptive color
+    document.body.style.removeProperty('--bg');
+    document.body.style.removeProperty('--scrim-clr');
+    clearTimeout(bgColorTimer);
+    // square: dark fill, light stroke
+    themeSqRect.style.fill = '#1a1a1a';
+    themeSqRect.style.stroke = 'rgba(255,255,255,0.5)';
+    themeSq.style.color = 'rgba(255,255,255,0.5)';
+  } else if (mode === 'light') {
+    document.body.classList.add('force-light');
+    document.body.style.removeProperty('--bg');
+    document.body.style.removeProperty('--scrim-clr');
+    clearTimeout(bgColorTimer);
+    // square: white fill, dark stroke
+    themeSqRect.style.fill = '#f1f1f1';
+    themeSqRect.style.stroke = 'rgba(0,0,0,0.45)';
+    themeSq.style.color = 'rgba(0,0,0,0.45)';
+  } else {
+    // color mode — adaptive bg, dark text vars (keep force-dark token set)
+    document.body.classList.add('force-dark');
+    // let adaptive bg run
+    startPeriodicSample();
+    // square: gradient-ish fill to signal "color"
+    themeSqRect.style.fill = 'rgba(180,140,255,0.45)';
+    themeSqRect.style.stroke = 'rgba(255,255,255,0.5)';
+    themeSq.style.color = 'rgba(255,255,255,0.5)';
+  }
+}
+
+const THEME_CYCLE = ['color','dark','light'];
+document.getElementById('theme-btn').addEventListener('click',()=>{
+  const next = THEME_CYCLE[(THEME_CYCLE.indexOf(themeMode)+1) % THEME_CYCLE.length];
+  applyTheme(next);
+});
+
+// init
+applyTheme('color');
 
 function openGrid(){gridOpen=true;gridMode.classList.add('on');}
 function closeGrid(){gridOpen=false;gridMode.classList.remove('on');}
 document.getElementById('grid-toggle').addEventListener('click',()=>gridOpen?closeGrid():openGrid());
 document.getElementById('grid-close').addEventListener('click',closeGrid);
 
-document.getElementById('click-prev').addEventListener('click',()=>{if(!gridOpen)goTo(cur-1);});
 document.getElementById('click-next').addEventListener('click',()=>{if(!gridOpen)goTo(cur+1);});
 navL.addEventListener('click',()=>goTo(cur-1));
 navR.addEventListener('click',()=>goTo(cur+1));
@@ -631,9 +794,10 @@ document.addEventListener('mousemove',e=>{
 });
 document.addEventListener('mousedown',()=>curEl.classList.add('pressed'));
 document.addEventListener('mouseup',()=>curEl.classList.remove('pressed'));
+
 document.querySelectorAll('a,button,.grid-item,.nav-arr').forEach(el=>{
-  el.addEventListener('mouseenter',()=>curEl.classList.add('hover'));
-  el.addEventListener('mouseleave',()=>curEl.classList.remove('hover'));
+  el.addEventListener('mouseenter',curHoverIn);
+  el.addEventListener('mouseleave',curHoverOut);
 });
 
 goTo(0);
