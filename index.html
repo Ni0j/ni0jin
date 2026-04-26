@@ -262,6 +262,25 @@ html, body {
   line-height:1.95; color:var(--ui-cap); letter-spacing:.03em;
 }
 
+#bio-toggle {
+  display:inline-block; margin-left:.35em;
+  font-size:.85em; opacity:.55; cursor:none;
+  transition:opacity .2s, transform .22s;
+  user-select:none;
+}
+#bio-toggle:hover { opacity:1; }
+#bio-toggle.open  { transform:rotate(45deg); opacity:1; }
+#bio-more { display:none; }
+#bio-more.open { display:block; }
+.bio-p {
+  text-indent:3em;
+  font-size:clamp(.58rem,.78vw,.68rem);
+  line-height:1.95; 
+  color:var(--ui-cap); 
+  letter-spacing:.03em;
+}
+.bio-p:last-child { margin-bottom:0; }
+
 #role-slot {
   display:inline-block; position:relative;
   height:1.5em; vertical-align:middle; overflow:visible;
@@ -423,7 +442,7 @@ html, body {
 }
 .grid-tag {
   background:none; 
-  /* border:1px solid var(--ui-desc); */
+  border:1px solid var(--ui-desc);
   cursor:none; font-family:var(--mono);
   font-size:clamp(.48rem,.66vw,.58rem); letter-spacing:.13em;
   text-transform:uppercase; color:var(--ui-cap);
@@ -514,7 +533,12 @@ html, body {
     </div>
     <div id="intro-body">
       <div id="intro-inner">
-        <p id="intro-text">is&nbsp;<span id="role-slot"></span>&nbsp;who believed design is not just an output, but a living logic system. Rooted in the intersection of creative technology and systemic storytelling, deconstruct the underlying "code" of perception. Auditing hidden logics and defining sensory rituals.</p>
+        <p id="intro-text">is&nbsp;<span id="role-slot"></span>&nbsp;working at the intersection of creative technology and systemic storytelling.<span id="bio-toggle" onclick="toggleBio()">+</span></p>
+        <span id="bio-more">
+          <p class="bio-p">Their early interest in law stemmed from a fascination with evidence and argumentation, while physics offered a way to think about the underlying structures of reality.</p>
+          <p class="bio-p">Treating design as a living logic system, their work explores how perception, belief, and meaning are constructed, negotiated, and sometimes manipulated.</p>
+          <p class="bio-p">Drawing from interests in religion, divination, and music, they translate abstract systems into tangible forms and experiences.</p>
+        </span>
       </div>
     </div>
   </div>
@@ -667,7 +691,7 @@ const ITEMS = [
   {
     title:    'GALA',
     year:     '2025',
-    tags:     ['vj', 'live','audioreactive','motion'],
+    tags:     ['live','audioreactive','motion'],
     type:     'video',
     src:      './videos/gala.mp4',
     thumb:    './thumbs/gala.jpg',
@@ -689,7 +713,7 @@ const ITEMS = [
   {
     title:      're:',
     year:       '2025',
-    tags:       ['printed medium', 'editorial','magazine'],
+    tags:       ['printed medium', 'editorial'],
     type:       'gallery',
     folderName: 're',
     images:     ['010.jpg','020.jpg','030.jpg','040.mp4'],
@@ -788,15 +812,15 @@ if (PAGE.backUrl) {
 
 // ── ROLE SWITCHER ────────────────────────────────────────────────────────────
 const ROLES = [
-  { word:'designer',        an:false },
-  { word:'visual designer', an:false },
+{ word:'multi-disciplinarydesigner', an:false },
   { word:'artist',          an:true  },
   { word:'human',           an:false },
-  { word:'quick adapter',   an:false },
   { word:'non-binary',      an:false },
 ];
+
+let roleReset = null;
 (function initRoles() {
-  const slot = document.getElementById('role-slot');
+    const slot = document.getElementById('role-slot');
   const probe = document.createElement('span');
   probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-family:var(--mono);font-size:clamp(.58rem,.78vw,.68rem);letter-spacing:.03em;';
   document.body.appendChild(probe);
@@ -817,19 +841,40 @@ const ROLES = [
     roleIdx = (roleIdx+1)%ROLES.length;
     words[roleIdx].classList.add('active');
   }, 2200);
+  roleReset = () => {
+    words[roleIdx].classList.remove('active');
+    roleIdx = 0;
+    words[roleIdx].classList.add('active');
+  };
 })();
+
+
 
 // ── INTRO PANEL ──────────────────────────────────────────────────────────────
 const nameColon = document.getElementById('name-colon');
 const introBody = document.getElementById('intro-body');
+
 nameColon.addEventListener('click', () => {
   introOpen = !introOpen;
   introBody.classList.toggle('open', introOpen);
   nameColon.style.color = introOpen ? 'var(--ui-hi)' : '';
+  if (introOpen && roleReset) roleReset();
+  if (!introOpen) {
+    document.getElementById('bio-toggle').classList.remove('open');
+    document.getElementById('bio-more').classList.remove('open');
+  }
   showUI();
 });
 nameColon.addEventListener('mouseenter', curHoverIn);
 nameColon.addEventListener('mouseleave', curHoverOut);
+
+function toggleBio() {
+  const tog = document.getElementById('bio-toggle');
+  const more = document.getElementById('bio-more');
+  const isOpen = tog.classList.toggle('open');
+  more.classList.toggle('open', isOpen);
+  showUI();
+}
 
 // ── GALLERY ENGINE ───────────────────────────────────────────────────────────
 //
