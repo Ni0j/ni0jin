@@ -249,7 +249,13 @@ html, body {
   transition:max-height .38s cubic-bezier(.4,0,.2,1), opacity .3s, padding .38s cubic-bezier(.4,0,.2,1);
   opacity:0; margin-top:.3rem; max-width:340px;
 }
-#intro-body.open { max-height:400px; opacity:1; padding:.65rem .9rem .7rem; }
+#intro-body.open { 
+  max-height: calc(85vh - 6rem);  /* 留出 top-bar 自身高度 */
+  opacity: 1; 
+  padding: .65rem .9rem .7rem; 
+  overflow-y: auto; 
+  -webkit-overflow-scrolling: touch; 
+}
 #intro-inner {
   background:var(--panel-bg);
   backdrop-filter:blur(12px) saturate(1.3);
@@ -536,7 +542,7 @@ html, body {
         <p id="intro-text">is&nbsp;<span id="role-slot"></span>&nbsp;working across interactive systems, editorial design, and real-time visual environments, currently based in New York City.<span id="bio-toggle" onclick="toggleBio()">+</span></p>
         <span id="bio-more">
           <p class="bio-p">Treating design as a living logic system, their work explores how perception, belief, and meaning are constructed, negotiated, and sometimes manipulated.</p>
-          <p>Their interests span visual communication, computational logic, and temporal or performance-based visual environments. This includes work that extends into live visual performance contexts, where imagery responds to external inputs such as sound, movement, or spatial conditions.</p>
+          <p class="bio-p">Their interests span visual communication, computational logic, and temporal or performance-based visual environments. This includes work that extends into live visual performance contexts, where imagery responds to external inputs such as sound, movement, or spatial conditions.</p>
           <p class="bio-p">
             Alongside visual practice, their research interests include religion and spiritual practice, with 6 years of divination experience.</p>
         </span>
