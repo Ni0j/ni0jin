@@ -13,26 +13,27 @@
   --t: 0.6s cubic-bezier(0.4,0,0.2,1);
   --t-fast: 0.28s cubic-bezier(0.4,0,0.2,1);
   --ui-slide: 0.45s cubic-bezier(0.4,0,0.2,1);
-  --bg: #111314;
+  --bg: #000000;
   --ui: rgba(255,255,255,0.38);
   --ui-hi: rgba(255,255,255,0.82);
-  --ui-cap: rgb(255, 255, 255);
+  --ui-cap: rgb(255,255,255);
   --ui-desc: rgba(255,255,255,0.24);
   --scrim-clr: rgba(0,0,0,0.5);
   --panel-bg: rgba(17,19,20,0.82);
+  --body-font: var(--serif);
+  --grid-line: transparent;
 }
-@media (prefers-color-scheme: light) { :root {
-  --bg: #f1f1f1;
-  --ui: rgba(0,0,0,0.32);
-  --ui-hi: rgba(0,0,0,0.72);
-  --ui-cap: rgba(0,0,0,0.26);
-  --ui-desc: rgba(0,0,0,0.20);
-  --scrim-clr: rgba(190,186,178,0.5);
-  --panel-bg: rgba(241,241,241,0.85);
-}}
-body.force-dark  { --bg:#080808; --ui:rgba(255,255,255,.38); --ui-hi:rgba(255,255,255,.82); --ui-cap:rgba(255, 255, 255, 0.992); --ui-desc:rgba(255,255,255,.24); --scrim-clr:rgba(0,0,0,.5); --panel-bg:rgba(8,8,8,.82); }
-body.force-light { --bg:#f1f1f1; --ui:rgba(0,0,0,.32); --ui-hi:rgba(0,0,0,.72); --ui-cap:rgba(0,0,0,.26); --ui-desc:rgba(0,0,0,.2); --scrim-clr:rgba(190,186,178,.5); --panel-bg:rgba(241,241,241,.85); }
-
+body.behind-mode {
+  --bg: #f5f5f3;
+  --ui: rgba(0,0,0,0.30);
+  --ui-hi: rgba(0,0,0,0.75);
+  --ui-cap: rgba(0,0,0,0.85);
+  --ui-desc: rgba(0,0,0,0.18);
+  --scrim-clr: rgba(200,198,192,0.55);
+  --panel-bg: rgba(245,245,243,0.88);
+  --body-font: var(--mono);
+  --grid-line: rgba(0,0,0,0.07);
+}
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
 html, body {
   width:100%; height:100%;
@@ -40,11 +41,26 @@ html, body {
   color:var(--ui-hi);
   overflow:hidden;
   cursor:none;
-  font-family:var(--mono);
-  transition:background 1.2s ease;
+  font-family:var(--body-font);
+  font-weight:200;
+  transition:background 0.7s ease, color 0.5s ease;
 }
-
-/* ── CURSOR ── */
+body.behind-mode { font-weight: 400; }
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:0;
+  pointer-events:none;
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size:28px 28px;
+  transition:opacity 0.7s ease;
+}
+#glitch-canvas {
+  position:fixed; inset:0; z-index:100;
+  pointer-events:none; mix-blend-mode:screen;
+  opacity:0;
+}
 #cur {
   position:fixed; pointer-events:none; z-index:9999;
   transform:translate(-50%,-50%);
@@ -66,7 +82,6 @@ html, body {
 #cur.pressed #cur-v { height:22px; }
 #cur.hover   #cur-h { width:9px; opacity:.5; }
 #cur.hover   #cur-v { height:9px; opacity:.5; }
-
 #cur-ring {
   position:absolute; top:50%; left:50%;
   transform:translate(-50%,-50%) rotate(-90deg);
@@ -85,8 +100,6 @@ html, body {
   stroke-dashoffset:-75.4; opacity:0;
   transition:stroke-dashoffset 0.42s cubic-bezier(0.4,0,0.2,1), opacity 0.3s 0.15s;
 }
-
-/* ── 1-BIT TRAIL PIXELS ── */
 .trail {
   position:fixed;
   pointer-events:none;
@@ -98,10 +111,7 @@ html, body {
   image-rendering:pixelated;
   will-change:left,top,opacity;
 }
-
-/* ── FULLSCREEN MODE ── */
-#fs-mode { position:fixed; inset:0; z-index:1; overflow:hidden; }
-
+#fs-mode { position:absolute; inset:0; z-index:1; overflow:hidden; }
 .fs-slide {
   position:absolute; inset:0;
   opacity:0;
@@ -112,7 +122,6 @@ html, body {
   overflow:hidden;
 }
 .fs-slide.on { opacity:1; pointer-events:all; }
-
 .fs-slide img {
   max-width:100%; max-height:100vh;
   width:auto; height:auto;
@@ -129,8 +138,6 @@ html, body {
   width:100%; height:100%;
   border:none; pointer-events:none;
 }
-
-/* ── GALLERY FRAME ── */
 .fs-slide.gallery-slide {
   display:flex;
   align-items:center;
@@ -167,8 +174,6 @@ html, body {
   transition:opacity 0.28s cubic-bezier(0.4,0,0.2,1), transform 0.28s cubic-bezier(0.4,0,0.2,1);
   z-index:3;
 }
-
-/* ── GALLERY PROGRESS ── */
 #gallery-prog {
   position:fixed; right:3px; top:0;
   width:2px; height:100vh;
@@ -185,7 +190,6 @@ html, body {
   background:var(--ui); border-radius:1px;
   transition:top .06s linear, height .06s linear;
 }
-
 #gallery-counter {
   position:fixed;
   right:clamp(1.5rem,4vw,3rem); top:50%;
@@ -198,8 +202,6 @@ html, body {
   writing-mode:vertical-rl; text-orientation:mixed;
 }
 #gallery-counter.vis { opacity:1; }
-
-/* ── UI BARS ── */
 #top-bar {
   position:fixed; top:0; left:0; right:0;
   padding:clamp(1.2rem,2.8vw,2rem) clamp(1.5rem,4vw,3rem);
@@ -210,7 +212,6 @@ html, body {
   will-change:transform;
 }
 #top-bar.ui-hidden { transform:translateY(-110%); }
-
 #bot-bar {
   position:fixed; bottom:0; left:0; right:0;
   padding:clamp(1.2rem,2.8vw,2rem) clamp(1.5rem,4vw,3rem);
@@ -222,52 +223,52 @@ html, body {
   will-change:transform;
 }
 #bot-bar.ui-hidden { transform:translateY(110%); }
-
 #prog {
   position:fixed; bottom:0; left:0;
   height:1px; background:var(--ui);
   transition:width var(--t); z-index:51;
 }
-
-/* ── INTRO ── */
 #intro-wrap { display:flex; flex-direction:column; pointer-events:all; }
 #name-block  { display:flex; flex-direction:column; gap:.18rem; cursor:none; }
 #name-time   {
-  font-family:var(--mono); font-size:clamp(.52rem,.72vw,.62rem);
+  font-family:var(--body-font); font-size:clamp(.52rem,.72vw,.62rem);
   color:var(--ui); letter-spacing:.1em;
+  transition:color 0.5s;
 }
 #name-label  {
-  font-family:var(--mono); font-size:clamp(.72rem,1vw,.85rem);
-  font-weight:100; letter-spacing:.01em; text-transform:uppercase;
+  font-family:var(--body-font); font-size:clamp(.72rem,1vw,.85rem);
+  font-weight:inherit; letter-spacing:.01em; text-transform:uppercase;
   color:var(--ui); display:inline-flex; align-items:center; gap:.35em;
+  transition:color 0.5s;
 }
 #name-colon { cursor:none; transition:color .2s; }
 #name-colon:hover { color:var(--ui-hi); }
-
 #intro-body {
   overflow:hidden; max-height:0;
   transition:max-height .38s cubic-bezier(.4,0,.2,1), opacity .3s, padding .38s cubic-bezier(.4,0,.2,1);
   opacity:0; margin-top:.3rem; max-width:340px;
 }
-#intro-body.open { 
-  max-height: calc(85vh - 6rem);  /* 留出 top-bar 自身高度 */
-  opacity: 1; 
-  padding: .65rem .9rem .7rem; 
-  overflow-y: auto; 
-  -webkit-overflow-scrolling: touch; 
+#intro-body.open {
+  max-height: calc(85vh - 6rem);
+  opacity: 1;
+  padding: .65rem .9rem .7rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 #intro-inner {
   background:var(--panel-bg);
   backdrop-filter:blur(12px) saturate(1.3);
   -webkit-backdrop-filter:blur(12px) saturate(1.3);
-  border-radius:6px; border:1px solid rgba(255,255,255,.07);
+  border-radius:6px; border:1px solid rgba(128,128,128,.12);
   width:100%; padding:.8rem 1.1rem .9rem;
+  transition:background 0.5s, border-color 0.5s;
 }
 #intro-text {
   font-size:clamp(.58rem,.78vw,.68rem);
   line-height:1.95; color:var(--ui-cap); letter-spacing:.03em;
+  transition:color 0.5s;
+  font-weight: inherit;
 }
-
 #bio-toggle {
   display:inline-block; margin-left:.35em;
   font-size:.85em; opacity:.55; cursor:none;
@@ -281,12 +282,11 @@ html, body {
 .bio-p {
   text-indent:3em;
   font-size:clamp(.58rem,.78vw,.68rem);
-  line-height:1.95; 
-  color:var(--ui-cap); 
+  line-height:1.95;
+  color:var(--ui-cap);
   letter-spacing:.03em;
 }
 .bio-p:last-child { margin-bottom:0; }
-
 #role-slot {
   display:inline-block; position:relative;
   height:1.5em; vertical-align:middle; overflow:visible;
@@ -300,27 +300,58 @@ html, body {
   pointer-events:none;
 }
 #role-slot .role-word.active { opacity:1; transform:translateY(-50%); }
-
-/* ── TOP RIGHT ── */
 #top-right { display:flex; align-items:center; gap:1.8rem; pointer-events:all; }
-#fs-counter { font-size:clamp(.55rem,.78vw,.68rem); color:var(--ui); letter-spacing:.1em; }
-#theme-btn  {
+#fs-counter { font-size:clamp(.55rem,.78vw,.68rem); color:var(--ui); letter-spacing:.1em; transition:color 0.5s; }
+
+/* ── BEHIND TOGGLE BUTTON ── */
+#behind-btn {
   background:none; border:none; cursor:none; padding:0;
-  display:flex; align-items:center; justify-content:center;
+  display:flex; align-items:center; gap:.5rem;
+  font-family:var(--body-font); font-size:clamp(.48rem,.65vw,.58rem);
+  letter-spacing:.13em; text-transform:uppercase;
+  color:var(--ui); opacity:.55;
+  transition:color .25s, opacity .25s;
 }
-#theme-btn:hover #theme-sq { opacity:.9; }
-#theme-sq { transition:fill .3s, stroke .3s, opacity .3s; opacity:.55; }
+#behind-btn:hover { opacity:1; color:var(--ui-hi); }
+body.behind-mode #behind-btn { opacity:1; color:var(--ui-hi); }
+
+.behind-ico {
+  position:relative; width:12px; height:12px; flex-shrink:0;
+}
+.behind-ico span {
+  position:absolute;
+  width:8px; height:8px;
+  border:1px solid currentColor;
+  transition:transform .3s cubic-bezier(.4,0,.2,1), opacity .3s, top .3s, left .3s;
+}
+.behind-ico span:first-child {
+  top:2px; left:2px;
+  opacity:1;
+}
+.behind-ico span:last-child {
+  top:2px; left:2px;
+  opacity:0;
+}
+body.behind-mode .behind-ico span:first-child {
+  top:0; left:0;
+  opacity:1;
+}
+body.behind-mode .behind-ico span:last-child {
+  bottom:0; right:0; top:auto; left:auto;
+  opacity:.5;
+}
+
 #grid-toggle {
   background:none; border:none; cursor:none;
   display:flex; align-items:center; justify-content:center;
   padding:10px; margin:-8px;
   color:var(--ui-hi); pointer-events:all;
-  opacity:.45; transition:opacity .25s;
+  opacity:.45; transition:opacity .25s, color 0.5s;
 }
 #grid-toggle:hover { opacity:.85; }
 #audio-btn {
   background:none; border:none; cursor:none;
-  font-family:var(--mono); font-size:clamp(.5rem,.7vw,.6rem);
+  font-family:var(--body-font); font-size:clamp(.5rem,.7vw,.6rem);
   letter-spacing:.13em; text-transform:uppercase;
   color:var(--ui); display:flex; align-items:center; gap:.4rem;
   opacity:0; pointer-events:none; transition:opacity .3s, color .25s;
@@ -330,8 +361,6 @@ html, body {
 .aico { width:12px; height:11px; display:flex; align-items:flex-end; gap:2px; }
 .abar { width:2px; background:currentColor; border-radius:1px; transition:height .22s; }
 #audio-btn.muted .abar { height:2px !important; }
-
-/* ── BOT INFO ── */
 #info-wrap { max-width:52%; pointer-events:all; }
 #info-work-title {
   font-size:clamp(.62rem,.88vw,.76rem);
@@ -340,6 +369,7 @@ html, body {
   opacity:0; transition:opacity .3s, color .2s;
   margin-bottom:.3rem;
   display:inline-flex; align-items:baseline; gap:.25em;
+  font-family:var(--body-font);
 }
 #info-work-title.vis  { opacity:1; }
 #info-work-title:hover { color:var(--ui-hi); }
@@ -349,25 +379,35 @@ html, body {
 }
 #info-work-title.open .tab-arrow { transform:rotate(90deg); }
 #work-title-year { font-size:.65em; vertical-align:super; opacity:.55; letter-spacing:.05em; }
-
+#behind-label-badge {
+  display:none;
+  font-size:.5em; letter-spacing:.14em; text-transform:uppercase;
+  background:var(--ui); color:var(--bg);
+  padding:.15em .45em; border-radius:2px; vertical-align:middle;
+  margin-left:.4em; opacity:0;
+  transition:opacity 0.4s;
+}
+body.behind-mode #behind-label-badge { display:inline; opacity:1; }
 #info-body {
   overflow:hidden; max-height:0;
   transition:max-height .38s cubic-bezier(.4,0,.2,1), opacity .3s, padding .38s cubic-bezier(.4,0,.2,1);
   opacity:0;
 }
-#info-body.open { max-height:60vh; opacity:1; padding:.5rem .9rem .65rem;overflow-y:auto; -webkit-overflow-scrolling:touch; }
+#info-body.open { max-height:60vh; opacity:1; padding:.5rem .9rem .65rem; overflow-y:auto; -webkit-overflow-scrolling:touch; }
 #info-inner {
   display:inline-block;
   background:var(--panel-bg);
   backdrop-filter:blur(12px) saturate(1.3);
   -webkit-backdrop-filter:blur(12px) saturate(1.3);
-  border-radius:6px; border:1px solid rgba(255,255,255,.07);
+  border-radius:6px; border:1px solid rgba(128,128,128,.12);
   width:100%; padding:.7rem 1rem .75rem;
+  transition:background 0.5s;
 }
 #caption-text {
-  font-style: var(--serif);
+  font-family:var(--body-font);
   font-size:clamp(.58rem,.78vw,.68rem);
   line-height:1.75; color:var(--ui-cap); letter-spacing:.04em;
+  transition:color 0.5s;
 }
 #caption-text a {
   color:var(--ui-hi); text-decoration:none;
@@ -386,7 +426,6 @@ html, body {
 }
 #watch-full-link:hover { color:var(--ui-hi); border-color:var(--ui); }
 #watch-full-link.vis  { display:block; }
-
 #desc-wrap {
   position:fixed; left:clamp(1.5rem,4vw,3rem); top:50%;
   transform:translateY(-50%); max-width:240px;
@@ -395,7 +434,6 @@ html, body {
 }
 #desc-wrap.on { opacity:1; }
 #desc-text { font-size:clamp(.58rem,.78vw,.68rem); line-height:1.85; color:var(--ui-desc); letter-spacing:.03em; }
-
 #scrim {
   position:fixed; bottom:0; left:0; right:0; height:30vh;
   background:linear-gradient(to top, var(--scrim-clr) 0%, transparent 100%);
@@ -403,102 +441,289 @@ html, body {
   opacity:0; transition:opacity var(--t);
 }
 #scrim.on { opacity:1; }
+#behind-canvas {
+  position:fixed; inset:0; z-index:2;
+  overflow:hidden; pointer-events:none;
+  opacity:0;
+  transition:opacity 0.55s cubic-bezier(0.4,0,0.2,1);
+}
+body.behind-mode #behind-canvas { opacity:1; pointer-events:all; }
+body.behind-mode #fs-mode { opacity:0; pointer-events:none; transition:opacity 0.4s; }
+#fs-mode { transition:opacity 0.4s; }
+.behind-img-wrap {
+  position:absolute;
+  cursor:none;
+  user-select:none;
+  will-change:transform;
+  transition:box-shadow .2s;
+  resize:both;
+  overflow:hidden;
+  min-width:80px; min-height:60px;
+}
+.behind-img-wrap:hover {
+  box-shadow:0 8px 32px rgba(0,0,0,0.18);
+}
+.behind-img-wrap::after {
+  content:'';
+  position:absolute; bottom:3px; right:3px;
+  width:8px; height:8px;
+  background:
+    radial-gradient(circle 1.5px at 2px 2px, var(--ui) 100%, transparent 100%),
+    radial-gradient(circle 1.5px at 6px 6px, var(--ui) 100%, transparent 100%),
+    radial-gradient(circle 1.5px at 6px 2px, var(--ui) 100%, transparent 100%);
+  opacity:0; transition:opacity .2s;
+  pointer-events:none; z-index:5;
+}
+.behind-img-wrap:hover::after { opacity:1; }
+.behind-img-wrap img,
+.behind-img-wrap video {
+  display:block;
+  width:100%; height:100%;
+  object-fit:cover;
+  pointer-events:none;
+  user-select:none; -webkit-user-drag:none;
+  border:1px solid rgba(0,0,0,0.08);
+}
+.behind-img-wrap.dragging {
+  box-shadow:0 16px 48px rgba(0,0,0,0.22);
+  z-index:100 !important;
+  transition:none;
+}
 
-/* ── GRID ── */
+/* ── GRID MODE ── */
+#grid-links {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4em;
+  pointer-events: all;
+}
+#grid-links a {
+  font-family: var(--serif);
+  font-weight: 100;
+  font-size: clamp(.72rem,1vw,.85rem);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ui);
+  text-decoration: none;
+  cursor: none;
+  transition: color .2s;
+  line-height: 1;
+}
+#grid-links a:hover {
+  color: var(--ui-hi);
+}
+.link-sep {
+  color: var(--ui);
+  font-family: var(--serif);
+  font-size: clamp(.72rem,1vw,.85rem);
+  pointer-events: none;
+}
+
+#grid-right {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  pointer-events: all;
+}
+#grid-total,
+#grid-updated {
+  font-family: var(--serif);
+  font-size: clamp(.55rem,.78vw,.68rem);
+  color: var(--ui);
+  letter-spacing: .1em;
+  white-space: nowrap;
+}
+
+#grid-close {
+  background: none;
+  border: none;
+  cursor: none;
+  font-family: var(--serif);
+  font-size: clamp(.52rem,.72vw,.62rem);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--ui);
+  transition: color .25s;
+  pointer-events: all;
+  padding: 0;
+  line-height: 1;
+}
+#grid-close:hover {
+  color: var(--ui-hi);
+}
+
+#grid-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.18rem;
+  pointer-events: all;
+}
+#grid-links a {
+  font-family: var(--serif);
+  font-weight: 100;
+  font-size: clamp(.72rem,1vw,.85rem);
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  color: var(--ui);
+  text-decoration: none;
+  cursor: none;
+  transition: color .2s;
+  line-height: 1;
+}
+#grid-links a:hover {
+  color: var(--ui-hi);
+}
+
+#grid-right {
+  display: flex;
+  align-items: center;
+  gap: 1.8rem;
+  pointer-events: all;
+}
+#grid-total,
+#grid-updated {
+  font-family: var(--serif);
+  font-size: clamp(.55rem,.78vw,.68rem);
+  color: var(--ui);
+  letter-spacing: .1em;
+  white-space: nowrap;
+}
+
 #grid-mode {
   position:fixed; inset:0; z-index:200;
   background:var(--bg);
   opacity:0; pointer-events:none;
   transition:opacity var(--t-fast), background .4s;
   overflow:hidden;
+  display:flex; flex-direction:column;
 }
 #grid-mode.on { opacity:1; pointer-events:all; }
+#grid-mode::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 15vh;
+  background: linear-gradient(to top, var(--scrim-clr) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+}
 
 #grid-header {
-  position:fixed; top:0; left:0; right:0;
+  position:absolute; top:0; left:0; right:0;
   padding:clamp(1.2rem,2.8vw,2rem) clamp(1.5rem,4vw,3rem);
-  display:flex; justify-content:space-between; align-items:baseline;
+  display:flex;
+  justify-content: space-between;
+  align-items:baseline;
   z-index:210; pointer-events:none;
   background:linear-gradient(to bottom, var(--bg) 60%, transparent 100%);
-}
-#grid-site-title {
-  font-family:var(--mono); font-weight:100;
-  font-size:clamp(.72rem,1vw,.85rem); letter-spacing:.01em;
-  text-transform:uppercase; color:var(--ui);
-  text-decoration:none; cursor:none; transition:color .2s;
-  pointer-events:all;
-}
-#grid-site-title:hover { color:var(--ui-hi); }
-#grid-close {
-  background:none; border:none; cursor:none;
-  font-family:var(--mono); font-size:clamp(.52rem,.72vw,.62rem);
-  letter-spacing:.14em; text-transform:uppercase;
-  color:var(--ui); transition:color .25s; pointer-events:all;
-}
-#grid-close:hover { color:var(--ui-hi); }
-
-#grid-body {
-  position:absolute; inset:0; overflow-y:auto;
-  padding:clamp(4.5rem,9vh,6.5rem) clamp(1.5rem,4vw,3rem) clamp(2rem,4vh,3rem);
+  transition:background .4s;
+  gap: 1.5rem;
 }
 
-#grid-tags {
-  display:flex; flex-wrap:wrap; gap:.45rem;
-  margin-bottom:clamp(1.4rem,2.8vh,2rem);
+#grid-scale-control {
+  display: flex;
+  align-items: center;
+  pointer-events: all;
+  align-self: center;
 }
-.grid-tag {
-  background:none; 
-  border:1px solid var(--ui-desc);
-  cursor:none; font-family:var(--mono);
-  font-size:clamp(.48rem,.66vw,.58rem); letter-spacing:.13em;
-  text-transform:uppercase; color:var(--ui-cap);
-  padding:.28em .7em; border-radius:2px;
-  transition:color .2s, border-color .2s, background .2s;
+#grid-scale-label {
+  font-family: var(--serif);
+  font-size: 0.7rem;
+  color: var(--ui);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
-.grid-tag:hover  { color:var(--ui-hi); border-color:var(--ui); }
-.grid-tag.active { color:var(--ui-hi); border-color:var(--ui-hi); background:rgba(255,255,255,.06); }
-
-#grid-items {
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(min(160px,100%), 1fr));
-  gap:12px;
+#grid-scale-slider {
+  -webkit-appearance: none;
+  width: 40px;
+  height: 2px;
+  background: var(--ui);
+  outline: none;
 }
-.grid-item {
-  position:relative; aspect-ratio:1;
-  overflow:hidden; cursor:none; background:#111;
-  transition:opacity .3s;
+#grid-scale-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
+  background: var(--ui-hi);
+  cursor: pointer;
 }
-.grid-item.hidden { display:none; }
-.grid-item img {
-  width:100%; height:100%;
-  object-fit:cover; display:block;
-  filter:grayscale(100%); opacity:.62;
-  transition:filter .35s ease, opacity .25s, transform .35s cubic-bezier(.4,0,.2,1);
-  pointer-events:none; user-select:none; -webkit-user-drag:none;
-}
-.grid-item.current img             { filter:grayscale(0%); opacity:1; }
-.grid-item:not(.current):hover img { filter:grayscale(0%); opacity:1; transform:scale(1.05); }
-
-.grid-item .gallery-badge {
-  position:absolute; bottom:5px; right:5px;
-  font-family:var(--mono); font-size:.42rem; letter-spacing:.1em;
-  color:rgba(255,255,255,.7); background:rgba(0,0,0,.45);
-  padding:.2em .45em; border-radius:1px; pointer-events:none;
+#grid-scale-cols {
+  font-family: var(--serif);
+  font-size: 0.6rem;
+  color: var(--ui);
 }
 
-/* ── LOADER ── */
+#grid-scroll {
+  position:absolute; inset:0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#grid-wall {
+  position: relative;
+  width: 100%;
+  display: block;
+  gap: unset;
+  padding: 0;
+  will-change: auto;
+}
+
+.grid-wall-item {
+  position:relative;
+  overflow:hidden;
+  cursor:none;
+  background:rgba(128,128,128,0.06);
+  break-inside:avoid;
+}
+.grid-wall-item img {
+  display:block;
+  width:100%; height:auto;
+  object-fit:cover;
+  user-select:none; -webkit-user-drag:none;
+  pointer-events:none;
+}
+.grid-wall-item:hover img { opacity:1; }
+.grid-wall-item .gw-label {
+  position:absolute; bottom:0; left:0; right:0;
+  padding:.4rem .55rem;
+  font-family:var(--mono);
+  font-size:clamp(.42rem,.58vw,.52rem);
+  letter-spacing:.1em; text-transform:uppercase;
+  color:rgba(255,255,255,.85);
+  background:linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 100%);
+  opacity:0;
+  transition:opacity .25s;
+  pointer-events:none;
+}
+body.behind-mode .grid-wall-item .gw-label {
+  color:rgba(0,0,0,.75);
+  background:linear-gradient(to top, rgba(255,255,255,.55) 0%, transparent 100%);
+}
+.grid-wall-item:hover .gw-label { opacity: 1; }
+
 #load {
   position:fixed; inset:0; background:var(--bg);
   display:flex; align-items:center; justify-content:center;
   z-index:1000; transition:opacity .5s;
 }
 #load.off { opacity:0; pointer-events:none; }
-.ld { width:4px; height:4px; border-radius:50%; background:var(--ui); animation:lp 1.2s ease-in-out infinite; }
-.ld:nth-child(2) { animation-delay:.2s; margin:0 6px; }
-.ld:nth-child(3) { animation-delay:.4s; }
-@keyframes lp { 0%,100%{opacity:.2;transform:scale(1)} 50%{opacity:1;transform:scale(1.4)} }
+
+.ld {
+  width: 4px;
+  height: 4px;
+  background: var(--ui);
+  animation: squarePulse 1.2s ease-in-out infinite;
+}
+.ld:nth-child(2) { animation-delay: 0.2s; margin: 0 8px; }
+.ld:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes squarePulse {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50%      { opacity: 1;   transform: scale(1.8); }
+}
 
 #click-next { position:fixed; inset:0; z-index:2; cursor:none; }
+body.behind-mode #click-next { pointer-events:none; }
 
 #top-bar button, #bot-bar button, #info-work-title, #name-colon {
   position: relative;
@@ -509,6 +734,18 @@ html, body {
   position: absolute;
   inset: -12px;
 }
+
+#wip-label {
+  position:fixed; top:50%; right:clamp(1.5rem,4vw,3rem);
+  transform:translateY(-50%);
+  font-family:var(--mono); font-size:clamp(.42rem,.58vw,.5rem);
+  letter-spacing:.18em; text-transform:uppercase;
+  color:var(--ui-desc);
+  writing-mode:vertical-rl; text-orientation:mixed;
+  z-index:52; pointer-events:none;
+  opacity:0; transition:opacity 0.5s;
+}
+body.behind-mode #wip-label { opacity:1; }
 </style>
 </head>
 <body>
@@ -518,8 +755,10 @@ html, body {
   <div id="cur-v"></div>
   <svg id="cur-ring" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><circle/></svg>
 </div>
+<canvas id="glitch-canvas"></canvas>
 <div id="load"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>
 <div id="fs-mode"></div>
+<div id="behind-canvas"></div>
 <div id="scrim"></div>
 <div id="click-next"></div>
 
@@ -528,6 +767,7 @@ html, body {
   <div id="gallery-prog-thumb"></div>
 </div>
 <div id="gallery-counter"></div>
+<div id="wip-label">wip · notes</div>
 
 <div id="top-bar">
   <div id="intro-wrap">
@@ -558,11 +798,9 @@ html, body {
       <span id="albl">sound off</span>
     </button>
     <div id="fs-counter"></div>
-    <button id="theme-btn" title="cycle theme">
-      <svg id="theme-sq" width="9" height="9" viewBox="0 0 9 9" xmlns="http://www.w3.org/2000/svg">
-        <rect id="theme-sq-rect" x="0.5" y="0.5" width="8" height="8" rx="0"
-              fill="none" stroke="currentColor" stroke-width="1"/>
-      </svg>
+    <button id="behind-btn" title="toggle behind mode">
+      <div class="behind-ico"><span></span><span></span></div>
+      <span id="behind-lbl">behind</span>
     </button>
     <button id="grid-toggle" aria-label="open grid">
       <svg width="14" height="14" viewBox="0 0 14 14" xmlns="http://www.w3.org/2000/svg"
@@ -588,6 +826,7 @@ html, body {
     <div id="info-work-title">
       <span id="work-title-text"></span>
       <sup id="work-title-year"></sup>
+      <span id="behind-label-badge">behind</span>
       <i class="tab-arrow">›</i>
     </div>
     <div id="info-body">
@@ -603,158 +842,190 @@ html, body {
 
 <div id="grid-mode">
   <div id="grid-header">
-    <a id="grid-site-title" href="./CV_NioJin.pdf" target="_blank" rel="noopener">CV</a>
-    <button id="grid-close">close ✕</button>
+    <span id="grid-links">
+      <a href="./CV_NioJin.pdf" target="_blank" rel="noopener">CV</a>
+      <a href="mailto:niojin.noi@gmail.com">Email</a>
+      <a href="https://www.instagram.com/7ni0jin/" target="_blank" rel="noopener">Instagram</a>
+    </span>
+    <div id="grid-right">
+      <div id="grid-scale-control">
+        <input type="range" id="grid-scale-slider" min="0" max="100" value="100" step="1" title="scale">
+      </div>
+      <span id="grid-total"></span>
+      <span id="grid-updated">05/15/2026</span>
+      <button id="grid-close">✕</button>
+    </div>
   </div>
-  <div id="grid-body">
-    <div id="grid-tags"></div>
-    <div id="grid-items"></div>
+  <div id="grid-scroll">
+    <div id="grid-wall"></div>
   </div>
 </div>
 
 <script>
-const PAGE = {
-  siteTitle: 'Nio Jin',
-  // backUrl:   '../index.html',
-};
+const PAGE = { siteTitle: 'Nio Jin' };
 
 const ITEMS = [
 {
-    title:    'jellyfish that live inside my computer',
-    year:     '2025',
-    tags:     ['motion','interactive'],
-    type:     'video',
-    src:      './videos/jellyfish.mp4',
-    thumb:    './thumbs/jellyfish.jpg',
-    hasAudio: true,
-    caption:  'An evolving interactive interface of jellyfish, inspired by Tamagotchi-like companionship.',
-    fullLink: 'https://youtu.be/0iu3OYLp8xg?si=baJlA7X29XbMNuuG',
+    title:'jellyfish that live inside my computer', year:'2025',
+    tags:['motion','interactive'], type:'video', src:'./videos/jellyfish.mp4',
+    thumb:'./thumbs/jellyfish.gif', 
+    hasAudio:true,
+    caption:'An evolving interactive interface of jellyfish, inspired by Tamagotchi-like companionship.',
+    fullLink:'https://youtu.be/0iu3OYLp8xg?si=baJlA7X29XbMNuuG',
+    behind:{ images:['./behind/jellyfish/sketch_01.jpg','./behind/jellyfish/sketch_02.jpg','./behind/jellyfish/audio_01.jpg'],
+      caption:'All ui and visual elements made thru TouchDesigner, connecte maxMSP to let these jellyfish have voices, jelly fish stock comes from pixaby.' },
   },
+
+  {
+    title:'auto-obiturary', year:'2025',
+    tags:['printed medium','book'], type:'gallery', folderName:'autoO',
+    images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg'],
+    thumb:'./thumbs/autoO.jpg',
+    caption:'A hand-finished artist\'s catalog that narrates the shifting states of mind of musician Boku no Lyric no Boyomi through a curated sequence of his songs and lyrics, leading to the symbolic "death" of his public persona as an act of protest against public expectation. Printed in black-and-white on plain office paper and presented in a simple black box with an accordion-fold scroll-book and 14 cards visualizing the selected songs. Showcased at Offset Book Fair 2025',
+    behind:{ images:['./behind/autoO/010.jpg','./behind/autoO/020.jpg','./behind/autoO/030.jpg','./behind/autoO/040.jpg','./behind/autoO/050.png','./behind/autoO/060.jpg'],
+      caption:'extra mockups...and dummy book i made, was debating the curating sequence, go with chronological or more narrative leaned.' },
+  },
+
 {
-    title:      'auto-obiturary',
-    year:       '2025',
-    tags:       ['printed medium', 'book'],
-    type:       'gallery',
-    folderName: 'autoO',
-    images:     ['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg'],
-    thumb:      './thumbs/autoO.jpg',
-    caption:    'A hand-finished artist’s catalog that narrates the shifting states of mind of musician Boku no Lyric no Boyomi through a curated sequence of his songs and lyrics, leading to the symbolic “death” of his public persona as an act of protest against public expectation. Printed in black-and-white on plain office paper and presented in a simple black box with an accordion-fold scroll-book and 14 cards visualizing the selected songs. Showcased at Offset Book Fair 2025',
+    title:'the one', year:'2026',
+    tags:['motion','interactive'], type:'video', src:'./videos/theOne.mp4',
+    thumb:'./thumbs/theone.gif', 
+    hasAudio:true,
+    caption:'Real-time audio-driven narrative with visual projection, 14\' 38". As traditional religions lose authority, the human search for meaning does not disappear; it relocates. Figures, lifestyles, ideologies, and consumer cultures increasingly take on the role of symbolic centers—offering simplified answers to complex realities. This projection creates a spectacle to envelop the audio. Within this structure, contact does not activate the system; it renders its participants legible to it. Only through connection does one momentarily appear—absorbed into this spectacle, and returned as part of it.',
+    // fullLink:'https://youtu.be/0iu3OYLp8xg?si=baJlA7X29XbMNuuG',
+    behind:{ images:['./behind/theOne/010.jpg','./behind/theOne/020.jpg','./behind/theOne/030.jpg','./behind/theOne/040.jpg','./behind/theOne/050.jpg','./behind/theOne/060.jpg','./behind/theOne/070.jpg'],
+      caption:'WIP — Started from a simple question: what if your desktop had a pet? Early sketches explored bioluminescent motion paths. TouchDesigner particle system driving the swim physics. Still figuring out interaction depth vs. visual clarity.' },
   },
   {
-    title:    'the afternoon we tried suicide',
-    year:     '2025',
-    tags:     ['motion','audioreactive'],
-    type:     'video',
-    src:      './videos/afternoon.mp4',
-    thumb:    './thumbs/afternoon.jpg',
-    hasAudio: true,
-    caption:  'Audio reactive visual experiment featuring The Afternoon We Tried Suicide by I Broke My Robot',
-    fullLink: 'https://youtube.com/shorts/dNpTpbXFv1M?si=vWcowd10r5IpY-Qr',
-  },
-  {
-    title:      'the [Lost H]orizon',
-    year:       '2024',
-    tags:       ['printed medium', 'book'],
-    type:       'gallery',
-    folderName: 'the [Lost H]orizon',
-    images:     ['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg','070.jpg','080.jpg','090.jpg','0100.jpg','0110.jpg','0120.jpg','0140.jpg','0150.jpg','0160.jpg'],
-    thumb:      './thumbs/theLostHorizon1.jpg',
-    caption:    'A series of publications curated and staged as a physical dossier. By recontextualizing external discourses into a structured folder of documents, the design investigates how we question the horizon line and the construction of reality. These printed artifacts serve as a tactile archive of human perception, concealing the cryptic fragments and the five-digit protocol—27182—required to interface with the digital realm.',
-  },
-  {
-    title:    'the [Lost H]orizon',
-    year:     '2024',
-    tags:     ['motion', 'web','interactive'],
-    type:     'video',
-    src:      './videos/theLostH.mp4',
-    thumb:    './thumbs/theLostHorizon.jpg',
-    hasAudio: false,
-    caption:  'A simulated desktop interface designed to process the project’s archival findings into a digital format. The system employs a live camera feed to deconstruct the physical environment into a fluid ASCII stream, visualizing the hypothesis of a data-driven world. Access to this network is restricted, requiring the fundamental constant $e$ (27182) retrieved from the printed documents to unlock the full interaction.',
-    fullLink: 'https://ni0j.github.io/theLostHorizon/',
-  },
-  {
-    title:      'pcell.otf',
-    year:       '2025',
-    tags:       ['typeface', 'motion'],
-    type:       'gallery',
-    folderName: 'pcell',
-    images:     ['010.jpg','020.jpg','030.mp4'],
-    thumb:      './thumbs/pcellS.jpg',
-    caption:    'A structural display typeface inspired by hexagonal geometry and Benzene-ring ambigrams. The specimen tests its industrial, architectural vibe across 2D and 3D mediums, exploring how constructed letterforms define a unique narrative world.',
-  },
-  {
-    title:    'pcell.otf',
-    year:     '2025',
-    tags:     ['typeface', 'interactive','motion'],
-    type:     'video',
-    src:      './videos/pcell.mp4',
-    thumb:    './thumbs/pcell.jpg',
-    hasAudio: true,
-    caption:  'An interactive evolution of the typeface. By translating 2D forms into 3D point clouds via Blender and importing them into TouchDesigner, the project creates a dynamic system where finger tracking modulates the font‘s parameters, turning rigid geometry into a responsive data-driven experience.',
-    // fullLink: 'https://youtu.be/0iu3OYLp8xg',
-  },
-  {
-    title:    'GALA',
-    year:     '2025',
-    tags:     ['live','audioreactive','motion'],
-    type:     'video',
-    src:      './videos/gala.mp4',
-    thumb:    './thumbs/gala.jpg',
-    hasAudio: true,
-    caption:  'A live audio-reactive VJ set performed at Volvox Labs, featuring a visual reinterpretation of GALA by XG.',
-    fullLink: 'https://youtu.be/idwUywYGlKQ?si=v8UhORQ_myDX6oTd',
-  },
-  {
-    title:      're:',
-    year:       '2025',
-    tags:       ['printed medium', 'editorial'],
-    type:       'gallery',
-    folderName: 're',
-    images:     ['010.jpg','020.jpg','030.jpg','040.mp4'],
-    thumb:      './thumbs/re.jpg',
-    caption:    'A school project developed around the prefix "RE:", functioning as an editorial platform to re-examine and reconstruct diverse perspectives.',
-  },
-  {
-    title:      'devilReturn',
-    year:       '2024',
-    tags:       ['printed medium', 'compagin'],
-    type:       'gallery',
-    folderName: 'devilReturn',
-    images:     ['010.jpg','020.jpg','030.jpg'],
-    thumb:      './thumbs/devilReturn.png',
-    caption:    'A campaign centered around Comet P12s return and gathering at Beach 67th Street for stargazing, announced to each member through envelopes containing tickets and posters, along with a short clip accessible via scanning the QR code on the poster.',
-  },
-  {
-    title:    'Zombie',
-    year:     '2026',
-    tags:     ['audioreactive','motion'],
-    type:     'video',
-    src:      './videos/zombie.mp4',
-    thumb:    './thumbs/zombie.jpg',
-    hasAudio: true,
-    caption:  'An audio-reactive visual based on Zombie by Millimax and DRIP TARKO.',
-    fullLink: 'https://www.instagram.com/p/DUcT_f-jpn6/?hl=en',
+    title:'the one', year:'2026',
+    tags:['printed medium','book'], type:'gallery', folderName:'theOne',
+    images:['010.jpg','020.jpg','030.jpg',],
+    thumb:'./thumbs/theOneE.jpg',
+    caption:'As traditional religions lose authority, the human search for meaning does not disappear; it relocates. Figures, lifestyles, ideologies, and consumer cultures increasingly take on the role of symbolic centers—offering simplified answers to complex realities. The book works as an exposure of the spectacle. It translates the moving projection into fixed ink, and the audio into a transcript. This project is a depiction of contemporary preaching.',
+    behind:{ images:['./behind/theOneB/010.png','./behind/theOneB/030.png','./behind/theOneB/040.png','./behind/theOneB/060.jpg',],
+      caption:'initially went with accordian fold to match the circle after it fully opened, but book ring binding also worked, and the different paper stock would work visually more appealing on the book ring binding. The image making one was abandoned in the final execution because of the fonts it used; it does not fit in the system i had, but i really love it, so i used it as the flyer later.' },
   },
 
+  {
+    title:'the [Lost H]orizon', year:'2024',
+    tags:['printed medium','book'], type:'gallery', folderName:'the [Lost H]orizon',
+    images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg','070.jpg','080.jpg','090.jpg','0100.jpg','0110.jpg','0120.jpg','0140.jpg','0150.jpg','0160.jpg'],
+    thumb:'./thumbs/theLostHorizon1.jpg',
+    caption:'A series of publications curated and staged as a physical dossier. By recontextualizing external discourses into a structured folder of documents, the design investigates how we question the horizon line and the construction of reality. These printed artifacts serve as a tactile archive of human perception, concealing the cryptic fragments and the five-digit protocol—27182—required to interface with the digital realm.',
+    behind:{ images:['./behind/lostH/010.jpg','./behind/lostH/020.jpg','./behind/lostH/030.jpg','./behind/lostH/040.jpg','./behind/lostH/050.jpg','./behind/lostH/060.jpg','./behind/lostH/070.jpg','./behind/lostH/080.png',],
+      caption:'definitely trained my ability working in parallel with 5 publications and a website at the same time..' },
+  },
+  {
+    title:'the [Lost H]orizon', year:'2024',
+    tags:['motion','web','interactive'], type:'video', src:'./videos/theLostH.mp4',
+    thumb:'./thumbs/theLostHorizon.gif', 
+    hasAudio:false,
+    caption:'A simulated desktop interface designed to process the project\'s archival findings into a digital format. The system employs a live camera feed to deconstruct the physical environment into a fluid ASCII stream, visualizing the hypothesis of a data-driven world. Access to this network is restricted, requiring the fundamental constant $e$ (27182) retrieved from the printed documents to unlock the full interaction.',
+    fullLink:'https://ni0j.github.io/theLostHorizon/',
+    behind:{ images:['./behind/lostHW/010.jpg','./behind/lostHW/020.jpg','./behind/lostHW/030.jpg','./behind/lostHW/040.jpg','./behind/lostHW/050.jpg','./behind/lostHW/060.jpg','./behind/lostHW/070.jpg','./behind/lostHW/080.jpg','./behind/lostHW/090.webp','./behind/lostHW/0100.png','./behind/lostHW/0110.jpg','./behind/lostHW/0120.png',],
+      caption:'ASCII camera feed was the core idea and the most time consuming part to code it out.' },
+  },
+  {
+    title:'pcell.otf', year:'2025',
+    tags:['typeface','motion'], type:'gallery', folderName:'pcell',
+    images:['010.jpg','020.jpg','030.mp4'],
+    thumb:'./thumbs/pcellS.jpg',
+    caption:'A structural display typeface inspired by hexagonal geometry and Benzene-ring ambigrams. The specimen tests its industrial, architectural vibe across 2D and 3D mediums, exploring how constructed letterforms define a unique narrative world.',
+    behind:{ images:['./behind/pcell/010.png', './behind/pcell/020.png', './behind/pcell/030.png','./behind/pcell/040.png',],
+      caption:'Really appreciate the constructive feedback during the process and book resources from my Typeface professor, Tobias Holzmann' },
+  },
+  {
+    title:'pcell.otf', year:'2025',
+    tags:['typeface','interactive','motion'], type:'video', src:'./videos/pcell.mp4',
+    thumb:'./thumbs/pcell.gif', 
+    hasAudio:true,
+    caption:'An interactive evolution of the typeface. By translating 2D forms into 3D point clouds via Blender and importing them into TouchDesigner, the project creates a dynamic system where finger tracking modulates the font\'s parameters, turning rigid geometry into a responsive data-driven experience.',
+    behind:{ images:['./behind/pcellI/010.png', './behind/pcellI/020.png', './behind/pcellI/030.png',],
+      caption:'hade fun exploring blender more, convert type to 3d in blender >> then export point cloud file >> touchdesigner >> mediapipe >> finger-tracking' },
+  },
+  {
+    title:'GALA', year:'2025',
+    tags:['live','audioreactive','motion'], type:'video', src:'./videos/gala.mp4',
+    thumb:'./thumbs/gala.gif', 
+    hasAudio:true,
+    caption:'A live audio-reactive VJ set performed at Volvox Labs, featuring a visual reinterpretation of GALA by XG.',
+    fullLink:'https://youtu.be/idwUywYGlKQ?si=v8UhORQ_myDX6oTd',
+    behind:{ images:['./behind/gala/010.png','./behind/gala/020.jpg','./behind/gala/030.jpg','./behind/gala/040.jpg','./behind/gala/050.jpg'],
+      caption:'Using an electronic piano to control midi input and control visuals was a lightbulb in my head, and i’m glad it went well. if i had more time could develop more. I wanted to actually perform at the same time playing the piano, prob will play with it in future projects. (Bringing my keyboard to Brooklyn was actually the most physically exhausting part of this project' },
+  },
+  {
+    title:'re:', year:'2025',
+    tags:['printed medium','editorial'], type:'gallery', folderName:'re',
+    images:['010.jpg','020.jpg','030.jpg','040.mp4'],
+     thumb:'./thumbs/re.jpg',
+    caption:'A school project developed around the prefix "RE:", functioning as an editorial platform to re-examine and reconstruct diverse perspectives.',
+    behind:{ images:['./behind/re/010.png','./behind/re/020.png','./behind/re/030.png','./behind/re/040.png','./behind/re/050.png','./behind/re/060.png','./behind/re/070.png','./behind/re/080.png','./behind/re/090.png','./behind/re/0100.png','./behind/re/0110.png','./behind/re/0120.png',],
+      caption:'Selected article that has its own kind of re-doing. Used organic motion to show the reprocess, but aesthetically, I want something more digital and analog.' },
+  },
+  {
+    title:'devilReturn', year:'2024',
+    tags:['printed medium','compagin'], type:'gallery', folderName:'devilReturn',
+    images:['010.jpg','020.jpg','030.jpg'],
+    thumb:'./thumbs/devilReturn.png',
+    caption:'A campaign centered around Comet P12\'s return and gathering at Beach 67th Street for stargazing, announced to each member through envelopes containing tickets and posters, along with a short clip accessible via scanning the QR code on the poster.',
+    behind:{ images:['./behind/devilReturn/010.png','./behind/devilReturn/020.png','./behind/devilReturn/030.png','./behind/devilReturn/040.png',],
+      caption:'At that time i saw people posting about Devil Comet returning, and that gave me the inspiration to do something with black and red. But I want to lose the presence of the word devil, and not too stereotypical-gothic, so i picked a dotted font specifically' },
+  },
+  {
+    title:'the afternoon we tried suicide', year:'2025',
+    tags:['motion','audioreactive'], type:'video', src:'./videos/afternoon.mp4',
+    thumb:'./thumbs/afternoon.gif', 
+    hasAudio:true,
+    hideInFullscreen: true,
+    caption:'Audio reactive visual experiment featuring The Afternoon We Tried Suicide by I Broke My Robot',
+    fullLink:'https://youtube.com/shorts/dNpTpbXFv1M?si=vWcowd10r5IpY-Qr',
+    // behind:{ images:['./behind/afternoon/dummy_01.jpg','./behind/afternoon/ref_01.jpg'],
+    //   caption:'inspired by tim_rodenbroeker\'s work posted on instagram: https://www.instagram.com/p/C7jlO3yMBVB/' },
+  },
+  {
+    title:'Zombie', year:'2026',
+    tags:['audioreactive','motion'], type:'video', src:'./videos/zombie.mp4',
+    thumb:'./thumbs/zombie.gif', 
+    hasAudio:true,
+    hideInFullscreen: true,
+    caption:'An audio-reactive visual based on Zombie by Millimax and DRIP TARKO.',
+    fullLink:'https://www.instagram.com/p/DUcT_f-jpn6/?hl=en',
+  },
 
+  {
+    title:'KOCAINE CASTLE', year:'2026',
+    type:'video',
+    src:'./videos/kc2.mp4',
+    thumb:'./thumbs/kc2.gif',
+    hideInFullscreen: true,
+    caption:''
+  },
+  {
+    title:'52.05718° N, 4.40660° E', year:'2026',
+    type:'image',
+    src:'./images/photoetching1.jpg',
+    thumb:'./thumbs/photoetching1.jpg',
+    hideInFullscreen: true,
+    caption:'Photo Etching, Rives BFK Grey, 5.5 x 7.25 inch. Photography by Nio Jin in Den Haag'
+  },
 ];
 
-// ── STATE ──────────────────────────────────────────────────────────────────
+// ── STATE ──
 let cur = 0, muted = true, gridOpen = false, infoOpen = false, introOpen = false;
 let isTransitioning = false;
-let themeMode = 'dark';
+let behindMode = false;
 
-// gallery state — event-driven, not setInterval
+// gallery state
 let galleryActive = false;
 let galleryIdx    = 0;
-let galleryEls    = [];   // img / video elements in current gallery frame
-let galleryTimer  = null; // setTimeout handle for images
-
-const GALLERY_INTERVAL = 1500; // ms — for images only; videos wait for 'ended'
+let galleryEls    = [];
+let galleryTimer  = null;
+const GALLERY_INTERVAL = 1500;
 
 const slides = [];
 
 const fsMode           = document.getElementById('fs-mode');
+const behindCanvas     = document.getElementById('behind-canvas');
 const scrim            = document.getElementById('scrim');
 const counter          = document.getElementById('fs-counter');
 const captionEl        = document.getElementById('caption-text');
@@ -776,8 +1047,10 @@ const load             = document.getElementById('load');
 const galleryProg      = document.getElementById('gallery-prog');
 const galleryProgThumb = document.getElementById('gallery-prog-thumb');
 const galleryCounter   = document.getElementById('gallery-counter');
+const behindBtn        = document.getElementById('behind-btn');
+const behindLbl        = document.getElementById('behind-lbl');
 
-// ── DWELL TIMER ─────────────────────────────────────────────────────────────
+// ── DWELL TIMER ──
 {
   const nameTimeEl = document.getElementById('name-time');
   let dwellMs = 0, segStart = null;
@@ -798,7 +1071,7 @@ const galleryCounter   = document.getElementById('gallery-counter');
   nameTimeEl.textContent = fmtDwell(0);
 }
 
-// ── CURSOR RING ──────────────────────────────────────────────────────────────
+// ── CURSOR RING ──
 let ringOutTimer = null;
 function curHoverIn()  {
   clearTimeout(ringOutTimer); curEl.classList.remove('ring-out'); curEl.classList.add('hover');
@@ -808,22 +1081,15 @@ function curHoverOut() {
   ringOutTimer = setTimeout(() => curEl.classList.remove('ring-out'), 500);
 }
 
-if (PAGE.backUrl) {
-  const nt = document.getElementById('name-text');
-  nt.style.pointerEvents='all'; nt.style.cursor='none';
-  nt.addEventListener('click', () => { window.location.href = PAGE.backUrl; });
-}
-
-// ── ROLE SWITCHER ────────────────────────────────────────────────────────────
+// ── ROLE SWITCHER ──
 const ROLES = [
-{ word:'designer', an:false },
-  { word:'artist',          an:true  },
-  { word:'human',           an:false },
+  { word:'designer', an:false },
+  { word:'artist',   an:true  },
+  { word:'human',    an:false },
 ];
-
 let roleReset = null;
 (function initRoles() {
-    const slot = document.getElementById('role-slot');
+  const slot = document.getElementById('role-slot');
   const probe = document.createElement('span');
   probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;font-family:var(--mono);font-size:clamp(.58rem,.78vw,.68rem);letter-spacing:.03em;';
   document.body.appendChild(probe);
@@ -851,12 +1117,9 @@ let roleReset = null;
   };
 })();
 
-
-
-// ── INTRO PANEL ──────────────────────────────────────────────────────────────
+// ── INTRO PANEL ──
 const nameColon = document.getElementById('name-colon');
 const introBody = document.getElementById('intro-body');
-
 nameColon.addEventListener('click', () => {
   introOpen = !introOpen;
   introBody.classList.toggle('open', introOpen);
@@ -879,13 +1142,7 @@ function toggleBio() {
   showUI();
 }
 
-// ── GALLERY ENGINE ───────────────────────────────────────────────────────────
-//
-// Images  → wait GALLERY_INTERVAL ms, then advance
-// Videos  → play to natural end ('ended'), then advance
-// End of last item → loop back to index 0 (no jump to next ITEM)
-// Click   → immediately step to next item (wraps at end)
-
+// ── GALLERY ENGINE ──
 function isGallery(idx) { return ITEMS[idx] && ITEMS[idx].type === 'gallery'; }
 
 function stopGallery() {
@@ -895,12 +1152,10 @@ function stopGallery() {
     el.classList.remove('gf-active');
     if (el.tagName === 'VIDEO') {
       if (el._endedCb) { el.removeEventListener('ended', el._endedCb); el._endedCb = null; }
-      el.pause();
-      el.currentTime = 0;
+      el.pause(); el.currentTime = 0;
     }
   });
-  galleryEls = [];
-  galleryIdx = 0;
+  galleryEls = []; galleryIdx = 0;
   galleryProg.classList.remove('vis');
   galleryCounter.classList.remove('vis');
 }
@@ -922,16 +1177,12 @@ function galleryDeactivateCurrent() {
   if (!el) return;
   if (el.tagName === 'VIDEO') {
     if (el._endedCb) { el.removeEventListener('ended', el._endedCb); el._endedCb = null; }
-    el.pause();
-    el.currentTime = 0;
-    el.classList.remove('gf-active');
-    el.classList.remove('gf-exit');
+    el.pause(); el.currentTime = 0;
+    el.classList.remove('gf-active','gf-exit');
   } else {
-    // 图片：加 gf-exit 触发退出动画，动画结束后清掉
     el.classList.remove('gf-active');
     el.classList.add('gf-exit');
-    const onDone = () => { el.classList.remove('gf-exit'); };
-    el.addEventListener('transitionend', onDone, { once: true });
+    el.addEventListener('transitionend', () => el.classList.remove('gf-exit'), { once:true });
   }
   if (galleryTimer) { clearTimeout(galleryTimer); galleryTimer = null; }
 }
@@ -940,28 +1191,25 @@ function galleryActivateCurrent() {
   if (!galleryActive) return;
   const total = galleryEls.length;
   const el    = galleryEls[galleryIdx];
-
   el.classList.add('gf-active');
   updateGalleryUI(total);
-
   if (el.tagName === 'VIDEO') {
     el.currentTime = 0;
-    el.play().catch(() => {});
+    el.play().catch(()=>{});
     const cb = () => {
       if (!galleryActive) return;
       el._endedCb = null;
       galleryDeactivateCurrent();
-      galleryIdx = (galleryIdx + 1) % total; // loop
+      galleryIdx = (galleryIdx + 1) % total;
       galleryActivateCurrent();
     };
     el._endedCb = cb;
-    el.addEventListener('ended', cb, { once: true });
+    el.addEventListener('ended', cb, { once:true });
   } else {
-    if (galleryTimer) { clearTimeout(galleryTimer); galleryTimer = null; }
     galleryTimer = setTimeout(() => {
       if (!galleryActive) return;
       galleryDeactivateCurrent();
-      galleryIdx = (galleryIdx + 1) % total; // loop
+      galleryIdx = (galleryIdx + 1) % total;
       galleryActivateCurrent();
     }, GALLERY_INTERVAL);
   }
@@ -972,12 +1220,10 @@ function startGallery(slide) {
   if (!frame) return;
   galleryEls = Array.from(frame.querySelectorAll('img, video'));
   if (!galleryEls.length) return;
-  galleryIdx    = 0;
-  galleryActive = true;
+  galleryIdx = 0; galleryActive = true;
   galleryActivateCurrent();
 }
 
-// Manual step on click — jump to next, wrap at end
 function galleryStep() {
   if (!galleryActive || !galleryEls.length) return;
   const total = galleryEls.length;
@@ -986,29 +1232,206 @@ function galleryStep() {
   galleryActivateCurrent();
 }
 
-// ── BUILD SLIDES ─────────────────────────────────────────────────────────────
+// ── BEHIND MODE — FLOATING IMAGES ──
+
+const behindContainers = {};
+const BEHIND_MAX_W = 380;
+const BEHIND_MAX_H = 380;
+
+function rnd(min, max) { return min + Math.random()*(max-min); }
+
+
+function placeWrapScattered(wrap, natW, natH, i, total) {
+  const vw = window.innerWidth, vh = window.innerHeight;
+  const margin = 48;
+
+  let w = natW, h = natH;
+  if (w > BEHIND_MAX_W) { h = Math.round(h * BEHIND_MAX_W / w); w = BEHIND_MAX_W; }
+  if (h > BEHIND_MAX_H) { w = Math.round(w * BEHIND_MAX_H / h); h = BEHIND_MAX_H; }
+
+
+  const cols = Math.ceil(Math.sqrt(total * (vw / vh)));
+  const rows = Math.ceil(total / cols);
+
+  const cellW = (vw - margin * 2) / cols;
+  const cellH = (vh - margin * 2) / rows;
+
+  const col = i % cols;
+  const row = Math.floor(i / cols);
+
+  // Base position: center of this cell
+  const baseCX = margin + col * cellW + cellW / 2;
+  const baseCY = margin + row * cellH + cellH / 2;
+
+  // Add strong jitter — up to 40% of cell size in each direction
+  const jitterX = rnd(-cellW * 0.38, cellW * 0.38);
+  const jitterY = rnd(-cellH * 0.38, cellH * 0.38);
+
+  let x = baseCX + jitterX - w / 2;
+  let y = baseCY + jitterY - h / 2;
+
+  // Clamp to viewport
+  x = Math.max(margin, Math.min(vw - w - margin, x));
+  y = Math.max(margin, Math.min(vh - h - margin, y));
+
+  wrap.style.width     = w + 'px';
+  wrap.style.height    = h + 'px';
+  wrap.style.left      = x + 'px';
+  wrap.style.top       = y + 'px';
+  wrap.style.transform = 'none';
+  wrap.style.zIndex    = 3 + i;
+  wrap.style.pointerEvents = 'all';
+}
+
+function buildBehindContainer(itemIdx) {
+  const item = ITEMS[itemIdx];
+  if (!item || !item.behind) return null;
+  const { images } = item.behind;
+  if (!images || !images.length) return null;
+
+  const container = document.createElement('div');
+  container.style.cssText = 'position:absolute;inset:0;pointer-events:none;';
+
+  const total = images.length;
+
+  images.forEach((src, i) => {
+    const wrap = document.createElement('div');
+    wrap.className = 'behind-img-wrap';
+    wrap.style.cssText = 'position:absolute; opacity:0; pointer-events:none;';
+
+    const ext = src.split('.').pop().toLowerCase();
+    let media;
+
+    if (['mp4','webm','mov'].includes(ext)) {
+      media = document.createElement('video');
+      media.src = src; media.loop = true; media.muted = true;
+      media.playsInline = true; media.preload = 'metadata';
+      media.addEventListener('loadedmetadata', () => {
+        placeWrapScattered(wrap, media.videoWidth||320, media.videoHeight||240, i, total);
+        wrap.style.opacity = '1';
+        wrap.style.pointerEvents = 'all';
+        wrap.style.transition = 'opacity 0.35s';
+        media.play().catch(()=>{});
+      }, { once: true });
+    } else {
+      media = document.createElement('img');
+      media.src = src; media.alt = ''; media.draggable = false;
+      const doPlace = () => {
+        placeWrapScattered(wrap, media.naturalWidth||300, media.naturalHeight||200, i, total);
+        wrap.style.opacity = '1';
+        wrap.style.pointerEvents = 'all';
+        wrap.style.transition = 'opacity 0.35s';
+      };
+      if (media.complete && media.naturalWidth) doPlace();
+      else {
+        media.addEventListener('load',  doPlace, { once: true });
+        media.addEventListener('error', () => {
+          placeWrapScattered(wrap, 240, 180, i, total);
+          wrap.style.opacity = '0.35';
+          wrap.style.pointerEvents = 'all';
+        }, { once: true });
+      }
+    }
+
+    wrap.appendChild(media);
+    makeDraggable(wrap);
+    container.appendChild(wrap);
+  });
+
+  behindCanvas.appendChild(container);
+  container.style.display = 'none';
+  behindContainers[itemIdx] = container;
+  return container;
+}
+
+function makeDraggable(el) {
+  let startX, startY, startLeft, startTop, isDragging = false;
+  el.addEventListener('mousedown', e => {
+    e.stopPropagation();
+    isDragging = true; el.classList.add('dragging');
+    startX = e.clientX; startY = e.clientY;
+    startLeft = parseInt(el.style.left)||0; startTop = parseInt(el.style.top)||0;
+    const siblings = el.parentElement.querySelectorAll('.behind-img-wrap');
+    let maxZ = 0;
+    siblings.forEach(s => { maxZ = Math.max(maxZ, parseInt(s.style.zIndex)||0); });
+    el.style.zIndex = maxZ + 1;
+  });
+  document.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    el.style.left = (startLeft + e.clientX - startX) + 'px';
+    el.style.top  = (startTop  + e.clientY - startY) + 'px';
+  });
+  document.addEventListener('mouseup', () => {
+    if (isDragging) { isDragging = false; el.classList.remove('dragging'); }
+  });
+  el.addEventListener('touchstart', e => {
+    const t = e.touches[0]; isDragging = true; el.classList.add('dragging');
+    startX = t.clientX; startY = t.clientY;
+    startLeft = parseInt(el.style.left)||0; startTop = parseInt(el.style.top)||0;
+  }, { passive:true });
+  el.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    const t = e.touches[0];
+    el.style.left = (startLeft + t.clientX - startX) + 'px';
+    el.style.top  = (startTop  + t.clientY - startY) + 'px';
+  }, { passive:true });
+  el.addEventListener('touchend', () => { isDragging = false; el.classList.remove('dragging'); });
+}
+
+function showBehindForItem(idx) {
+  Object.values(behindContainers).forEach(c => c.style.display = 'none');
+  const item = ITEMS[idx];
+  if (!item || !item.behind) return;
+  let container = behindContainers[idx];
+  if (!container) container = buildBehindContainer(idx);
+  if (container) {
+    container.style.display = '';
+    container.querySelectorAll('video').forEach(v => v.play().catch(()=>{}));
+  }
+}
+
+function hideBehind() {
+  Object.values(behindContainers).forEach(c => c.style.display = 'none');
+}
+
+// ── TOGGLE BEHIND MODE ──
+function toggleBehind() {
+  behindMode = !behindMode;
+  document.body.classList.toggle('behind-mode', behindMode);
+  behindLbl.textContent = behindMode ? 'gallery' : 'behind';
+  if (behindMode) {
+    showBehindForItem(cur); updateCaption(cur);
+    const slide = slides[cur];
+    if (ITEMS[cur].type === 'video' && slide._vid) slide._vid.pause();
+  } else {
+    hideBehind(); updateCaption(cur);
+    const slide = slides[cur];
+    if (ITEMS[cur].type === 'video' && slide._vid) slide._vid.play().catch(()=>{});
+  }
+}
+behindBtn.addEventListener('click', toggleBehind);
+behindBtn.addEventListener('mouseenter', curHoverIn);
+behindBtn.addEventListener('mouseleave', curHoverOut);
+
+// ── BUILD SLIDES ──
 ITEMS.forEach((item) => {
   const slide = document.createElement('div');
   slide.className = 'fs-slide';
-
   if (item.type === 'image') {
     const img = document.createElement('img');
     img.src=item.src; img.alt=item.title||''; img.draggable=false;
     slide.appendChild(img);
-
   } else if (item.type === 'video') {
     const vid = document.createElement('video');
     vid.src=item.src; vid.autoplay=true; vid.loop=true;
     vid.muted=true; vid.playsInline=true;
     slide.appendChild(vid);
     slide._vid = vid;
-
   } else if (item.type === 'gallery') {
     slide.classList.add('gallery-slide');
     const folder = item.folderName || item.title.replace(/[^a-z0-9]/gi,'-').toLowerCase();
     const frame  = document.createElement('div');
     frame.className = 'gallery-frame';
-
     (item.images||[]).filter(Boolean).forEach(fname => {
       const ext = fname.split('.').pop().toLowerCase();
       let el;
@@ -1023,92 +1446,345 @@ ITEMS.forEach((item) => {
       }
       frame.appendChild(el);
     });
-
     slide.appendChild(frame);
     slide._gallery    = true;
     slide._imageCount = (item.images||[]).filter(Boolean).length;
-
   } else if (item.type === 'youtube') {
     slide._ytId=item.youtubeId; slide._ytLoaded=false;
   }
-
   fsMode.appendChild(slide);
   slides.push(slide);
 });
 
-// ── TAG GRID ─────────────────────────────────────────────────────────────────
-const gridItemsEl = document.getElementById('grid-items');
-const gridTagsEl  = document.getElementById('grid-tags');
-const allTags     = [];
-ITEMS.forEach(item => (item.tags||[]).forEach(t => { if(!allTags.includes(t)) allTags.push(t); }));
-
-let activeTags = new Set();
-allTags.forEach(tag => {
-  const btn = document.createElement('button');
-  btn.className='grid-tag'; btn.textContent=tag;
-  btn.addEventListener('click', () => {
-    activeTags.has(tag) ? activeTags.delete(tag) : activeTags.add(tag);
-    btn.classList.toggle('active', activeTags.has(tag)); filterGrid();
-  });
-  btn.addEventListener('mouseenter', curHoverIn); btn.addEventListener('mouseleave', curHoverOut);
-  gridTagsEl.appendChild(btn);
-});
-
-const gridCells = [];
-ITEMS.forEach((item, i) => {
-  const cell = document.createElement('div');
-  cell.className='grid-item'; cell.dataset.index=i;
-  const img = document.createElement('img');
-  img.src=item.thumb||''; img.alt=''; img.loading='lazy'; img.draggable=false;
-  cell.appendChild(img);
-  if (item.type==='gallery' && item.images) {
-    const badge = document.createElement('div');
-    badge.className='gallery-badge';
-    badge.textContent=(item.images||[]).filter(Boolean).length+'  imgs';
-    cell.appendChild(badge);
+// ── CAPTION / TITLE UPDATE ──
+function updateCaption(idx) {
+  const item = ITEMS[idx];
+  const has  = item.title || item.caption;
+  if (!has) {
+    workTitleText.textContent=''; workTitleYear.textContent='';
+    infoWorkTitle.classList.remove('vis');
+    captionEl.innerHTML=''; watchFullLink.classList.remove('vis');
+    scrim.classList.remove('on'); return;
   }
-  cell.addEventListener('click', () => { closeGrid(); goTo(i); });
-  cell.addEventListener('mouseenter', curHoverIn); cell.addEventListener('mouseleave', curHoverOut);
-  gridItemsEl.appendChild(cell);
-  gridCells.push({ el:cell, idx:i });
+  workTitleText.textContent = item.title||'';
+  workTitleYear.textContent = item.year||'';
+  infoWorkTitle.classList.add('vis');
+  const cap = behindMode && item.behind ? item.behind.caption : item.caption;
+  captionEl.innerHTML     = cap ? linkify(cap) : '';
+  captionEl.style.display = cap ? 'block' : 'none';
+  if (!behindMode && item.fullLink) {
+    watchFullLink.href = item.fullLink;
+    watchFullLink.classList.add('vis');
+  } else {
+    watchFullLink.classList.remove('vis');
+    watchFullLink.href = '#';
+  }
+  scrim.classList.add('on');
+}
+
+// ── MASONRY GRID ──
+
+const gridWall   = document.getElementById('grid-wall');
+const gridScroll = document.getElementById('grid-scroll');
+let currentColCount = 3;
+let currentColW = 0;
+
+let masonryInited = false;
+let colHeights = [];
+let wallTotalH = 0;
+
+function createThumbMedia(item, colW, callback) {
+  if (item.thumb) {
+    const img = new Image();
+    img.src = item.thumb;
+    img.onload = () => callback(img);
+    img.onerror = () => callback(fallbackImage(item, colW));
+    return;
+  }
+
+  function fallbackImage(itm, cW) {
+    const canvas = document.createElement('canvas');
+    canvas.width = cW;
+    canvas.height = Math.round(cW * 0.75);
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#1a1a1a';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = '#666';
+    ctx.font = '12px monospace';
+    ctx.fillText(itm.title || '', 10, canvas.height / 2);
+    const img = new Image();
+    img.src = canvas.toDataURL();
+    return img;
+  }
+
+  if (item.type === 'gallery') {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = `./images/${item.folderName}/${item.images[0]}`;
+    img.onload = () => callback(img);
+    img.onerror = () => callback(fallbackImage(item, colW));
+  } else if (item.type === 'video') {
+    const video = document.createElement('video');
+    video.src = item.src;
+    video.muted = true;
+    video.playsInline = true;
+    video.preload = 'metadata';
+    video.crossOrigin = 'anonymous';
+    let handled = false;
+    video.addEventListener('loadeddata', () => {
+      video.currentTime = 0.5;
+    });
+    video.addEventListener('seeked', () => {
+      if (handled) return; handled = true;
+      const canvas = document.createElement('canvas');
+      canvas.width = colW;
+      canvas.height = Math.round(colW * (video.videoHeight / video.videoWidth));
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      const img = new Image();
+      img.src = canvas.toDataURL('image/jpeg', 0.85);
+      img.onload = () => callback(img);
+      video.remove();
+    }, { once: true });
+    video.addEventListener('error', () => {
+      if (handled) return; handled = true;
+      callback(fallbackImage(item, colW));
+    });
+    setTimeout(() => {
+      if (!handled) {
+        handled = true;
+        callback(fallbackImage(item, colW));
+        video.remove();
+      }
+    }, 8000);
+  } else {
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = item.src || '';
+    img.onload = () => callback(img);
+    img.onerror = () => callback(fallbackImage(item, colW));
+  }
+}
+
+function buildMasonry() {
+  gridWall.innerHTML = '';
+  const vw = gridScroll.clientWidth;
+  const colCount = 3;
+  const headerStyle = getComputedStyle(document.getElementById('grid-header'));
+  const gapValue = parseFloat(headerStyle.paddingLeft) || 32;
+  const GAP = gapValue;
+  const PAD = gapValue;
+  const colW = Math.floor((vw - PAD * 2 - GAP * (colCount - 1)) / colCount);
+
+  const headerH = document.getElementById('grid-header').offsetHeight;
+
+
+  colHeights = new Array(colCount).fill(headerH + PAD);
+  const colCells = Array.from({length: colCount}, () => []);
+
+  currentColCount = colCount;
+  currentColW = colW;
+
+  gridWall.style.cssText = `position:relative; width:100%;`;
+
+  ITEMS.forEach((item, idx) => {
+  
+    const shortCol = colHeights.indexOf(Math.min(...colHeights));
+    const x = PAD + shortCol * (colW + GAP);
+    const y = colHeights[shortCol];
+
+    const cell = document.createElement('div');
+    cell.className = 'grid-wall-item';
+    cell.style.cssText = `position:absolute; left:${x}px; top:${y}px; width:${colW}px; cursor:none; overflow:hidden;`;
+    colCells[shortCol].push(cell);
+
+    const defaultH = Math.round(colW * 0.75);
+    cell.style.height = defaultH + 'px';
+    colHeights[shortCol] += defaultH + GAP;
+
+    // Loading dots
+    const loadingDiv = document.createElement('div');
+    loadingDiv.className = 'grid-loading';
+    loadingDiv.style.cssText = 'position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:2;';
+    for (let i=0; i<3; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'ld';
+      loadingDiv.appendChild(dot);
+    }
+    cell.appendChild(loadingDiv);
+
+    const label = document.createElement('div');
+    label.className = 'gw-label';
+    label.textContent = item.title + (item.year ? '  ' + item.year : '');
+    cell.appendChild(label);
+
+    cell.addEventListener('click', () => {
+      closeGrid();
+   
+      goToFromGrid(idx);
+    });
+    cell.addEventListener('mouseenter', curHoverIn);
+    cell.addEventListener('mouseleave', curHoverOut);
+
+    createThumbMedia(item, colW, function(thumbImg) {
+      const loader = cell.querySelector('.grid-loading');
+      if (loader) loader.remove();
+      cell.insertBefore(thumbImg, label);
+
+      if (thumbImg.naturalWidth && thumbImg.naturalHeight) {
+        const aspectH = Math.round(colW * thumbImg.naturalHeight / thumbImg.naturalWidth);
+        const delta = aspectH - defaultH;
+        cell.style.height = aspectH + 'px';
+        const cellsInCol = colCells[shortCol];
+        const idxInCol = cellsInCol.indexOf(cell);
+        colHeights[shortCol] += delta;
+        for (let i = idxInCol + 1; i < cellsInCol.length; i++) {
+          const laterCell = cellsInCol[i];
+          const currentTop = parseFloat(laterCell.style.top) || 0;
+          laterCell.style.top = (currentTop + delta) + 'px';
+        }
+        recalcWallHeight();
+      }
+    });
+
+    gridWall.appendChild(cell);
+  });
+
+  recalcWallHeight();
+  masonryInited = true;
+}
+
+function reflowMasonry(newColCount, newColW) {
+  const cells = Array.from(gridWall.querySelectorAll('.grid-wall-item'));
+  if (cells.length === 0) {
+    buildMasonry();
+    return;
+  }
+  const vw = gridScroll.clientWidth;
+  const headerStyle = getComputedStyle(document.getElementById('grid-header'));
+  const gapValue = parseFloat(headerStyle.paddingLeft) || 32;
+  const GAP = gapValue;
+  const PAD = gapValue;
+
+  let colCount, colW;
+  if (newColCount !== undefined && newColW !== undefined) {
+    colCount = newColCount;
+    colW = newColW;
+  } else {
+    colCount = currentColCount || 3;
+    colW = Math.floor((vw - PAD * 2 - GAP * (colCount - 1)) / colCount);
+  }
+  currentColCount = colCount;
+  currentColW = colW;
+
+  const headerH = document.getElementById('grid-header').offsetHeight;
+
+  colHeights = new Array(colCount).fill(headerH + PAD);
+
+  cells.forEach(cell => {
+  
+    const shortCol = colHeights.indexOf(Math.min(...colHeights));
+    const x = PAD + shortCol * (colW + GAP);
+    const y = colHeights[shortCol];
+
+    cell.style.left = x + 'px';
+    cell.style.top  = y + 'px';
+    cell.style.width = colW + 'px';
+
+    const img = cell.querySelector('img');
+    if (img && img.naturalWidth && img.naturalHeight) {
+      const aspectH = Math.round(colW * img.naturalHeight / img.naturalWidth);
+      cell.style.height = aspectH + 'px';
+      colHeights[shortCol] += aspectH + GAP;
+    } else {
+      const currentH = parseFloat(cell.style.height) || Math.round(colW * 0.75);
+      cell.style.height = currentH + 'px';
+      colHeights[shortCol] += currentH + GAP;
+    }
+  });
+
+  recalcWallHeight();
+}
+
+function recalcWallHeight() {
+  wallTotalH = Math.max(...colHeights);
+  gridWall.style.height = wallTotalH + 'px';
+}
+
+
+
+function openGrid() {
+  gridOpen = true;
+  gridModeEl.classList.add('on');
+  if (!masonryInited) buildMasonry();
+  const totalEl = document.getElementById('grid-total');
+  if (totalEl) totalEl.textContent = ITEMS.length;
+
+}
+
+function closeGrid() {
+  gridOpen = false;
+  gridModeEl.classList.remove('on');
+
+}
+
+window.addEventListener('resize', () => {
+  if (gridOpen && masonryInited) {
+    reflowMasonry();
+  } else if (gridOpen) {
+    buildMasonry();
+  }
 });
 
-function filterGrid() {
-  gridCells.forEach(({ el, idx }) => {
-    if (!activeTags.size) { el.classList.remove('hidden'); return; }
-    const tags = ITEMS[idx].tags||[];
-    el.classList.toggle('hidden', ![...activeTags].every(t=>tags.includes(t)));
-  });
-}
-function markGridCurrent() { gridCells.forEach(({el,idx})=>el.classList.toggle('current',idx===cur)); }
-function openGrid()  { gridOpen=true;  gridModeEl.classList.add('on');    markGridCurrent(); }
-function closeGrid() { gridOpen=false; gridModeEl.classList.remove('on'); }
+// ── NAVIGATE ──
 
-// ── NAVIGATE ─────────────────────────────────────────────────────────────────
+
+function goToFromGrid(idx) {
+  if (isTransitioning) return;
+  // Direct navigation from grid — show exactly this item regardless of hideInFullscreen
+  _activateSlide(idx, true);
+}
+
 function goTo(idx) {
   if (isTransitioning) return;
-  if (idx < 0)             idx = ITEMS.length-1;
-  if (idx >= ITEMS.length) idx = 0;
-  if (idx === cur && slides[cur].classList.contains('on')) return;
+  let target = idx;
+  if (target < 0) target = ITEMS.length - 1;
+  if (target >= ITEMS.length) target = 0;
 
+
+  let attempts = 0;
+  while (ITEMS[target].hideInFullscreen && attempts < ITEMS.length) {
+    if (idx > cur || idx === 0) {
+      target++;
+      if (target >= ITEMS.length) target = 0;
+    } else {
+      target--;
+      if (target < 0) target = ITEMS.length - 1;
+    }
+    attempts++;
+  }
+  if (attempts >= ITEMS.length) return;
+
+  _activateSlide(target, false);
+}
+
+function _activateSlide(idx, fromGrid) {
+  if (idx === cur && slides[cur].classList.contains('on')) return;
   isTransitioning = true;
 
   const prevSlide = slides[cur];
   const prevItem  = ITEMS[cur];
   prevSlide.classList.remove('on');
-
   if (prevItem.type === 'gallery') stopGallery();
   if (prevItem.type === 'video' && prevSlide._vid) {
     prevSlide._vid.pause(); prevSlide._vid.muted=true; prevSlide._vid.currentTime=0;
   }
 
   cur = idx;
-  const item  = ITEMS[cur];
+  const item = ITEMS[cur];
   const slide = slides[cur];
 
-  muted = true;
-  audioBtn.classList.add('muted');
-  albl.textContent = 'sound off';
+  muted = true; audioBtn.classList.add('muted'); albl.textContent = 'sound off';
 
   if (item.type==='youtube' && !slide._ytLoaded) {
     const f = document.createElement('iframe');
@@ -1116,43 +1792,34 @@ function goTo(idx) {
     f.allow='autoplay; fullscreen'; f.frameBorder='0';
     slide.appendChild(f); slide._iframe=f; slide._ytLoaded=true;
   }
-
   if (item.type==='video' && slide._vid) {
-    slide._vid.currentTime=0; slide._vid.muted=true; slide._vid.play().catch(()=>{});
+    slide._vid.currentTime=0; slide._vid.muted=true;
+    if (!behindMode) slide._vid.play().catch(()=>{});
   }
 
   setTimeout(() => {
     slide.classList.add('on');
     isTransitioning = false;
-    if (item.type === 'gallery') startGallery(slide);
+    if (item.type === 'gallery' && !behindMode) startGallery(slide);
   }, 80);
 
   item.hasAudio ? audioBtn.classList.add('vis') : audioBtn.classList.remove('vis');
-
   closeInfo();
+  if (behindMode) showBehindForItem(cur);
+  setTimeout(() => updateCaption(cur), 60);
 
-  setTimeout(() => {
-    const has = item.title || item.caption;
-    if (has) {
-      workTitleText.textContent = item.title||'';
-      workTitleYear.textContent = item.year||'';
-      infoWorkTitle.classList.add('vis');
-      captionEl.innerHTML     = item.caption ? linkify(item.caption) : '';
-      captionEl.style.display = item.caption ? 'block' : 'none';
-      if (item.fullLink) { watchFullLink.href=item.fullLink; watchFullLink.classList.add('vis'); }
-      else { watchFullLink.classList.remove('vis'); watchFullLink.href='#'; }
-      scrim.classList.add('on');
-    } else {
-      workTitleText.textContent=''; workTitleYear.textContent='';
-      infoWorkTitle.classList.remove('vis');
-      captionEl.innerHTML=''; watchFullLink.classList.remove('vis');
-      scrim.classList.remove('on');
-    }
-  }, 60);
-
-  counter.textContent = String(cur+1).padStart(2,'0')+' / '+String(ITEMS.length).padStart(2,'0');
-  progEl.style.width = ((cur+1)/ITEMS.length*100)+'%';
-  markGridCurrent();
+ 
+  const visibleItems = ITEMS.filter(it => !it.hideInFullscreen);
+  const visibleTotal = visibleItems.length;
+  // Find position of current item in visible list (if it's hidden, show nothing or "-")
+  if (item.hideInFullscreen) {
+    counter.textContent = '— / ' + String(visibleTotal).padStart(2,'0');
+    progEl.style.width = '0%';
+  } else {
+    const visibleIdx = visibleItems.indexOf(item);
+    counter.textContent = String(visibleIdx+1).padStart(2,'0')+' / '+String(visibleTotal).padStart(2,'0');
+    progEl.style.width = ((visibleIdx+1)/visibleTotal*100)+'%';
+  }
 }
 
 function linkify(t) {
@@ -1169,63 +1836,64 @@ watchFullLink.addEventListener('mouseenter', curHoverIn);
 watchFullLink.addEventListener('mouseleave', curHoverOut);
 
 function setMuted(m) {
-  muted = m;
-  audioBtn.classList.toggle('muted', m);
+  muted = m; audioBtn.classList.toggle('muted', m);
   albl.textContent = m ? 'sound off' : 'sound on';
   const item = ITEMS[cur];
   if (item.type==='video' && slides[cur]._vid) slides[cur]._vid.muted = m;
   if (item.type==='youtube' && slides[cur]._iframe) ytMute(slides[cur]._iframe, m);
 }
 function ytMute(iframe, m) {
-  try { iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:m?'mute':'unMute',args:[]},'*')); } catch(e) {}
+  try { iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:m?'mute':'unMute',args:[]}),'*'); } catch(e) {}
 }
 audioBtn.addEventListener('click', () => setMuted(!muted));
-
-// ── THEME ─────────────────────────────────────────────────────────────────────
-const themeSqRect = document.getElementById('theme-sq-rect');
-const themeSq     = document.getElementById('theme-sq');
-function applyTheme(mode) {
-  themeMode = mode;
-  document.body.classList.remove('force-dark','force-light');
-  if (mode==='dark') {
-    document.body.classList.add('force-dark');
-    themeSqRect.style.fill='#1a1a1a'; themeSqRect.style.stroke='rgba(255,255,255,0.5)';
-    themeSq.style.color='rgba(255,255,255,0.5)';
-  } else {
-    document.body.classList.add('force-light');
-    themeSqRect.style.fill='#f1f1f1'; themeSqRect.style.stroke='rgba(0,0,0,0.45)';
-    themeSq.style.color='rgba(0,0,0,0.45)';
-  }
-}
-document.getElementById('theme-btn').addEventListener('click', () => applyTheme(themeMode==='dark'?'light':'dark'));
-applyTheme('dark');
 
 document.getElementById('grid-toggle').addEventListener('click', () => gridOpen ? closeGrid() : openGrid());
 document.getElementById('grid-close').addEventListener('click', closeGrid);
 
-// ── CLICK-NEXT ────────────────────────────────────────────────────────────────
 document.getElementById('click-next').addEventListener('click', () => {
-  if (gridOpen) return;
+  if (gridOpen || behindMode) return;
   goTo(cur+1);
 });
 
-// ── WHEEL ────────────────────────────────────────────────────────────────────
 window.addEventListener('wheel', e => {
-  if (gridOpen) return;
+  if (gridOpen || behindMode) return;
   if (!isGallery(cur)) e.preventDefault();
 }, { passive:false });
 
-// ── KEYBOARD ─────────────────────────────────────────────────────────────────
 document.addEventListener('keydown', e => {
   if (gridOpen && e.key==='Escape') { closeGrid(); return; }
-  if (!gridOpen) {
+  if (e.key==='b') { toggleBehind(); return; }
+  if (!gridOpen && !behindMode) {
     if (e.key==='ArrowRight') { isGallery(cur) ? galleryStep() : goTo(cur+1); }
     if (e.key==='ArrowLeft')  goTo(cur-1);
     if (e.key==='g') openGrid();
   }
 });
 
-// ── UI AUTO-HIDE ──────────────────────────────────────────────────────────────
+const scaleSlider = document.getElementById('grid-scale-slider');
+if (scaleSlider) {
+  scaleSlider.addEventListener('input', function () {
+    if (!gridOpen || !masonryInited) return;
+    const sliderVal = parseFloat(this.value);
+    const vw = gridScroll.clientWidth;
+    const headerStyle = getComputedStyle(document.getElementById('grid-header'));
+    const gapValue = parseFloat(headerStyle.paddingLeft) || 32;
+    const GAP = gapValue;
+    const PAD = gapValue;
+
+    const maxColW = Math.floor((vw - PAD * 2 - GAP * (3 - 1)) / 3);
+    const minColW = 16;
+    const targetW = Math.round(minColW + (maxColW - minColW) * (sliderVal / 100));
+
+    let newColCount = Math.floor((vw - PAD * 2 + GAP) / (targetW + GAP));
+    newColCount = Math.min(12, Math.max(1, newColCount));
+
+    const actualColW = Math.floor((vw - PAD * 2 - GAP * (newColCount - 1)) / newColCount);
+    reflowMasonry(newColCount, actualColW);
+  });
+}
+
+// ── UI AUTO-HIDE ──
 let uiVisible=true, uiTimer=null, mouseY=0;
 const HIDE_DELAY = 4500;
 function isOverUI() {
@@ -1251,7 +1919,7 @@ document.addEventListener('mousemove', e => { mouseY=e.clientY; showUI(); });
 document.addEventListener('touchstart', () => showUI(), { passive:true });
 uiTimer = setTimeout(hideUI, HIDE_DELAY);
 
-// ── 1-BIT TRAIL PIXELS ───────────────────────────────────────────────────────
+// ── 1-BIT TRAIL PIXELS ──
 const TRAIL_MAX=16, trail=[], BIT_SIZES=[2,2,2,2,4,4];
 for (let i=0;i<TRAIL_MAX;i++) {
   const d=document.createElement('div');
@@ -1281,7 +1949,7 @@ document.addEventListener('mousemove', e => {
 });
 document.addEventListener('mousedown', ()=>curEl.classList.add('pressed'));
 document.addEventListener('mouseup',   ()=>curEl.classList.remove('pressed'));
-document.querySelectorAll('a,button,.grid-item').forEach(el=>{
+document.querySelectorAll('a,button').forEach(el=>{
   el.addEventListener('mouseenter',curHoverIn); el.addEventListener('mouseleave',curHoverOut);
 });
 
