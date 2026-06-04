@@ -311,7 +311,7 @@ body.behind-mode {
 #grid-links a:hover { color:var(--ui-hi); }
 #grid-right { display:flex; align-items:center; gap:1.8rem; pointer-events:none; }
 #grid-mode.on #grid-right { pointer-events:all; }
-#grid-total, #grid-updated { font-family:var(--body-font); font-size:clamp(.55rem,.78vw,.68rem); color:var(--ui); letter-spacing:.05em; white-space:nowrap; }
+#grid-meta { font-family:var(--body-font); font-size:clamp(.55rem,.78vw,.68rem); color:var(--ui); letter-spacing:.05em; white-space:nowrap; }
 #grid-close { background:none; border:none; cursor:none; font-family:var(--body-font); font-size:clamp(.52rem,.72vw,.62rem); letter-spacing:.1em; color:var(--ui); transition:color .25s; padding:8px; margin:-8px; line-height:1; }
 #grid-close:hover { color:var(--ui-hi); }
 #grid-scale-control { display:flex; align-items:center; align-self:center; }
@@ -485,8 +485,7 @@ body.behind-mode #wip-label { opacity:1; }
       <div id="grid-scale-control">
         <input type="range" id="grid-scale-slider" min="0" max="100" value="100" step="1" title="scale">
       </div>
-      <span id="grid-total"></span>
-      <span id="grid-updated">05/15/2026</span>
+      <span id="grid-meta"></span>
       <button id="grid-close">✕</button>
     </div>
   </div>
@@ -1051,7 +1050,9 @@ const _thumbIO=new IntersectionObserver(entries=>{
 },{rootMargin:'200px'});
 
 function createThumbMedia(item,colW,callback){
-  function fallbackImage(itm,cW){const canvas=document.createElement('canvas');canvas.width=cW;canvas.height=Math.round(cW*0.75);const ctx=canvas.getContext('2d');ctx.fillStyle='#1a1a1a';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#666';ctx.font='12px monospace';ctx.fillText(itm.title||'',10,canvas.height/2);const img=new Image();img.src=canvas.toDataURL();return img;}
+  function fallbackImage(itm,cW){const canvas=document.createElement('canvas');canvas.width=cW;canvas.height=Math.round(cW*0.75);const ctx=canvas.getContext('2d');ctx.fillStyle='#1a1a1a';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#666';ctx.font='12px monospace';ctx.fillText(itm.title||'',10,canvas.height/2);
+  const img=new Image();img.src=canvas.toDataURL();img.dataset.isFallback='1';return img;
+}
   if(item.thumb){
     const img=new Image();img.alt=item.title||'';img.dataset.src=item.thumb;
     img.style.cssText='display:block;width:100%;height:auto;object-fit:cover;';
@@ -1065,82 +1066,109 @@ function createThumbMedia(item,colW,callback){
 
 function buildMasonry(){
   gridWall.innerHTML='';
-  const vw=gridScroll.clientWidth,colCount=3;
-  const headerStyle=getComputedStyle(document.getElementById('grid-header'));
-  const gapValue=parseFloat(headerStyle.paddingLeft)||32,GAP=gapValue,PAD=gapValue;
-  const colW=Math.floor((vw-PAD*2-GAP*(colCount-1))/colCount);
-  const headerH=document.getElementById('grid-header').offsetHeight;
-  colHeights=new Array(colCount).fill(headerH+PAD);
-  const colCells=Array.from({length:colCount},()=>[]);
-  currentColCount=colCount;currentColW=colW;
-  gridWall.style.cssText='position:relative;width:100%;';
-  ITEMS.forEach((item,idx)=>{
-    const shortCol=colHeights.indexOf(Math.min(...colHeights));
-    const x=PAD+shortCol*(colW+GAP),y=colHeights[shortCol];
-    const cell=document.createElement('div');
-    cell.className='grid-wall-item';
-    cell.style.cssText=`position:absolute;left:${x}px;top:${y}px;width:${colW}px;cursor:none;overflow:hidden;`;
-    colCells[shortCol].push(cell);
-    const defaultH=Math.round(colW*0.75);
-    cell.style.height=defaultH+'px';
-    colHeights[shortCol]+=defaultH+GAP;
-    const label=document.createElement('div');label.className='gw-label';
-    label.textContent=item.title+(item.year?'  '+item.year:'');
-    cell.appendChild(label);
-    cell.addEventListener('click',()=>{closeGrid();goToFromGrid(idx);});
-    cell.addEventListener('mouseenter',curHoverIn);cell.addEventListener('mouseleave',curHoverOut);
-    createThumbMedia(item,colW,thumbImg=>{
-      cell.insertBefore(thumbImg,label);
-      if(thumbImg.dataset&&thumbImg.dataset.src)_thumbIO.observe(thumbImg);
-      const doReflow=()=>{
-        if(thumbImg.naturalWidth&&thumbImg.naturalHeight){
-          const aspectH=Math.round(colW*thumbImg.naturalHeight/thumbImg.naturalWidth);
-          const delta=aspectH-defaultH;
-          cell.style.height=aspectH+'px';
-          const cellsInCol=colCells[shortCol],idxInCol=cellsInCol.indexOf(cell);
-          colHeights[shortCol]+=delta;
-          for(let i=idxInCol+1;i<cellsInCol.length;i++)
-            colCells[shortCol][i].style.top=(parseFloat(colCells[shortCol][i].style.top)||0+delta)+'px';
-          recalcWallHeight();
-        }
-      };
-      if(thumbImg.complete&&thumbImg.naturalWidth)doReflow();
-      else{thumbImg.addEventListener('load',doReflow,{once:true});thumbImg.addEventListener('_thumbLoaded',doReflow,{once:true});}
-    });
-    gridWall.appendChild(cell);
-  });
-  recalcWallHeight();masonryInited=true;
+  masonryInited=false;
+  _doLayout();
 }
 
-function reflowMasonry(newColCount,newColW){
-  const cells=Array.from(gridWall.querySelectorAll('.grid-wall-item'));
-  if(cells.length===0){buildMasonry();return;}
-  const vw=gridScroll.clientWidth;
-  const headerStyle=getComputedStyle(document.getElementById('grid-header'));
-  const gapValue=parseFloat(headerStyle.paddingLeft)||32,GAP=gapValue,PAD=gapValue;
-  let colCount,colW;
-  if(newColCount!==undefined&&newColW!==undefined){colCount=newColCount;colW=newColW;}
-  else{colCount=currentColCount||3;colW=Math.floor((vw-PAD*2-GAP*(colCount-1))/colCount);}
-  currentColCount=colCount;currentColW=colW;
-  const headerH=document.getElementById('grid-header').offsetHeight;
-  colHeights=new Array(colCount).fill(headerH+PAD);
-  cells.forEach(cell=>{
-    const shortCol=colHeights.indexOf(Math.min(...colHeights));
-    const x=PAD+shortCol*(colW+GAP),y=colHeights[shortCol];
-    cell.style.left=x+'px';cell.style.top=y+'px';cell.style.width=colW+'px';
-    const img=cell.querySelector('img');
-    if(img&&img.naturalWidth&&img.naturalHeight){const aspectH=Math.round(colW*img.naturalHeight/img.naturalWidth);cell.style.height=aspectH+'px';colHeights[shortCol]+=aspectH+GAP;}
-    else{const currentH=parseFloat(cell.style.height)||Math.round(colW*0.75);cell.style.height=currentH+'px';colHeights[shortCol]+=currentH+GAP;}
-  });
-  recalcWallHeight();
+function reflowMasonry(){
+  _doLayout();
 }
-function recalcWallHeight(){wallTotalH=Math.max(...colHeights);gridWall.style.height=wallTotalH+'px';}
+
+function _doLayout(){
+  const vw=gridScroll.clientWidth||window.innerWidth;
+  const GAP=Math.round(vw*0.04);
+  const PAD=GAP;
+  const sv=scaleSlider?parseFloat(scaleSlider.value):50;
+  const maxCols=12,minCols=1;
+  const maxColW=Math.floor((vw-PAD*2-GAP*(3-1))/3);
+  const minColW=60;
+  const targetColW=Math.round(minColW+(maxColW-minColW)*(sv/100));
+  let colCount=Math.round((vw-PAD*2+GAP)/(targetColW+GAP));
+  colCount=Math.max(minCols,Math.min(maxCols,colCount));
+  const colW=Math.floor((vw-PAD*2-GAP*(colCount-1))/colCount);
+  const headerH=document.getElementById('grid-header').offsetHeight;
+
+  // rebuild cells if needed
+  let cells=Array.from(gridWall.querySelectorAll('.grid-wall-item'));
+  if(cells.length===0){
+    ITEMS.forEach((item,idx)=>{
+      const cell=document.createElement('div');
+      cell.className='grid-wall-item';
+      cell.style.cssText='position:absolute;overflow:hidden;cursor:none;';
+      const label=document.createElement('div');
+      label.className='gw-label';
+      label.textContent=item.title+(item.year?'  '+item.year:'');
+      // loading placeholder
+      const loadingLabel=document.createElement('div');
+      loadingLabel.className='cell-loading';
+      loadingLabel.style.cssText='position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:1rem;text-align:center;font-family:var(--body-font);font-size:clamp(.42rem,.58vw,.52rem);letter-spacing:.08em;color:var(--ui);opacity:.55;pointer-events:none;line-height:1.7;';
+      loadingLabel.textContent='Take a moment to rest while the asset loads.';
+      cell.appendChild(loadingLabel);
+      cell.appendChild(label);
+      cell.addEventListener('click',()=>{closeGrid();goToFromGrid(idx);});
+      cell.addEventListener('mouseenter',curHoverIn);
+      cell.addEventListener('mouseleave',curHoverOut);
+      // load thumb
+      if(item.thumb){
+        const img=new Image();
+        img.alt=item.title||'';
+        img.style.cssText='display:block;width:100%;height:auto;object-fit:cover;';
+        img.onload=()=>{
+          if(loadingLabel.parentNode)loadingLabel.remove();
+          cell.insertBefore(img,label);
+          _thumbIO.observe(img);
+          _reposCell(cell);
+        };
+        img.onerror=()=>{
+          loadingLabel.textContent='asset unavailable';
+          loadingLabel.style.opacity='.3';
+        };
+        img.src=item.thumb;
+      }
+      gridWall.appendChild(cell);
+    });
+    cells=Array.from(gridWall.querySelectorAll('.grid-wall-item'));
+  }
+
+  // position all cells
+  const colHeights=new Array(colCount).fill(headerH+PAD);
+  cells.forEach(cell=>{
+    const img=cell.querySelector('img');
+    const natW=img&&img.naturalWidth?img.naturalWidth:1;
+    const natH=img&&img.naturalHeight?img.naturalHeight:1;
+    const cellH=img&&img.naturalWidth?Math.round(colW*natH/natW):Math.round(colW*0.75);
+    const shortCol=colHeights.indexOf(Math.min(...colHeights));
+    const x=PAD+shortCol*(colW+GAP);
+    const y=colHeights[shortCol];
+    cell.style.left=x+'px';
+    cell.style.top=y+'px';
+    cell.style.width=colW+'px';
+    cell.style.height=cellH+'px';
+    colHeights[shortCol]+=cellH+GAP;
+  });
+
+  gridWall.style.position='relative';
+  gridWall.style.width='100%';
+  gridWall.style.height=Math.max(...colHeights)+'px';
+  masonryInited=true;
+}
+
+function _reposCell(cell){
+  // after image loads, just re-run full layout — cheap and correct
+  if(masonryInited)_doLayout();
+}
 
 function openGrid(){
   gridOpen=true;gridModeEl.classList.add('on');
-  if(!masonryInited)buildMasonry();
-  const totalEl=document.getElementById('grid-total');if(totalEl)totalEl.textContent=ITEMS.length;
+  const metaEl=document.getElementById('grid-meta');if(metaEl)metaEl.textContent='Total logged: '+ITEMS.length+' // Last updated: 05/15/2026';
+  gridWall.style.opacity='0';
+  setTimeout(()=>{
+    if(!masonryInited)buildMasonry();else reflowMasonry();
+    gridWall.style.transition='opacity 0.35s cubic-bezier(0.4,0,0.2,1)';
+    gridWall.style.opacity='1';
+  },120);
 }
+
 function closeGrid(){
   gridOpen=false;gridModeEl.classList.remove('on');
   if(gridAboutOpen)closeGridAbout();
@@ -1227,17 +1255,9 @@ document.addEventListener('keydown',e=>{
 const scaleSlider=document.getElementById('grid-scale-slider');
 if(scaleSlider){
   scaleSlider.addEventListener('input',function(){
-    if(!gridOpen||!masonryInited)return;
-    const sliderVal=parseFloat(this.value),vw=gridScroll.clientWidth;
-    const headerStyle=getComputedStyle(document.getElementById('grid-header'));
-    const gapValue=parseFloat(headerStyle.paddingLeft)||32,GAP=gapValue,PAD=gapValue;
-    const maxColW=Math.floor((vw-PAD*2-GAP*(3-1))/3),minColW=16;
-    const targetW=Math.round(minColW+(maxColW-minColW)*(sliderVal/100));
-    let newColCount=Math.floor((vw-PAD*2+GAP)/(targetW+GAP));
-    newColCount=Math.min(12,Math.max(1,newColCount));
-    const actualColW=Math.floor((vw-PAD*2-GAP*(newColCount-1))/newColCount);
-    reflowMasonry(newColCount,actualColW);
-  });
+  if(!gridOpen)return;
+  _doLayout();
+});
 }
 
 // ── UI AUTO-HIDE ──
@@ -1263,6 +1283,16 @@ document.addEventListener('mousemove',e=>{
 document.addEventListener('mousedown',()=>curEl.classList.add('pressed'));
 document.addEventListener('mouseup',()=>curEl.classList.remove('pressed'));
 document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',curHoverIn);el.addEventListener('mouseleave',curHoverOut);});
+
+// ── SET INITIAL SLIDER VALUE ──
+if(scaleSlider){
+  const isMobile=window.innerWidth<=768;
+  if(isMobile){
+    scaleSlider.value=100; // 3 cols on mobile
+  } else {
+    scaleSlider.value=50;
+  }
+}
 
 // ── BOOT ──
 goTo(0);
