@@ -10,7 +10,6 @@
 :root {
   --serif: 'Courier New', monospace;
   --mono: 'Courier New', monospace;
-  --sans: system-ui, -apple-system, 'Helvetica Neue', Arial, 'Noto Sans', 'Noto Sans CJK SC', 'Noto Sans CJK JP', 'Noto Sans CJK KR', sans-serif;
   --t: 0.6s cubic-bezier(0.4,0,0.2,1);
   --t-fast: 0.28s cubic-bezier(0.4,0,0.2,1);
   --ui-slide: 0.45s cubic-bezier(0.4,0,0.2,1);
@@ -21,8 +20,9 @@
   --ui-desc: rgba(255,255,255,0.24);
   --scrim-clr: rgba(0,0,0,0.5);
   --panel-bg: rgba(17,19,20,0.82);
-  --body-font: var(--sans);
+  --body-font: var(--serif);
   --grid-line: transparent;
+  --role-offset: 4px; 
 }
 
 body.behind-mode {
@@ -33,8 +33,10 @@ body.behind-mode {
   --ui-desc: rgba(255,255,255,0.12);
   --scrim-clr: rgba(0,0,0,0.6);
   --panel-bg: rgba(17,17,15,0.88);
+  --body-font: var(--mono);
   --grid-line: rgba(255,255,255,0.03);
   font-weight: 400;
+  --role-offset: 4px;
 }
 *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
 html, body {
@@ -43,11 +45,11 @@ html, body {
   color:var(--ui-hi);
   overflow:hidden;
   cursor:none;
-  font-family:var(--mono);
+  font-family:var(--body-font);
   font-weight:200;
   transition:background 0.7s ease, color 0.5s ease;
 }
-body.behind-mode { font-weight: 400; }
+body.behind-mode { font-weight: 400; --role-offset: 4px; }
 body::before {
   content:'';
   position:fixed; inset:0; z-index:0;
@@ -160,24 +162,36 @@ body::before {
 #prog { position:fixed; bottom:0; left:0; height:1px; background:var(--ui); transition:width var(--t); z-index:51; }
 #intro-wrap { display:flex; flex-direction:column; pointer-events:all; }
 #name-block { display:flex; flex-direction:column; gap:.18rem; cursor:none; }
-#name-time { font-family:var(--body-font); font-size:clamp(.52rem,.72vw,.62rem); color:var(--ui); letter-spacing:.05em; transition:color 0.5s; }
-#name-label { font-family:var(--body-font); font-size:clamp(.72rem,1vw,.85rem); font-weight:inherit; letter-spacing:.01em; color:var(--ui); display:inline-flex; align-items:center; gap:.35em; transition:color 0.5s; }
-#name-colon { cursor:none; transition:color .2s; display:inline-block; padding:6px; margin:-6px; }
+#name-time { font-family:var(--body-font); font-size:clamp(.52rem,.72vw,.62rem); color:var(--ui); letter-spacing:.1em; transition:color 0.5s; }
+#name-label { font-family:var(--body-font); font-size:clamp(.72rem,1vw,.85rem); font-weight:inherit; letter-spacing:.01em; text-transform:uppercase; color:var(--ui); display:inline-flex; align-items:center; gap:.35em; transition:color 0.5s; }
+#name-colon { cursor:none; transition:color .2s; }
 #name-colon:hover { color:var(--ui-hi); }
 #intro-body { overflow:hidden; max-height:0; transition:max-height .38s cubic-bezier(.4,0,.2,1), opacity .3s, padding .38s cubic-bezier(.4,0,.2,1); opacity:0; margin-top:.3rem; max-width:340px; }
 #intro-body.open { max-height:calc(85vh - 6rem); opacity:1; padding:.65rem .9rem .7rem; overflow-y:auto; -webkit-overflow-scrolling:touch; }
 #intro-inner { background:var(--panel-bg); backdrop-filter:blur(12px) saturate(1.3); -webkit-backdrop-filter:blur(12px) saturate(1.3); border-radius:6px; border:1px solid rgba(128,128,128,.12); width:100%; padding:.8rem 1.1rem .9rem; transition:background 0.5s, border-color 0.5s; }
-#intro-text { font-family:var(--sans); font-size:clamp(.58rem,.78vw,.68rem); line-height:1.95; color:var(--ui-cap); letter-spacing:.03em; transition:color 0.5s; font-weight:inherit; }
+#intro-text { font-size:clamp(.58rem,.78vw,.68rem); line-height:1.95; color:var(--ui-cap); letter-spacing:.03em; transition:color 0.5s; font-weight:inherit; }
+#bio-toggle { display:inline-block; margin-left:.35em; font-size:.85em; opacity:.55; cursor:none; transition:opacity .2s, transform .22s; user-select:none; }
+#bio-toggle:hover { opacity:1; }
+#bio-toggle.open { transform:rotate(45deg); opacity:1; }
+#bio-more { display:none; }
+#bio-more.open { display:block; }
+.bio-p { text-indent:3em; font-size:clamp(.58rem,.78vw,.68rem); line-height:1.95; color:var(--ui-cap); letter-spacing:.03em; }
+.bio-p:last-child { margin-bottom:0; }
+#role-slot { display:inline-block; position:relative; height:1.5em; vertical-align:middle; overflow:visible; }
+#role-slot .role-word { position:absolute; left:0; top:50%; transform:translateY(calc(-50% + var(--role-offset))); white-space:nowrap; color:var(--ui-hi); opacity:0; transition:opacity .35s cubic-bezier(.4,0,.2,1), transform .35s cubic-bezier(.4,0,.2,1); pointer-events:none; }
+#role-slot .role-word.active { opacity:1; transform:translateY(-50%); }
 #top-right { display:flex; align-items:center; gap:1.8rem; pointer-events:all; }
 #fs-counter { font-size:clamp(.55rem,.78vw,.68rem); color:var(--ui); letter-spacing:.1em; transition:color 0.5s; }
 
+/* ── BEHIND BUTTON — enlarged hit area via padding + negative margin ── */
 #behind-btn {
   background:none; border:none; cursor:none; padding:10px; margin:-10px;
   display:flex; align-items:center; gap:.5rem;
   font-family:var(--body-font); font-size:clamp(.48rem,.65vw,.58rem);
-  letter-spacing:.08em;
+  letter-spacing:.13em; text-transform:uppercase;
   color:var(--ui); opacity:.55;
   transition:color .25s, opacity .25s;
+  /* no ::after needed — padding handles it */
 }
 #behind-btn:hover { opacity:1; color:var(--ui-hi); }
 body.behind-mode #behind-btn { opacity:1; color:var(--ui-hi); }
@@ -188,6 +202,7 @@ body.behind-mode #behind-btn { opacity:1; color:var(--ui-hi); }
 body.behind-mode .behind-ico span:first-child { top:0; left:0; opacity:1; }
 body.behind-mode .behind-ico span:last-child { bottom:0; right:0; top:auto; left:auto; opacity:.5; }
 
+/* ── GRID TOGGLE — same enlarged padding treatment ── */
 #grid-toggle {
   background:none; border:none; cursor:none;
   display:flex; align-items:center; justify-content:center;
@@ -197,7 +212,7 @@ body.behind-mode .behind-ico span:last-child { bottom:0; right:0; top:auto; left
 }
 #grid-toggle:hover { opacity:.85; }
 
-#audio-btn { background:none; border:none; cursor:none; font-family:var(--body-font); font-size:clamp(.5rem,.7vw,.6rem); letter-spacing:.08em; color:var(--ui); display:flex; align-items:center; gap:.4rem; opacity:0; pointer-events:none; transition:opacity .3s, color .25s; padding:8px; margin:-8px; }
+#audio-btn { background:none; border:none; cursor:none; font-family:var(--body-font); font-size:clamp(.5rem,.7vw,.6rem); letter-spacing:.13em; text-transform:uppercase; color:var(--ui); display:flex; align-items:center; gap:.4rem; opacity:0; pointer-events:none; transition:opacity .3s, color .25s; padding:8px; margin:-8px; }
 #audio-btn.vis { opacity:1; pointer-events:all; }
 #audio-btn:hover { color:var(--ui-hi); }
 .aico { width:12px; height:11px; display:flex; align-items:flex-end; gap:2px; }
@@ -205,21 +220,22 @@ body.behind-mode .behind-ico span:last-child { bottom:0; right:0; top:auto; left
 #audio-btn.muted .abar { height:2px !important; }
 
 #info-wrap { max-width:52%; pointer-events:all; }
-#info-work-title { font-size:clamp(.62rem,.88vw,.76rem); letter-spacing:.06em; color:var(--ui-hi); cursor:none; user-select:none; opacity:0; transition:opacity .3s, color .2s; margin-bottom:.3rem; display:inline-flex; align-items:baseline; gap:.25em; font-family:var(--body-font); padding:8px; margin:-8px; }
+#info-work-title { font-size:clamp(.62rem,.88vw,.76rem); letter-spacing:.10em; text-transform:uppercase; color:var(--ui-hi); cursor:none; user-select:none; opacity:0; transition:opacity .3s, color .2s; margin-bottom:.3rem; display:inline-flex; align-items:baseline; gap:.25em; font-family:var(--body-font); padding:8px; margin:-8px; }
 #info-work-title.vis { opacity:1; }
 #info-work-title:hover { color:var(--ui-hi); }
 #info-work-title .tab-arrow { display:inline-block; transition:transform .22s; font-style:normal; font-size:.7em; opacity:.55; margin-left:.3em; }
 #info-work-title.open .tab-arrow { transform:rotate(90deg); }
 #work-title-year { font-size:.65em; vertical-align:super; opacity:.55; letter-spacing:.05em; }
-#behind-label-badge { display:none; font-size:.5em; letter-spacing:.1em; background:var(--ui); color:var(--bg); padding:.15em .45em; border-radius:2px; vertical-align:middle; margin-left:.4em; opacity:0; transition:opacity 0.4s; }
+#behind-label-badge { display:none; font-size:.5em; letter-spacing:.14em; text-transform:uppercase; background:var(--ui); color:var(--bg); padding:.15em .45em; border-radius:2px; vertical-align:middle; margin-left:.4em; opacity:0; transition:opacity 0.4s; }
+
 body.behind-mode #behind-label-badge { display:inline; opacity:1; }
 #info-body { overflow:hidden; max-height:0; transition:max-height .38s cubic-bezier(.4,0,.2,1), opacity .3s, padding .38s cubic-bezier(.4,0,.2,1); opacity:0; }
 #info-body.open { max-height:60vh; opacity:1; padding:.5rem .9rem .65rem; overflow-y:auto; -webkit-overflow-scrolling:touch; }
 #info-inner { display:inline-block; background:var(--panel-bg); backdrop-filter:blur(12px) saturate(1.3); -webkit-backdrop-filter:blur(12px) saturate(1.3); border-radius:6px; border:1px solid rgba(128,128,128,.12); width:100%; padding:.7rem 1rem .75rem; transition:background 0.5s; }
-#caption-text { font-family:var(--sans); font-size:clamp(.58rem,.78vw,.68rem); line-height:1.75; color:var(--ui-cap); letter-spacing:.03em; transition:color 0.5s; }
+#caption-text { font-family:var(--body-font); font-size:clamp(.58rem,.78vw,.68rem); line-height:1.75; color:var(--ui-cap); letter-spacing:.04em; transition:color 0.5s; }
 #caption-text a { color:var(--ui-hi); text-decoration:none; border-bottom:1px solid var(--ui); transition:border-color .2s; cursor:none; pointer-events:all; }
 #caption-text a:hover { border-color:var(--ui-hi); }
-#watch-full-link { display:none; margin-top:.55rem; font-size:clamp(.52rem,.72vw,.63rem); letter-spacing:.1em; color:var(--ui); text-decoration:none; border-bottom:1px solid var(--ui-desc); transition:color .2s, border-color .2s; cursor:none; pointer-events:all; width:fit-content; }
+#watch-full-link { display:none; margin-top:.55rem; font-size:clamp(.52rem,.72vw,.63rem); letter-spacing:.14em; text-transform:uppercase; color:var(--ui); text-decoration:none; border-bottom:1px solid var(--ui-desc); transition:color .2s, border-color .2s; cursor:none; pointer-events:all; width:fit-content; }
 #watch-full-link:hover { color:var(--ui-hi); border-color:var(--ui); }
 #watch-full-link.vis { display:block; }
 #desc-wrap { position:fixed; left:clamp(1.5rem,4vw,3rem); top:50%; transform:translateY(-50%); max-width:240px; z-index:50; pointer-events:none; opacity:0; transition:opacity .4s; }
@@ -249,24 +265,85 @@ body.behind-mode {
   font-family: 'Courier New', monospace;
   user-select: none;
 }
-.behind-titlebar-id { color: #3a3a34; font-size: 10px; letter-spacing: .12em; flex-shrink: 0; }
-.behind-titlebar-sep { width: 1px; height: 12px; background: #252520; flex-shrink: 0; }
-.behind-titlebar-name { position: static; text-align: left; padding: 0; font-family: 'Courier New', monospace; font-size: 10px; letter-spacing: .06em; color: #5a5a50; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-transform: none; }
-.behind-titlebar-meta { color: #3a3a34; font-size: 10px; letter-spacing: .08em; flex-shrink: 0; }
-.behind-img-inner { position: absolute; top: 20px; left: 0; right: 0; bottom: 0; overflow: hidden; }
-.behind-img-inner img, .behind-img-inner video { display: block; width: 100%; height: 100%; object-fit: cover; filter: brightness(0.72) saturate(0.2); pointer-events: none; }
-.behind-img-inner::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2; background: repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.07) 3px, rgba(0,0,0,0.07) 4px); }
-.behind-sticky { position: absolute; cursor: none; user-select: none; will-change: transform; border-radius: 0; box-shadow: none; border: 1px solid #252520; }
-.behind-img-wrap { position:absolute; }
-.sticky-titlebar { height: 20px; background: #111110; border-bottom: 1px solid #252520; border-radius: 0; display: flex; align-items: center; padding: 0 10px; gap: 8px; }
+.behind-titlebar-id {
+  color: #3a3a34; font-size: 10px;
+  letter-spacing: .12em; flex-shrink: 0;
+}
+.behind-titlebar-sep {
+  width: 1px; height: 12px;
+  background: #252520; flex-shrink: 0;
+}
+.behind-titlebar-name {
+  position: static; text-align: left; padding: 0;
+  font-family: 'Courier New', monospace;
+  font-size: 10px; letter-spacing: .06em;
+  color: #5a5a50; flex: 1;
+  overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; text-transform: none;
+}
+.behind-titlebar-meta {
+  color: #3a3a34; font-size: 10px;
+  letter-spacing: .08em; flex-shrink: 0;
+}
+
+/* 图片面板 */
+.behind-img-inner {
+  position: absolute; top: 20px; left: 0; right: 0; bottom: 0;
+  overflow: hidden;
+}
+.behind-img-inner img,
+.behind-img-inner video {
+  display: block; width: 100%; height: 100%;
+  object-fit: cover;
+  filter: brightness(0.72) saturate(0.2);
+  pointer-events: none;
+}
+.behind-img-inner::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 2;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,0,0,0.07) 3px, rgba(0,0,0,0.07) 4px
+  );
+}
+
+/* sticky note → process log */
+.behind-sticky {
+  position: absolute;   
+  cursor: none;
+  user-select: none;
+  will-change: transform;
+  border-radius: 0;
+  box-shadow: none;
+  border: 1px solid #252520;
+}
+.behind-img-wrap{
+  position:absolute;
+}
+.sticky-titlebar {
+  height: 20px; background: #111110;
+  border-bottom: 1px solid #252520; border-radius: 0;
+  display: flex; align-items: center; padding: 0 10px; gap: 8px;
+}
 .sticky-titlebar-id { color: #3a3a34; font-size: 10px; letter-spacing: .12em; }
 .sticky-titlebar-sep { width: 1px; height: 12px; background: #252520; }
 .sticky-titlebar-name { color: #5a5a50; font-size: 10px; letter-spacing: .06em; flex: 1; }
-.sticky-body { background: #0f0f0e; padding: 10px 12px; font-family: var(--sans); }
-.sticky-line { font-size: 10px; line-height: 1.85; color: #7a7a68; border-bottom: 1px solid #1c1c18; padding-bottom: 3px; margin-bottom: 3px; letter-spacing: .03em; }
+.sticky-body {
+  background: #0f0f0e; padding: 10px 12px; font-family: 'Courier New', monospace;
+}
+.sticky-line {
+  font-size: 10px; line-height: 1.85; color: #7a7a68;
+  border-bottom: 1px solid #1c1c18;
+  padding-bottom: 3px; margin-bottom: 3px; letter-spacing: .03em;
+}
 .sticky-line:last-child { border-bottom: none; }
 
-/* ── GRID MODE ── */
+
+/* ── GRID MODE ──
+   FIX: #grid-mode itself is pointer-events:none when closed,
+   but child elements must NOT override that with pointer-events:all
+   while the parent is invisible. We set grid-links/right to
+   pointer-events:none by default and only enable them when #grid-mode.on ──
+*/
 #grid-mode {
   position:fixed; inset:0; z-index:200;
   background:var(--bg);
@@ -276,43 +353,20 @@ body.behind-mode {
 }
 #grid-mode.on { opacity:1; pointer-events:all; }
 #grid-mode::after { content:''; position:absolute; bottom:0; left:0; right:0; height:15vh; background:linear-gradient(to top, var(--scrim-clr) 0%, transparent 100%); pointer-events:none; z-index:1; }
-#grid-header {
-  position:absolute; top:0; left:0; right:0;
-  padding:clamp(1.2rem,2.8vw,2rem) clamp(1.5rem,4vw,3rem);
-  display:flex; justify-content:space-between; align-items:flex-start;
-  z-index:210; pointer-events:none;
-  background:linear-gradient(to bottom, var(--bg) 60%, transparent 100%);
-  transition:background .4s; gap:1.5rem;
-}
+#grid-header { position:absolute; top:0; left:0; right:0; padding:clamp(1.2rem,2.8vw,2rem) clamp(1.5rem,4vw,3rem); display:flex; justify-content:space-between; align-items:baseline; z-index:210; pointer-events:none; background:linear-gradient(to bottom, var(--bg) 60%, transparent 100%); transition:background .4s; gap:1.5rem; }
 
-/* About label top-left in grid */
-#grid-about-label {
-  font-family:var(--body-font);
-  font-size:clamp(.72rem,1vw,.85rem);
-  font-weight:inherit;
-  letter-spacing:.01em;
-  color:var(--ui);
-  line-height:1;
-}
-
-/* Grid links: horizontal row */
-#grid-links {
-  display:flex; flex-direction:row; gap:1.4rem;
-  pointer-events:none; align-items:center;
-}
+/* FIX: links/controls inside grid-header are pointer-events:none by default;
+   the .on class on the parent grid-mode re-enables them via cascade.
+   We achieve this by making the interactive children pointer-events:all
+   ONLY when the grid is open — use the grid-mode.on selector. */
+#grid-links { display:flex; flex-direction:column; gap:0.18rem; pointer-events:none; }
 #grid-mode.on #grid-links { pointer-events:all; }
-#grid-mode.on #grid-about-label { pointer-events:all; }
-#grid-links a {
-  font-family:var(--body-font); font-weight:100;
-  font-size:clamp(.72rem,1vw,.85rem); letter-spacing:.01em;
-  color:var(--ui); text-decoration:none; cursor:none;
-  transition:color .2s; line-height:1;
-}
+#grid-links a { font-family:var(--serif); font-weight:100; font-size:clamp(.72rem,1vw,.85rem); letter-spacing:.01em; text-transform:uppercase; color:var(--ui); text-decoration:none; cursor:none; transition:color .2s; line-height:1; }
 #grid-links a:hover { color:var(--ui-hi); }
 #grid-right { display:flex; align-items:center; gap:1.8rem; pointer-events:none; }
 #grid-mode.on #grid-right { pointer-events:all; }
-#grid-total, #grid-updated { font-family:var(--body-font); font-size:clamp(.55rem,.78vw,.68rem); color:var(--ui); letter-spacing:.05em; white-space:nowrap; }
-#grid-close { background:none; border:none; cursor:none; font-family:var(--body-font); font-size:clamp(.52rem,.72vw,.62rem); letter-spacing:.1em; color:var(--ui); transition:color .25s; padding:8px; margin:-8px; line-height:1; }
+#grid-total, #grid-updated { font-family:var(--serif); font-size:clamp(.55rem,.78vw,.68rem); color:var(--ui); letter-spacing:.1em; white-space:nowrap; }
+#grid-close { background:none; border:none; cursor:none; font-family:var(--serif); font-size:clamp(.52rem,.72vw,.62rem); letter-spacing:.14em; text-transform:uppercase; color:var(--ui); transition:color .25s; padding:8px; margin:-8px; line-height:1; }
 #grid-close:hover { color:var(--ui-hi); }
 #grid-scale-control { display:flex; align-items:center; align-self:center; }
 #grid-scale-slider { -webkit-appearance:none; width:40px; height:2px; background:var(--ui); outline:none; }
@@ -322,51 +376,9 @@ body.behind-mode {
 .grid-wall-item { position:relative; overflow:hidden; cursor:none; background:rgba(128,128,128,0.06); break-inside:avoid; }
 .grid-wall-item img { display:block; width:100%; height:auto; object-fit:cover; user-select:none; -webkit-user-drag:none; pointer-events:none; }
 .grid-wall-item:hover img { opacity:1; }
-.grid-wall-item .gw-label { position:absolute; bottom:0; left:0; right:0; padding:.4rem .55rem; font-family:var(--body-font); font-size:clamp(.42rem,.58vw,.52rem); letter-spacing:.06em; color:rgba(255,255,255,.85); background:linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 100%); opacity:0; transition:opacity .25s; pointer-events:none; }
+.grid-wall-item .gw-label { position:absolute; bottom:0; left:0; right:0; padding:.4rem .55rem; font-family:var(--mono); font-size:clamp(.42rem,.58vw,.52rem); letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.85); background:linear-gradient(to top, rgba(0,0,0,.55) 0%, transparent 100%); opacity:0; transition:opacity .25s; pointer-events:none; }
 body.behind-mode .grid-wall-item .gw-label { color:rgba(0,0,0,.75); background:linear-gradient(to top, rgba(255,255,255,.55) 0%, transparent 100%); }
 .grid-wall-item:hover .gw-label { opacity:1; }
-
-/* ── ABOUT OVERLAY in grid (slides up from bottom, stops below topbar) ── */
-#grid-about-overlay {
-  position:absolute;
-  left:0; right:0; bottom:0;
-  z-index:205;
-  pointer-events:none;
-  opacity:0;
-  transform:translateY(100%);
-  transition:transform 0.48s cubic-bezier(0.4,0,0.2,1), opacity 0.35s cubic-bezier(0.4,0,0.2,1);
-  /* top is set dynamically via JS to be below the grid header */
-}
-#grid-about-overlay.on {
-  opacity:1; pointer-events:all;
-  transform:translateY(0);
-}
-#grid-about-inner {
-  position:absolute; inset:0;
-  background:var(--bg);
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  padding:clamp(2rem,5vw,4rem) clamp(1.5rem,4vw,3rem);
-  padding-top:clamp(1.5rem,3vw,2.5rem);
-}
-#grid-about-text {
-  font-family:var(--sans);
-  font-size:clamp(.7rem,.95vw,.85rem);
-  line-height:1.95;
-  color:var(--ui-cap);
-  letter-spacing:.03em;
-  max-width:480px;
-}
-#grid-about-text .about-role { color:var(--ui-hi); }
-.about-bio-p { font-family:var(--sans); text-indent:3em; font-size:clamp(.7rem,.95vw,.85rem); line-height:1.95; color:var(--ui-cap); letter-spacing:.03em; margin-top:.2rem; }
-#grid-about-bio-toggle {
-  display:inline-block; margin-left:.35em; font-size:.85em;
-  opacity:.55; cursor:none; transition:opacity .2s, transform .22s; user-select:none;
-}
-#grid-about-bio-toggle:hover { opacity:1; }
-#grid-about-bio-toggle.open { transform:rotate(45deg); opacity:1; }
-#grid-about-bio-more { display:none; }
-#grid-about-bio-more.open { display:block; }
 
 #load { position:fixed; inset:0; background:var(--bg); display:flex; align-items:center; justify-content:center; z-index:1000; transition:opacity .5s; }
 #load.off { opacity:0; pointer-events:none; }
@@ -378,7 +390,11 @@ body.behind-mode .grid-wall-item .gw-label { color:rgba(0,0,0,.75); background:l
 #click-next { position:fixed; inset:0; z-index:2; cursor:none; }
 body.behind-mode #click-next { pointer-events:none; }
 
-#wip-label { position:fixed; top:50%; right:clamp(1.5rem,4vw,3rem); transform:translateY(-50%); font-family:var(--body-font); font-size:clamp(.42rem,.58vw,.5rem); letter-spacing:.14em; color:var(--ui-desc); writing-mode:vertical-rl; text-orientation:mixed; z-index:52; pointer-events:none; opacity:0; transition:opacity 0.5s; }
+/* Removed generic ::after hit-area — each interactive element now uses padding+negative-margin instead */
+#name-colon { cursor:none; transition:color .2s; display:inline-block; padding:6px; margin:-6px; }
+#name-colon:hover { color:var(--ui-hi); }
+
+#wip-label { position:fixed; top:50%; right:clamp(1.5rem,4vw,3rem); transform:translateY(-50%); font-family:var(--mono); font-size:clamp(.42rem,.58vw,.5rem); letter-spacing:.18em; text-transform:uppercase; color:var(--ui-desc); writing-mode:vertical-rl; text-orientation:mixed; z-index:52; pointer-events:none; opacity:0; transition:opacity 0.5s; }
 body.behind-mode #wip-label { opacity:1; }
 </style>
 </head>
@@ -413,7 +429,11 @@ body.behind-mode #wip-label { opacity:1; }
     </div>
     <div id="intro-body">
       <div id="intro-inner">
-        <p id="intro-text"></p>
+        <p id="intro-text">is&nbsp;<span id="role-slot"></span>&nbsp;working across interactive systems, editorial design, and real-time visual environments, currently based in New York City.<span id="bio-toggle" onclick="toggleBio()">+</span></p>
+        <span id="bio-more">
+          <p class="bio-p">Treating design as a living logic system, their work explores how perception, belief, and meaning are constructed and negotiated, and how they could convince people to believe in something.</p>
+          <p class="bio-p">Their interests span visual communication, computational logic, and temporal or performance-based visual environments. This includes work that extends into live visual performance contexts, where imagery responds to external inputs such as sound, movement, or spatial conditions.</p>
+        </span>
       </div>
     </div>
   </div>
@@ -471,16 +491,11 @@ body.behind-mode #wip-label { opacity:1; }
 
 <div id="grid-mode">
   <div id="grid-header">
-    <div style="display:flex;flex-direction:column;gap:.55rem;">
-      <span id="grid-about-label">
-        <a id="grid-about-trigger" style="cursor:none;color:var(--ui);text-decoration:none;transition:color .2s;font-family:var(--body-font);font-size:clamp(.72rem,1vw,.85rem);letter-spacing:.01em;">About</a>
-      </span>
-      <span id="grid-links">
-        <a href="./CV_NioJin_May_28_.pdf" target="_blank" rel="noopener">CV</a>
-        <a href="mailto:niojin.noi@gmail.com">Email</a>
-        <a href="https://www.instagram.com/7ni0jin/" target="_blank" rel="noopener">Instagram</a>
-      </span>
-    </div>
+    <span id="grid-links">
+      <a href="./CV_NioJin_May_28_.pdf" target="_blank" rel="noopener">CV</a>
+      <a href="mailto:niojin.noi@gmail.com">Email</a>
+      <a href="https://www.instagram.com/7ni0jin/" target="_blank" rel="noopener">Instagram</a>
+    </span>
     <div id="grid-right">
       <div id="grid-scale-control">
         <input type="range" id="grid-scale-slider" min="0" max="100" value="100" step="1" title="scale">
@@ -493,25 +508,23 @@ body.behind-mode #wip-label { opacity:1; }
   <div id="grid-scroll">
     <div id="grid-wall"></div>
   </div>
-
-  <div id="grid-about-overlay">
-    <div id="grid-about-inner">
-      <p id="grid-about-text">
-        Working across interactive systems, editorial design, and real-time visual environments, currently based in New York City.<span id="grid-about-bio-toggle" onclick="toggleGridBio()">+</span>
-      </p>
-      <span id="grid-about-bio-more">
-        <p class="about-bio-p">Treating design as a living logic system, their work explores how perception, belief, and meaning are constructed and negotiated, and how they could convince people to believe in something.</p>
-        <p class="about-bio-p">Their interests span visual communication, computational logic, and temporal or performance-based visual environments. This includes work that extends into live visual performance contexts, where imagery responds to external inputs such as sound, movement, or spatial conditions.</p>
-      </span>
-    </div>
-  </div>
 </div>
 
 <script>
 const PAGE = { siteTitle: 'Nio Jin' };
 
 const ITEMS = [
-{
+  {
+    title:'jellyfish that live inside my computer', year:'2025',
+    tags:['motion','interactive'], type:'video', src:'./videos/jellyfish.mp4',
+    thumb:'./thumbs/jellyfish.gif',
+    hasAudio:true,
+    caption:'An evolving interactive interface of jellyfish, inspired by Tamagotchi-like companionship.',
+    fullLink:'https://youtu.be/0iu3OYLp8xg?si=baJlA7X29XbMNuuG',
+    behind:{ images:['./behind/jellyfish/sketch_01.jpg','./behind/jellyfish/sketch_02.jpg','./behind/jellyfish/audio_01.jpg'],
+      caption:'All UI and visual elements were made in TouchDesigner; connected MaxMSP to give these jellyfish voices. Jellyfish stock comes from Pixabay.' },
+  },
+  {
     title:'auto-obiturary', year:'2025',
     tags:['printed medium','book'], type:'gallery', folderName:'autoO',
     images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg'],
@@ -519,6 +532,24 @@ const ITEMS = [
     caption:'A hand-finished artist\'s catalog that narrates the shifting states of mind of musician Boku no Lyric no Boyomi through a curated sequence of his songs and lyrics, leading to the symbolic "death" of his public persona as an act of protest against public expectation. Printed in black-and-white on plain office paper and presented in a simple black box with an accordion-fold scroll-book and 14 cards visualizing the selected songs. Showcased at Offset Book Fair 2025',
     behind:{ images:['./behind/autoO/010.jpg','./behind/autoO/020.jpg','./behind/autoO/030.jpg','./behind/autoO/040.jpg','./behind/autoO/050.png','./behind/autoO/060.jpg'],
       caption:'extra mockups...and dummy book i made, was debating the curating sequence, go with chronological or more narrative leaned.' },
+  },
+  {
+    title:'the one', year:'2026',
+    tags:['motion','interactive'], type:'video', src:'./videos/theOne.mp4',
+    thumb:'./thumbs/theone.gif',
+    hasAudio:true,
+    caption:'Real-time audio-driven narrative with visual projection, 14\' 38". As traditional religions lose authority, the human search for meaning does not disappear; it relocates. Figures, lifestyles, ideologies, and consumer cultures increasingly take on the role of symbolic centers—offering simplified answers to complex realities. This projection creates a spectacle to envelop the audio. Within this structure, contact does not activate the system; it renders its participants legible to it. Only through connection does one momentarily appear—absorbed into this spectacle, and returned as part of it.',
+    behind:{ images:['./behind/theOne/010.jpg','./behind/theOne/020.jpg','./behind/theOne/030.jpg','./behind/theOne/040.jpg','./behind/theOne/050.jpg','./behind/theOne/060.jpg','./behind/theOne/070.jpg'],
+      caption:'went through tons of different directions and redid a lot of times, from literal figures, the abstract approach i want to convey the message through one‘s own perception rather than direct information.'}
+  },
+  {
+    title:'the one', year:'2026',
+    tags:['printed medium','book'], type:'gallery', folderName:'theOne',
+    images:['010.jpg','020.jpg','030.jpg'],
+    thumb:'./thumbs/theOneE.jpg',
+    caption:'As traditional religions lose authority, the human search for meaning does not disappear; it relocates. Figures, lifestyles, ideologies, and consumer cultures increasingly take on the role of symbolic centers—offering simplified answers to complex realities. The book works as an exposure of the spectacle. It translates the moving projection into fixed ink, and the audio into a transcript. This project is a depiction of contemporary preaching.',
+    behind:{ images:['./behind/theOneB/010.png','./behind/theOneB/030.png','./behind/theOneB/040.png','./behind/theOneB/060.jpg'],
+      caption:'initially went with accordian fold to match the circle after it fully opened, but book ring binding also worked, and the different paper stock would work visually more appealing on the book ring binding. The image making one was abandoned in the final execution because of the fonts it used; it does not fit in the system i had, but i really love it, so i used it as the flyer later.' },
   },
   {
     title:'the [Lost H]orizon', year:'2024',
@@ -541,6 +572,15 @@ const ITEMS = [
   },
   {
     title:'pcell.otf', year:'2025',
+    tags:['typeface','motion'], type:'gallery', folderName:'pcell',
+    images:['010.jpg','020.jpg','030.mp4'],
+    thumb:'./thumbs/pcellS.jpg',
+    caption:'A structural display typeface inspired by hexagonal geometry and Benzene-ring ambigrams. The specimen tests its industrial, architectural vibe across 2D and 3D mediums, exploring how constructed letterforms define a unique narrative world.',
+    behind:{ images:['./behind/pcell/010.png','./behind/pcell/020.png','./behind/pcell/030.png','./behind/pcell/040.png'],
+      caption:'Really appreciate the constructive feedback during the process and book resources from my Typeface professor, Tobias Holzmann' },
+  },
+  {
+    title:'pcell.otf', year:'2025',
     tags:['typeface','interactive','motion'], type:'video', src:'./videos/pcell.mp4',
     thumb:'./thumbs/pcell.gif',
     hasAudio:true,
@@ -549,13 +589,14 @@ const ITEMS = [
       caption:'hade fun exploring blender more, convert type to 3d in blender >> then export point cloud file >> touchdesigner >> mediapipe >> finger-tracking' },
   },
   {
-    title:'pcell.otf', year:'2025',
-    tags:['typeface','motion'], type:'gallery', folderName:'pcell',
-    images:['010.jpg','020.jpg','030.mp4'],
-    thumb:'./thumbs/pcellS.jpg',
-    caption:'A structural display typeface inspired by hexagonal geometry and Benzene-ring ambigrams. The specimen tests its industrial, architectural vibe across 2D and 3D mediums, exploring how constructed letterforms define a unique narrative world.',
-    behind:{ images:['./behind/pcell/010.png','./behind/pcell/020.png','./behind/pcell/030.png','./behind/pcell/040.png'],
-      caption:'Really appreciate the constructive feedback during the process and book resources from my Typeface professor, Tobias Holzmann' },
+    title:'GALA', year:'2025',
+    tags:['live','audioreactive','motion'], type:'video', src:'./videos/gala.mp4',
+    thumb:'./thumbs/gala.gif',
+    hasAudio:true,
+    caption:'A live audio-reactive VJ set performed at Volvox Labs, featuring a visual reinterpretation of GALA by XG.',
+    fullLink:'https://youtu.be/idwUywYGlKQ?si=v8UhORQ_myDX6oTd',
+    behind:{ images:['./behind/gala/010.png','./behind/gala/020.jpg','./behind/gala/030.jpg','./behind/gala/040.jpg','./behind/gala/050.jpg'],
+      caption:'Using an electronic piano to control midi input and control visuals was a lightbulb in my head, and i\'m glad it went well. if i had more time could develop more. I wanted to actually perform at the same time playing the piano, prob will play with it in future projects. (Bringing my keyboard to Brooklyn was actually the most physically exhausting part of this project' },
   },
   {
     title:'re:', year:'2025',
@@ -575,55 +616,6 @@ const ITEMS = [
     behind:{ images:['./behind/devilReturn/010.png','./behind/devilReturn/020.png','./behind/devilReturn/030.png','./behind/devilReturn/040.png'],
       caption:'At that time i saw people posting about Devil Comet returning, and that gave me the inspiration to do something with black and red. But I want to lose the presence of the word devil, and not too stereotypical-gothic, so i picked a dotted font specifically' },
   },
-  {
-    title:'the one', year:'2026',
-    tags:['printed medium','book'], type:'gallery', folderName:'theOne',
-    images:['010.jpg','020.jpg','030.jpg'],
-    thumb:'./thumbs/theOneE.jpg',
-    caption:'As traditional religions lose authority, the human search for meaning does not disappear; it relocates. Figures, lifestyles, ideologies, and consumer cultures increasingly take on the role of symbolic centers—offering simplified answers to complex realities. The book works as an exposure of the spectacle. It translates the moving projection into fixed ink, and the audio into a transcript. This project is a depiction of contemporary preaching.',
-    behind:{ images:['./behind/theOneB/010.png','./behind/theOneB/030.png','./behind/theOneB/040.png','./behind/theOneB/060.jpg'],
-      caption:'initially went with accordian fold to match the circle after it fully opened, but book ring binding also worked, and the different paper stock would work visually more appealing on the book ring binding. The image making one was abandoned in the final execution because of the fonts it used; it does not fit in the system i had, but i really love it, so i used it as the flyer later.' },
-  },
-  {
-    title:'the one', year:'2026',
-    tags:['motion','interactive'], type:'video', src:'./videos/theOne.mp4',
-    thumb:'./thumbs/theone.gif',
-    hasAudio:true,
-    hideInFullscreen:true,
-    caption:'Real-time audio-driven narrative with visual projection, 14\' 38". As traditional religions lose authority, the human search for meaning does not disappear; it relocates. Figures, lifestyles, ideologies, and consumer cultures increasingly take on the role of symbolic centers—offering simplified answers to complex realities. This projection creates a spectacle to envelop the audio. Within this structure, contact does not activate the system; it renders its participants legible to it. Only through connection does one momentarily appear—absorbed into this spectacle, and returned as part of it.',
-    behind:{ images:['./behind/theOne/010.jpg','./behind/theOne/020.jpg','./behind/theOne/030.jpg','./behind/theOne/040.jpg','./behind/theOne/050.jpg','./behind/theOne/060.jpg','./behind/theOne/070.jpg'],
-      caption:'went through tons of different directions and redid a lot of times, from literal figures, the abstract approach i want to convey the message through one\'s own perception rather than direct information.'}
-  },
-  
-
-  {
-    title:'jellyfish that live inside my computer', year:'2025',
-    tags:['motion','interactive'], type:'video', src:'./videos/jellyfish.mp4',
-    thumb:'./thumbs/jellyfish.gif',
-    hasAudio:true,
-    hideInFullscreen:true,
-    caption:'An evolving interactive interface of jellyfish, inspired by Tamagotchi-like companionship.',
-    fullLink:'https://youtu.be/0iu3OYLp8xg?si=baJlA7X29XbMNuuG',
-    behind:{ images:['./behind/jellyfish/sketch_01.jpg','./behind/jellyfish/sketch_02.jpg','./behind/jellyfish/audio_01.jpg'],
-      caption:'All UI and visual elements were made in TouchDesigner; connected MaxMSP to give these jellyfish voices. Jellyfish stock comes from Pixabay.' },
-  },
-  
-
-
-
-  {
-    title:'GALA', year:'2025',
-    tags:['live','audioreactive','motion'], type:'video', src:'./videos/gala.mp4',
-    thumb:'./thumbs/gala.gif',
-    hasAudio:true,
-    hideInFullscreen:true,
-    caption:'A live audio-reactive VJ set performed at Volvox Labs, featuring a visual reinterpretation of GALA by XG.',
-    fullLink:'https://youtu.be/idwUywYGlKQ?si=v8UhORQ_myDX6oTd',
-    behind:{ images:['./behind/gala/010.png','./behind/gala/020.jpg','./behind/gala/030.jpg','./behind/gala/040.jpg','./behind/gala/050.jpg'],
-      caption:'Using an electronic piano to control midi input and control visuals was a lightbulb in my head, and i\'m glad it went well. if i had more time could develop more. I wanted to actually perform at the same time playing the piano, prob will play with it in future projects. (Bringing my keyboard to Brooklyn was actually the most physically exhausting part of this project' },
-  },
-
-
   {
     title:'the afternoon we tried suicide', year:'2025',
     tags:['motion','audioreactive'], type:'video', src:'./videos/afternoon.mp4',
@@ -657,14 +649,14 @@ const ITEMS = [
 ];
 
 // ── STATE ──
-let cur = 0, muted = true, gridOpen = false, infoOpen = false;
+let cur = 0, muted = true, gridOpen = false, infoOpen = false, introOpen = false;
 let isTransitioning = false, behindMode = false;
 let galleryActive = false, galleryIdx = 0, galleryEls = [], galleryTimer = null;
 const GALLERY_INTERVAL = 1500;
-let gridAboutOpen = false;
-
+ 
+// ① Slide registry — sparse array, built on demand
 const slides = new Array(ITEMS.length).fill(null);
-
+ 
 const fsMode           = document.getElementById('fs-mode');
 const behindCanvas     = document.getElementById('behind-canvas');
 const scrim            = document.getElementById('scrim');
@@ -688,10 +680,8 @@ const galleryProgThumb = document.getElementById('gallery-prog-thumb');
 const galleryCounter   = document.getElementById('gallery-counter');
 const behindBtn        = document.getElementById('behind-btn');
 const behindLbl        = document.getElementById('behind-lbl');
-const gridAboutOverlay = document.getElementById('grid-about-overlay');
-const gridAboutTrigger = document.getElementById('grid-about-trigger');
-
-// ── DWELL TIMER → name-time ──
+ 
+// ── DWELL TIMER ──
 {
   const nameTimeEl = document.getElementById('name-time');
   let dwellMs = 0, segStart = null;
@@ -702,104 +692,81 @@ const gridAboutTrigger = document.getElementById('grid-about-trigger');
   setInterval(()=>{nameTimeEl.textContent=fmtDwell(dwellMs+(segStart!==null?performance.now()-segStart:0));},1000);
   nameTimeEl.textContent=fmtDwell(0);
 }
-
-// ── LOCAL GREETING → intro-text ──
-(function initGreeting(){
-  const greetings = {
-    'zh':   ['早上好', '下午好', '晚上好'],
-    'zh-tw':['早安', '午安', '晚安'],
-    'zh-hk':['早晨', '午安', '晚安'],
-    'ja':   ['おはようございます', 'こんにちは', 'こんばんは'],
-    'ko':   ['좋은 아침이에요', '안녕하세요', '안녕하세요'],
-    'fr':   ['Bonjour', 'Bonjour', 'Bonsoir'],
-    'es':   ['Buenos días', 'Buenas tardes', 'Buenas noches'],
-    'pt':   ['Bom dia', 'Boa tarde', 'Boa noite'],
-    'it':   ['Buongiorno', 'Buongiorno', 'Buonasera'],
-    'de':   ['Guten Morgen', 'Guten Tag', 'Guten Abend'],
-    'nl':   ['Goedemorgen', 'Goedemiddag', 'Goedenavond'],
-    'sv':   ['God morgon', 'God dag', 'God kväll'],
-    'no':   ['God morgen', 'God dag', 'God kveld'],
-    'da':   ['God morgen', 'God dag', 'God aften'],
-    'ru':   ['Доброе утро', 'Добрый день', 'Добрый вечер'],
-    'pl':   ['Dzień dobry', 'Dzień dobry', 'Dobry wieczór'],
-    'ar':   ['صباح الخير', 'مساء الخير', 'مساء الخير'],
-    'hi':   ['सुप्रभात', 'नमस्ते', 'शुभ संध्या'],
-    'tr':   ['Günaydın', 'İyi günler', 'İyi akşamlar'],
-    'en':   ['Good morning', 'Good afternoon', 'Good evening'],
-  };
-  function getGreeting(hour) {
-    const lang = (navigator.language || 'en').toLowerCase();
-    const period = hour >= 5 && hour < 12 ? 0 : hour >= 12 && hour < 18 ? 1 : 2;
-    const g = greetings[lang] || greetings[lang.split('-')[0]] || greetings['en'];
-    return g[period];
-  }
-  const introTextEl = document.getElementById('intro-text');
-  function setGreeting() {
-    introTextEl.textContent = getGreeting(new Date().getHours());
-  }
-  setGreeting();
-  setInterval(setGreeting, 60000);
-})();
-
+ 
 // ── CURSOR RING ──
 let ringOutTimer = null;
 function curHoverIn()  { clearTimeout(ringOutTimer); curEl.classList.remove('ring-out'); curEl.classList.add('hover'); }
 function curHoverOut() { curEl.classList.remove('hover'); curEl.classList.add('ring-out'); ringOutTimer=setTimeout(()=>curEl.classList.remove('ring-out'),500); }
-
-// ── COLON → toggle intro panel ──
+ 
+// ── ④ ROLE SWITCHER ──
+// Measure both font widths once at boot with a single probe span.
+// No rAF/double-rAF needed — we set fontFamily directly on the probe,
+// so the measurement is synchronous and accurate regardless of CSS vars.
+const ROLES = [{word:'designer',an:false},{word:'artist',an:true},{word:'human',an:false}];
+let roleReset = null;
+let applyRoleWidth; // called by toggleBehind after class switch
+ 
+(function initRoles(){
+  const slot = document.getElementById('role-slot');
+ 
+  // Probe inherits nothing risky — we set font explicitly
+  const probe = document.createElement('span');
+  probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap;' +
+    'font-size:clamp(.58rem,.78vw,.68rem);letter-spacing:.03em;';
+  document.body.appendChild(probe);
+ 
+  function measureMaxW(fontFamily) {
+    probe.style.fontFamily = fontFamily;
+    let max = 0;
+    ROLES.forEach(r => { probe.textContent = (r.an ? 'an ' : 'a ') + r.word; max = Math.max(max, probe.offsetWidth); });
+    return max;
+  }
+ 
+  const widths = {
+    serif: measureMaxW('swiss-721-bt, sans-serif'),
+    mono:  measureMaxW("'Courier New', monospace"),
+  };
+  document.body.removeChild(probe);
+ 
+  slot.style.width = (widths.serif + 2) + 'px'; // default: serif mode
+ 
+  ROLES.forEach((r, i) => {
+    const sp = document.createElement('span');
+    sp.className = 'role-word' + (i === 0 ? ' active' : '');
+    sp.innerHTML = `<span style="opacity:.55">${r.an ? 'an' : 'a'}</span> ${r.word}`;
+    slot.appendChild(sp);
+  });
+ 
+  let roleIdx = 0;
+  const words = slot.querySelectorAll('.role-word');
+  setInterval(() => { words[roleIdx].classList.remove('active'); roleIdx=(roleIdx+1)%ROLES.length; words[roleIdx].classList.add('active'); }, 2200);
+  roleReset = () => { words[roleIdx].classList.remove('active'); roleIdx=0; words[roleIdx].classList.add('active'); };
+ 
+  // Instant width swap — no rAF needed, widths are already cached
+  applyRoleWidth = () => { slot.style.width = (widths[behindMode ? 'mono' : 'serif'] + 2) + 'px'; };
+})();
+ 
+// ── INTRO PANEL ──
 const nameColon = document.getElementById('name-colon');
 const introBody = document.getElementById('intro-body');
-let introOpen = false;
 nameColon.addEventListener('click',()=>{
   introOpen=!introOpen;
   introBody.classList.toggle('open',introOpen);
   nameColon.style.color=introOpen?'var(--ui-hi)':'';
+  if(introOpen&&roleReset)roleReset();
+  if(!introOpen){document.getElementById('bio-toggle').classList.remove('open');document.getElementById('bio-more').classList.remove('open');}
   showUI();
 });
 nameColon.addEventListener('mouseenter',curHoverIn);
 nameColon.addEventListener('mouseleave',curHoverOut);
-
-function toggleGridBio(){
-  const tog=document.getElementById('grid-about-bio-toggle'),more=document.getElementById('grid-about-bio-more');
+ 
+function toggleBio(){
+  const tog=document.getElementById('bio-toggle'),more=document.getElementById('bio-more');
   const isOpen=tog.classList.toggle('open');
   more.classList.toggle('open',isOpen);
+  showUI();
 }
-
-// ── GRID ABOUT OVERLAY ──────────────────────────────────────────────────────
-function positionGridAboutOverlay() {
-  const header = document.getElementById('grid-header');
-  const headerBottom = header.offsetTop + header.offsetHeight;
-  gridAboutOverlay.style.top = headerBottom + 'px';
-}
-
-function openGridAbout() {
-  gridAboutOpen = true;
-  positionGridAboutOverlay();
-  gridAboutOverlay.classList.add('on');
-  gridAboutTrigger.style.color = 'var(--ui-hi)';
-}
-
-function closeGridAbout() {
-  gridAboutOpen = false;
-  gridAboutOverlay.classList.remove('on');
-  gridAboutTrigger.style.color = '';
-  // reset bio
-  document.getElementById('grid-about-bio-toggle').classList.remove('open');
-  document.getElementById('grid-about-bio-more').classList.remove('open');
-}
-
-gridAboutTrigger.addEventListener('click', (e) => {
-  e.stopPropagation();
-  gridAboutOpen ? closeGridAbout() : openGridAbout();
-});
-gridAboutTrigger.addEventListener('mouseenter', curHoverIn);
-gridAboutTrigger.addEventListener('mouseleave', curHoverOut);
-
-// Close about overlay when clicking outside (on the grid scroll area)
-document.getElementById('grid-scroll').addEventListener('click', () => {
-  if (gridAboutOpen) closeGridAbout();
-});
-
+ 
 // ── GALLERY ENGINE ──
 function isGallery(idx){return ITEMS[idx]&&ITEMS[idx].type==='gallery';}
 function stopGallery(){
@@ -838,12 +805,12 @@ function galleryStep(){
   if(!galleryActive||!galleryEls.length)return;
   const total=galleryEls.length;galleryDeactivateCurrent();galleryIdx=(galleryIdx+1)%total;galleryActivateCurrent();
 }
-
+ 
 // ── BEHIND MODE ──
 const behindContainers={};
 const BEHIND_MAX_W=380,BEHIND_MAX_H=380;
 function rnd(min,max){return min+Math.random()*(max-min);}
-
+ 
 function placeWrapScattered(wrap,natW,natH,i,total,extraH=0){
   const vw=window.innerWidth,vh=window.innerHeight,margin=48;
   let w=natW,h=natH;
@@ -860,30 +827,35 @@ function placeWrapScattered(wrap,natW,natH,i,total,extraH=0){
   wrap.style.left=x+'px';wrap.style.top=y+'px';
   wrap.style.transform='none';wrap.style.zIndex=3+i;wrap.style.pointerEvents='all';
 }
-
+ 
 function parseStickyLines(text){
   if(!text||!text.trim())return[];
   return text.split(/\n/).map(s=>s.trim()).filter(Boolean);
 }
-
+ 
 function buildBehindContainer(itemIdx){
   const item=ITEMS[itemIdx];if(!item||!item.behind)return null;
   const{images,caption:behindCaption}=item.behind;
   const container=document.createElement('div');
   container.style.cssText='position:absolute;inset:0;pointer-events:none;';
   const total=(images||[]).length;
-
+ 
   (images||[]).forEach((src,i)=>{
     const wrap=document.createElement('div');
     wrap.className='behind-img-wrap';
     wrap.style.cssText='position:absolute;opacity:0;pointer-events:none;';
+
     const titlebar=document.createElement('div');titlebar.className='behind-titlebar';
-    const tbId=document.createElement('span');tbId.className='behind-titlebar-id';tbId.textContent='A·'+String(i+1).padStart(2,'0');
+    const tbId=document.createElement('span');tbId.className='behind-titlebar-id';
+    tbId.textContent='A·'+String(i+1).padStart(2,'0');
     const tbSep=document.createElement('span');tbSep.className='behind-titlebar-sep';
-    const titleName=document.createElement('span');titleName.className='behind-titlebar-name';titleName.textContent=src.split('/').pop();
+    const titleName=document.createElement('span');titleName.className='behind-titlebar-name';
+    titleName.textContent=src.split('/').pop();
     const tbMeta=document.createElement('span');tbMeta.className='behind-titlebar-meta';
-    const ext=src.split('.').pop().toLowerCase();tbMeta.textContent=['mp4','webm','mov'].includes(ext)?'vid':'img';
+    const ext=src.split('.').pop().toLowerCase();
+    tbMeta.textContent=['mp4','webm','mov'].includes(ext)?'vid':'img';
     titlebar.appendChild(tbId);titlebar.appendChild(tbSep);titlebar.appendChild(titleName);titlebar.appendChild(tbMeta);
+
     wrap.appendChild(titlebar);
     const inner=document.createElement('div');inner.className='behind-img-inner';
     let media;
@@ -898,7 +870,7 @@ function buildBehindContainer(itemIdx){
     }
     inner.appendChild(media);wrap.appendChild(inner);makeDraggable(wrap);container.appendChild(wrap);
   });
-
+ 
   const stickyLines=parseStickyLines(behindCaption);
   if(stickyLines.length>0){
     const sticky=document.createElement('div');sticky.className='behind-sticky';
@@ -907,22 +879,26 @@ function buildBehindContainer(itemIdx){
     let sx=Math.min(rnd(vw*0.55,vw*0.80),vw-sW-20);
     let sy=Math.min(rnd(vh*0.55,vh*0.78),vh-120);
     sticky.style.cssText=`left:${Math.round(sx)}px;top:${Math.round(sy)}px;width:${Math.round(sW)}px;z-index:250;opacity:0;pointer-events:none;transition:opacity 0.4s 0.1s;`;
+
     const sTitlebar=document.createElement('div');sTitlebar.className='sticky-titlebar';
-    const stId=document.createElement('span');stId.className='sticky-titlebar-id';stId.textContent='LOG';
+    const stId=document.createElement('span');stId.className='sticky-titlebar-id';
+    stId.textContent='LOG';
     const stSep=document.createElement('span');stSep.className='sticky-titlebar-sep';
-    const stName=document.createElement('span');stName.className='sticky-titlebar-name';stName.textContent='process_note';
+    const stName=document.createElement('span');stName.className='sticky-titlebar-name';
+    stName.textContent='process_note';
     sTitlebar.appendChild(stId);sTitlebar.appendChild(stSep);sTitlebar.appendChild(stName);
     sticky.appendChild(sTitlebar);
+
     const sBody=document.createElement('div');sBody.className='sticky-body';
     stickyLines.forEach(line=>{const p=document.createElement('p');p.className='sticky-line';p.innerHTML=linkify(line);sBody.appendChild(p);});
     sticky.appendChild(sBody);makeDraggable(sticky);container.appendChild(sticky);
     requestAnimationFrame(()=>{sticky.style.pointerEvents='all';sticky.style.opacity='1';});
   }
-
+ 
   behindCanvas.appendChild(container);container.style.display='none';
   behindContainers[itemIdx]=container;return container;
 }
-
+ 
 function makeDraggable(el){
   let startX,startY,startLeft,startTop,isDragging=false;
   el.addEventListener('mousedown',e=>{e.stopPropagation();isDragging=true;el.classList.add('dragging');startX=e.clientX;startY=e.clientY;startLeft=parseInt(el.style.left)||0;startTop=parseInt(el.style.top)||0;const siblings=el.parentElement.querySelectorAll('.behind-img-wrap,.behind-sticky');let maxZ=0;siblings.forEach(s=>{maxZ=Math.max(maxZ,parseInt(s.style.zIndex)||0);});el.style.zIndex=maxZ+1;});
@@ -932,7 +908,7 @@ function makeDraggable(el){
   el.addEventListener('touchmove',e=>{if(!isDragging)return;const t=e.touches[0];el.style.left=(startLeft+t.clientX-startX)+'px';el.style.top=(startTop+t.clientY-startY)+'px';},{passive:true});
   el.addEventListener('touchend',()=>{isDragging=false;el.classList.remove('dragging');});
 }
-
+ 
 function showBehindForItem(idx){
   Object.values(behindContainers).forEach(c=>c.style.display='none');
   const item=ITEMS[idx];if(!item||!item.behind)return;
@@ -941,10 +917,11 @@ function showBehindForItem(idx){
   if(container){container.style.display='';container.querySelectorAll('video').forEach(v=>v.play().catch(()=>{}));}
 }
 function hideBehind(){Object.values(behindContainers).forEach(c=>c.style.display='none');}
-
+ 
 function toggleBehind(){
   behindMode=!behindMode;
   document.body.classList.toggle('behind-mode',behindMode);
+  if(applyRoleWidth)applyRoleWidth(); // ④ instant — widths pre-cached
   behindLbl.textContent=behindMode?'gallery':'behind';
   if(behindMode){
     showBehindForItem(cur);updateCaption(cur);
@@ -957,20 +934,24 @@ function toggleBehind(){
 behindBtn.addEventListener('click',toggleBehind);
 behindBtn.addEventListener('mouseenter',curHoverIn);
 behindBtn.addEventListener('mouseleave',curHoverOut);
-
-// ── LAZY SLIDE BUILDER ──
+ 
+// ── ① LAZY SLIDE BUILDER ──────────────────────────────────────────────────────
 function buildSlide(idx){
   if(slides[idx])return slides[idx];
   const item=ITEMS[idx];
   const slide=document.createElement('div');
   slide.className='fs-slide';
+ 
   if(item.type==='image'){
     const img=document.createElement('img');img.src=item.src;img.alt=item.title||'';img.draggable=false;slide.appendChild(img);
+ 
   } else if(item.type==='video'){
     const vid=document.createElement('video');
     vid.src=item.src;vid.loop=true;vid.muted=true;vid.playsInline=true;
-    vid.preload='none';vid.autoplay=false;
+    vid.preload='none'; // ② don't fetch until activated
+    vid.autoplay=false;
     slide.appendChild(vid);slide._vid=vid;
+ 
   } else if(item.type==='gallery'){
     slide.classList.add('gallery-slide');
     const folder=item.folderName||item.title.replace(/[^a-z0-9]/gi,'-').toLowerCase();
@@ -979,21 +960,26 @@ function buildSlide(idx){
       const ext=fname.split('.').pop().toLowerCase();let el;
       if(['mp4','webm','mov'].includes(ext)){
         el=document.createElement('video');el.src=`./images/${folder}/${fname}`;
-        el.loop=false;el.muted=true;el.playsInline=true;el.preload='none';
+        el.loop=false;el.muted=true;el.playsInline=true;el.preload='none'; // ② lazy
       } else {
         el=document.createElement('img');el.src=`./images/${folder}/${fname}`;el.alt='';el.loading='eager';el.draggable=false;
       }
       frame.appendChild(el);
     });
     slide.appendChild(frame);slide._gallery=true;slide._imageCount=(item.images||[]).filter(Boolean).length;
+ 
   } else if(item.type==='youtube'){
     slide._ytId=item.youtubeId;slide._ytLoaded=false;
   }
+ 
   fsMode.appendChild(slide);slides[idx]=slide;return slide;
 }
-
+ 
+// ── ② VIDEO PRELOAD STRATEGY ──────────────────────────────────────────────────
 let _preloadController=null;
+ 
 function cancelPendingPreload(){if(_preloadController){_preloadController.abort=true;_preloadController=null;}}
+ 
 function scheduleNeighbourPreload(activatedIdx){
   cancelPendingPreload();
   const ctrl={abort:false};_preloadController=ctrl;
@@ -1010,19 +996,22 @@ function scheduleNeighbourPreload(activatedIdx){
     }
   });
 }
+ 
 function releaseSlide(idx){
   const slide=slides[idx];if(!slide)return;
   const item=ITEMS[idx];
   if(item.type==='video'&&slide._vid){
-    const vid=slide._vid;vid.pause();vid.currentTime=0;
-    vid.preload='none';vid.src=vid.src;
+    const vid=slide._vid;
+    vid.pause();vid.currentTime=0;
+    vid.preload='none';vid.src=vid.src; // flush buffered segments
   }
 }
-
+ 
+// Boot: only build slide 0 and 1
 buildSlide(0);
 if(ITEMS.length>1)buildSlide(1);
-
-// ── CAPTION ──
+ 
+// ── CAPTION ──────────────────────────────────────────────────────────────────
 function updateCaption(idx){
   const item=ITEMS[idx];
   const has=item.title||item.caption;
@@ -1035,12 +1024,12 @@ function updateCaption(idx){
   else{watchFullLink.classList.remove('vis');watchFullLink.href='#';}
   scrim.classList.add('on');
 }
-
-// ── MASONRY GRID ──
+ 
+// ── ③ MASONRY GRID — IntersectionObserver lazy thumbs ────────────────────────
 const gridWall=document.getElementById('grid-wall');
 const gridScroll=document.getElementById('grid-scroll');
 let currentColCount=3,currentColW=0,masonryInited=false,colHeights=[],wallTotalH=0;
-
+ 
 const _thumbIO=new IntersectionObserver(entries=>{
   entries.forEach(entry=>{
     if(!entry.isIntersecting)return;
@@ -1049,11 +1038,14 @@ const _thumbIO=new IntersectionObserver(entries=>{
     _thumbIO.unobserve(el);
   });
 },{rootMargin:'200px'});
-
+ 
 function createThumbMedia(item,colW,callback){
   function fallbackImage(itm,cW){const canvas=document.createElement('canvas');canvas.width=cW;canvas.height=Math.round(cW*0.75);const ctx=canvas.getContext('2d');ctx.fillStyle='#1a1a1a';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.fillStyle='#666';ctx.font='12px monospace';ctx.fillText(itm.title||'',10,canvas.height/2);const img=new Image();img.src=canvas.toDataURL();return img;}
+ 
   if(item.thumb){
-    const img=new Image();img.alt=item.title||'';img.dataset.src=item.thumb;
+    // ③ defer src — IO will assign when cell enters viewport
+    const img=new Image();img.alt=item.title||'';
+    img.dataset.src=item.thumb;
     img.style.cssText='display:block;width:100%;height:auto;object-fit:cover;';
     img.addEventListener('load',()=>img.dispatchEvent(new Event('_thumbLoaded')));
     callback(img);return;
@@ -1062,7 +1054,7 @@ function createThumbMedia(item,colW,callback){
   else if(item.type==='video'){const video=document.createElement('video');video.src=item.src;video.muted=true;video.playsInline=true;video.preload='metadata';video.crossOrigin='anonymous';let handled=false;video.addEventListener('loadeddata',()=>{video.currentTime=0.5;});video.addEventListener('seeked',()=>{if(handled)return;handled=true;const canvas=document.createElement('canvas');canvas.width=colW;canvas.height=Math.round(colW*(video.videoHeight/video.videoWidth));const ctx=canvas.getContext('2d');ctx.drawImage(video,0,0,canvas.width,canvas.height);const img=new Image();img.src=canvas.toDataURL('image/jpeg',0.85);img.onload=()=>callback(img);video.remove();},{once:true});video.addEventListener('error',()=>{if(handled)return;handled=true;callback(fallbackImage(item,colW));});setTimeout(()=>{if(!handled){handled=true;callback(fallbackImage(item,colW));video.remove();}},8000);}
   else{const img=new Image();img.crossOrigin='anonymous';img.src=item.src||'';img.onload=()=>callback(img);img.onerror=()=>callback(fallbackImage(item,colW));}
 }
-
+ 
 function buildMasonry(){
   gridWall.innerHTML='';
   const vw=gridScroll.clientWidth,colCount=3;
@@ -1074,6 +1066,7 @@ function buildMasonry(){
   const colCells=Array.from({length:colCount},()=>[]);
   currentColCount=colCount;currentColW=colW;
   gridWall.style.cssText='position:relative;width:100%;';
+ 
   ITEMS.forEach((item,idx)=>{
     const shortCol=colHeights.indexOf(Math.min(...colHeights));
     const x=PAD+shortCol*(colW+GAP),y=colHeights[shortCol];
@@ -1084,14 +1077,20 @@ function buildMasonry(){
     const defaultH=Math.round(colW*0.75);
     cell.style.height=defaultH+'px';
     colHeights[shortCol]+=defaultH+GAP;
+ 
     const label=document.createElement('div');label.className='gw-label';
     label.textContent=item.title+(item.year?'  '+item.year:'');
     cell.appendChild(label);
+ 
     cell.addEventListener('click',()=>{closeGrid();goToFromGrid(idx);});
     cell.addEventListener('mouseenter',curHoverIn);cell.addEventListener('mouseleave',curHoverOut);
+ 
     createThumbMedia(item,colW,thumbImg=>{
       cell.insertBefore(thumbImg,label);
+ 
+      // ③ register with IO for lazy src
       if(thumbImg.dataset&&thumbImg.dataset.src)_thumbIO.observe(thumbImg);
+ 
       const doReflow=()=>{
         if(thumbImg.naturalWidth&&thumbImg.naturalHeight){
           const aspectH=Math.round(colW*thumbImg.naturalHeight/thumbImg.naturalWidth);
@@ -1107,11 +1106,12 @@ function buildMasonry(){
       if(thumbImg.complete&&thumbImg.naturalWidth)doReflow();
       else{thumbImg.addEventListener('load',doReflow,{once:true});thumbImg.addEventListener('_thumbLoaded',doReflow,{once:true});}
     });
+ 
     gridWall.appendChild(cell);
   });
   recalcWallHeight();masonryInited=true;
 }
-
+ 
 function reflowMasonry(newColCount,newColW){
   const cells=Array.from(gridWall.querySelectorAll('.grid-wall-item'));
   if(cells.length===0){buildMasonry();return;}
@@ -1135,25 +1135,14 @@ function reflowMasonry(newColCount,newColW){
   recalcWallHeight();
 }
 function recalcWallHeight(){wallTotalH=Math.max(...colHeights);gridWall.style.height=wallTotalH+'px';}
-
-function openGrid(){
-  gridOpen=true;gridModeEl.classList.add('on');
-  if(!masonryInited)buildMasonry();
-  const totalEl=document.getElementById('grid-total');if(totalEl)totalEl.textContent=ITEMS.length;
-}
-function closeGrid(){
-  gridOpen=false;gridModeEl.classList.remove('on');
-  if(gridAboutOpen)closeGridAbout();
-}
-window.addEventListener('resize',()=>{
-  if(gridOpen&&masonryInited)reflowMasonry();
-  else if(gridOpen)buildMasonry();
-  if(gridAboutOpen)positionGridAboutOverlay();
-});
-
-// ── NAVIGATE ──
+ 
+function openGrid(){gridOpen=true;gridModeEl.classList.add('on');if(!masonryInited)buildMasonry();const totalEl=document.getElementById('grid-total');if(totalEl)totalEl.textContent=ITEMS.length;}
+function closeGrid(){gridOpen=false;gridModeEl.classList.remove('on');}
+window.addEventListener('resize',()=>{if(gridOpen&&masonryInited)reflowMasonry();else if(gridOpen)buildMasonry();});
+ 
+// ── NAVIGATE ──────────────────────────────────────────────────────────────────
 function goToFromGrid(idx){if(isTransitioning)return;_activateSlide(idx,true);}
-
+ 
 function goTo(idx){
   if(isTransitioning)return;
   let target=idx;
@@ -1168,48 +1157,57 @@ function goTo(idx){
   if(attempts>=ITEMS.length)return;
   _activateSlide(target,false);
 }
-
+ 
 function _activateSlide(idx,fromGrid){
   if(idx===cur&&slides[cur]&&slides[cur].classList.contains('on'))return;
   isTransitioning=true;
+ 
   const prevSlide=slides[cur],prevItem=ITEMS[cur];
   if(prevSlide)prevSlide.classList.remove('on');
   if(prevItem.type==='gallery')stopGallery();
-  releaseSlide(cur);
+  releaseSlide(cur); // ② free buffer
+ 
   cur=idx;
-  const slide=buildSlide(cur);
+  const slide=buildSlide(cur); // ① lazy
   const item=ITEMS[cur];
+ 
   muted=true;audioBtn.classList.add('muted');albl.textContent='sound off';
+ 
   if(item.type==='youtube'&&!slide._ytLoaded){const f=document.createElement('iframe');f.src=`https://www.youtube.com/embed/${slide._ytId}?autoplay=1&mute=1&loop=1&playlist=${slide._ytId}&controls=0&rel=0&modestbranding=1&enablejsapi=1`;f.allow='autoplay; fullscreen';f.frameBorder='0';slide.appendChild(f);slide._iframe=f;slide._ytLoaded=true;}
+ 
   if(item.type==='video'&&slide._vid){
     const vid=slide._vid;
-    if(vid.preload==='none')vid.preload='metadata';
+    if(vid.preload==='none')vid.preload='metadata'; // ② start buffering
     vid.currentTime=0;vid.muted=true;
     if(!behindMode)vid.play().catch(()=>{});
   }
+ 
   setTimeout(()=>{slide.classList.add('on');isTransitioning=false;if(item.type==='gallery'&&!behindMode)startGallery(slide);},80);
+ 
   item.hasAudio?audioBtn.classList.add('vis'):audioBtn.classList.remove('vis');
   closeInfo();
   if(behindMode)showBehindForItem(cur);
   setTimeout(()=>updateCaption(cur),60);
+ 
   const visibleItems=ITEMS.filter(it=>!it.hideInFullscreen),visibleTotal=visibleItems.length;
   if(item.hideInFullscreen){counter.textContent='— / '+String(visibleTotal).padStart(2,'0');progEl.style.width='0%';}
   else{const visibleIdx=visibleItems.indexOf(item);counter.textContent=String(visibleIdx+1).padStart(2,'0')+' / '+String(visibleTotal).padStart(2,'0');progEl.style.width=((visibleIdx+1)/visibleTotal*100)+'%';}
-  scheduleNeighbourPreload(cur);
+ 
+  scheduleNeighbourPreload(cur); // ② preload next on idle
 }
-
-// ── HELPERS ──
+ 
+// ── HELPERS ──────────────────────────────────────────────────────────────────
 function linkify(t){return t.replace(/(https?:\/\/[^\s]+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>');}
 function openInfo(){infoOpen=true;infoWorkTitle.classList.add('open');infoBody.classList.add('open');}
 function closeInfo(){infoOpen=false;infoWorkTitle.classList.remove('open');infoBody.classList.remove('open');}
 infoWorkTitle.addEventListener('click',()=>infoOpen?closeInfo():openInfo());
 infoWorkTitle.addEventListener('mouseenter',curHoverIn);infoWorkTitle.addEventListener('mouseleave',curHoverOut);
 watchFullLink.addEventListener('mouseenter',curHoverIn);watchFullLink.addEventListener('mouseleave',curHoverOut);
-
+ 
 function setMuted(m){muted=m;audioBtn.classList.toggle('muted',m);albl.textContent=m?'sound off':'sound on';const item=ITEMS[cur];if(item.type==='video'&&slides[cur]&&slides[cur]._vid)slides[cur]._vid.muted=m;if(item.type==='youtube'&&slides[cur]&&slides[cur]._iframe)ytMute(slides[cur]._iframe,m);}
 function ytMute(iframe,m){try{iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:m?'mute':'unMute',args:[]}),'*');}catch(e){}}
 audioBtn.addEventListener('click',()=>setMuted(!muted));
-
+ 
 document.getElementById('grid-toggle').addEventListener('click',()=>gridOpen?closeGrid():openGrid());
 document.getElementById('grid-close').addEventListener('click',closeGrid);
 document.getElementById('click-next').addEventListener('click',()=>{if(gridOpen||behindMode)return;goTo(cur+1);});
@@ -1223,7 +1221,7 @@ document.addEventListener('keydown',e=>{
     if(e.key==='g')openGrid();
   }
 });
-
+ 
 const scaleSlider=document.getElementById('grid-scale-slider');
 if(scaleSlider){
   scaleSlider.addEventListener('input',function(){
@@ -1239,8 +1237,8 @@ if(scaleSlider){
     reflowMasonry(newColCount,actualColW);
   });
 }
-
-// ── UI AUTO-HIDE ──
+ 
+// ── UI AUTO-HIDE ──────────────────────────────────────────────────────────────
 let uiVisible=true,uiTimer=null,mouseY=0;
 const HIDE_DELAY=4500;
 function isOverUI(){return mouseY<=topBar.getBoundingClientRect().bottom||mouseY>=botBar.getBoundingClientRect().top;}
@@ -1249,8 +1247,8 @@ function hideUI(){if(infoOpen||introOpen||gridOpen||isOverUI()){uiTimer=setTimeo
 document.addEventListener('mousemove',e=>{mouseY=e.clientY;showUI();});
 document.addEventListener('touchstart',()=>showUI(),{passive:true});
 uiTimer=setTimeout(hideUI,HIDE_DELAY);
-
-// ── CURSOR TRAIL ──
+ 
+// ── 1-BIT CURSOR TRAIL ────────────────────────────────────────────────────────
 const TRAIL_MAX=16,trail=[],BIT_SIZES=[2,2,2,2,4,4];
 for(let i=0;i<TRAIL_MAX;i++){const d=document.createElement('div');d.className='trail';d.style.opacity='0';d.style.width='2px';d.style.height='2px';document.body.appendChild(d);trail.push({el:d});}
 let pmx=0,pmy=0,trailHead=0,trailFadeTimer=null;
@@ -1263,8 +1261,8 @@ document.addEventListener('mousemove',e=>{
 document.addEventListener('mousedown',()=>curEl.classList.add('pressed'));
 document.addEventListener('mouseup',()=>curEl.classList.remove('pressed'));
 document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',curHoverIn);el.addEventListener('mouseleave',curHoverOut);});
-
-// ── BOOT ──
+ 
+// ── BOOT ──────────────────────────────────────────────────────────────────────
 goTo(0);
 setTimeout(()=>load.classList.add('off'),400);
 </script>
