@@ -496,11 +496,13 @@ body.behind-mode #wip-label { opacity:1; }
   <div id="grid-about-overlay">
     <div id="grid-about-inner">
       <p id="grid-about-text">
-        Working across interactive systems, editorial design, and real-time visual environments, currently based in New York City.<span id="grid-about-bio-toggle" onclick="toggleGridBio()">+</span>
+        Nio Jin is a New Media Artist & Designer, Creative Technologist who earned her Bachelor's degree in Communication Design from Parsons School of Design. Working across interactive systems, editorial design, and real-time visual environments, currently based in New York City.<span id="grid-about-bio-toggle" onclick="toggleGridBio()">+</span>
       </p>
       <span id="grid-about-bio-more">
         <p class="about-bio-p">Treating design as a living logic system, their work explores how perception, belief, and meaning are constructed and negotiated, and how they could convince people to believe in something.</p>
-        <p class="about-bio-p">Their interests span visual communication, computational logic, and temporal or performance-based visual environments. This includes work that extends into live visual performance contexts, where imagery responds to external inputs such as sound, movement, or spatial conditions.</p>
+        <p class="about-bio-p">They really looking forward to learn more and passionate about the technology side, especially game development or porformance visuals.</p>
+        <!-- <p class="about-bio-p">Treating design as a living logic system, their work explores how perception, belief, and meaning are constructed and negotiated, and how they could convince people to believe in something.</p> -->
+       
       </span>
     </div>
   </div>
@@ -510,24 +512,6 @@ body.behind-mode #wip-label { opacity:1; }
 const PAGE = { siteTitle: 'Nio Jin' };
 
 const ITEMS = [
-{
-    title:'auto-obiturary', year:'2025',
-    tags:['printed medium','book'], type:'gallery', folderName:'autoO',
-    images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg'],
-    thumb:'./thumbs/autoO.jpg',
-    caption:'A hand-finished artist\'s catalog that narrates the shifting states of mind of musician Boku no Lyric no Boyomi through a curated sequence of his songs and lyrics, leading to the symbolic "death" of his public persona as an act of protest against public expectation. Printed in black-and-white on plain office paper and presented in a simple black box with an accordion-fold scroll-book and 14 cards visualizing the selected songs. Showcased at Offset Book Fair 2025',
-    behind:{ images:['./behind/autoO/010.jpg','./behind/autoO/020.jpg','./behind/autoO/030.jpg','./behind/autoO/040.jpg','./behind/autoO/050.png','./behind/autoO/060.jpg'],
-      caption:'extra mockups...and dummy book i made, was debating the curating sequence, go with chronological or more narrative leaned.' },
-  },
-  {
-    title:'the [Lost H]orizon', year:'2024',
-    tags:['printed medium','book'], type:'gallery', folderName:'the [Lost H]orizon',
-    images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg','070.jpg','080.jpg','090.jpg','0100.jpg','0110.jpg','0120.jpg','0140.jpg','0150.jpg','0160.jpg'],
-    thumb:'./thumbs/theLostHorizon1.jpg',
-    caption:'A series of publications curated and staged as a physical dossier. By recontextualizing external discourses into a structured folder of documents, the design investigates how we question the horizon line and the construction of reality. These printed artifacts serve as a tactile archive of human perception, concealing the cryptic fragments and the five-digit protocol—27182—required to interface with the digital realm.',
-    behind:{ images:['./behind/lostH/010.jpg','./behind/lostH/020.jpg','./behind/lostH/030.jpg','./behind/lostH/040.jpg','./behind/lostH/050.jpg','./behind/lostH/060.jpg','./behind/lostH/070.jpg','./behind/lostH/080.png'],
-      caption:'definitely trained my ability working in parallel with 5 publications and a website at the same time..' },
-  },
   {
     title:'the [Lost H]orizon', year:'2024',
     tags:['motion','web','interactive'], type:'video', src:'./videos/theLostH.mp4',
@@ -548,15 +532,6 @@ const ITEMS = [
       caption:'hade fun exploring blender more, convert type to 3d in blender >> then export point cloud file >> touchdesigner >> mediapipe >> finger-tracking' },
   },
   {
-    title:'pcell.otf', year:'2025',
-    tags:['typeface','motion'], type:'gallery', folderName:'pcell',
-    images:['010.jpg','020.jpg','030.mp4'],
-    thumb:'./thumbs/pcellS.jpg',
-    caption:'A structural display typeface inspired by hexagonal geometry and Benzene-ring ambigrams. The specimen tests its industrial, architectural vibe across 2D and 3D mediums, exploring how constructed letterforms define a unique narrative world.',
-    behind:{ images:['./behind/pcell/010.png','./behind/pcell/020.png','./behind/pcell/030.png','./behind/pcell/040.png'],
-      caption:'Really appreciate the constructive feedback during the process and book resources from my Typeface professor, Tobias Holzmann' },
-  },
-  {
     title:'re:', year:'2025',
     tags:['printed medium','editorial'], type:'gallery', folderName:'re',
     images:['010.jpg','020.jpg','030.jpg','040.mp4'],
@@ -566,13 +541,13 @@ const ITEMS = [
       caption:'Selected article that has its own kind of re-doing. Used organic motion to show the reprocess, but aesthetically, I want something more digital and analog.' },
   },
   {
-    title:'devilReturn', year:'2024',
-    tags:['printed medium','compagin'], type:'gallery', folderName:'devilReturn',
-    images:['010.jpg','020.jpg','030.jpg'],
-    thumb:'./thumbs/devilReturn.png',
-    caption:'A campaign centered around Comet P12\'s return and gathering at Beach 67th Street for stargazing, announced to each member through envelopes containing tickets and posters, along with a short clip accessible via scanning the QR code on the poster.',
-    behind:{ images:['./behind/devilReturn/010.png','./behind/devilReturn/020.png','./behind/devilReturn/030.png','./behind/devilReturn/040.png'],
-      caption:'At that time i saw people posting about Devil Comet returning, and that gave me the inspiration to do something with black and red. But I want to lose the presence of the word devil, and not too stereotypical-gothic, so i picked a dotted font specifically' },
+    title:'auto-obiturary', year:'2025',
+    tags:['printed medium','book'], type:'gallery', folderName:'autoO',
+    images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg'],
+    thumb:'./thumbs/autoO.jpg',
+    caption:'A hand-finished artist\'s catalog that narrates the shifting states of mind of musician Boku no Lyric no Boyomi through a curated sequence of his songs and lyrics, leading to the symbolic "death" of his public persona as an act of protest against public expectation. Printed in black-and-white on plain office paper and presented in a simple black box with an accordion-fold scroll-book and 14 cards visualizing the selected songs. Showcased at Offset Book Fair 2025',
+    behind:{ images:['./behind/autoO/010.jpg','./behind/autoO/020.jpg','./behind/autoO/030.jpg','./behind/autoO/040.jpg','./behind/autoO/050.png','./behind/autoO/060.jpg'],
+      caption:'extra mockups...and dummy book i made, was debating the curating sequence, go with chronological or more narrative leaned.' },
   },
   {
     title:'the one', year:'2026',
@@ -582,6 +557,33 @@ const ITEMS = [
     caption:'As traditional religions lose authority, the human search for meaning does not disappear; it relocates. Figures, lifestyles, ideologies, and consumer cultures increasingly take on the role of symbolic centers—offering simplified answers to complex realities. The book works as an exposure of the spectacle. It translates the moving projection into fixed ink, and the audio into a transcript. This project is a depiction of contemporary preaching.',
     behind:{ images:['./behind/theOneB/010.png','./behind/theOneB/030.png','./behind/theOneB/040.png','./behind/theOneB/060.jpg'],
       caption:'initially went with accordian fold to match the circle after it fully opened, but book ring binding also worked, and the different paper stock would work visually more appealing on the book ring binding. The image making one was abandoned in the final execution because of the fonts it used; it does not fit in the system i had, but i really love it, so i used it as the flyer later.' },
+  },
+  {
+    title:'the [Lost H]orizon', year:'2024',
+    tags:['printed medium','book'], type:'gallery', folderName:'the [Lost H]orizon',
+    images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg','070.jpg','080.jpg','090.jpg','0100.jpg','0110.jpg','0120.jpg','0140.jpg','0150.jpg','0160.jpg'],
+    thumb:'./thumbs/theLostHorizon1.jpg',
+    caption:'A series of publications curated and staged as a physical dossier. By recontextualizing external discourses into a structured folder of documents, the design investigates how we question the horizon line and the construction of reality. These printed artifacts serve as a tactile archive of human perception, concealing the cryptic fragments and the five-digit protocol—27182—required to interface with the digital realm.',
+    behind:{ images:['./behind/lostH/010.jpg','./behind/lostH/020.jpg','./behind/lostH/030.jpg','./behind/lostH/040.jpg','./behind/lostH/050.jpg','./behind/lostH/060.jpg','./behind/lostH/070.jpg','./behind/lostH/080.png'],
+      caption:'definitely trained my ability working in parallel with 5 publications and a website at the same time..' },
+  },
+  {
+    title:'pcell.otf', year:'2025',
+    tags:['typeface','motion'], type:'gallery', folderName:'pcell',
+    images:['010.jpg','020.jpg','030.mp4'],
+    thumb:'./thumbs/pcellS.jpg',
+    caption:'A structural display typeface inspired by hexagonal geometry and Benzene-ring ambigrams. The specimen tests its industrial, architectural vibe across 2D and 3D mediums, exploring how constructed letterforms define a unique narrative world.',
+    behind:{ images:['./behind/pcell/010.png','./behind/pcell/020.png','./behind/pcell/030.png','./behind/pcell/040.png'],
+      caption:'Really appreciate the constructive feedback during the process and book resources from my Typeface professor, Tobias Holzmann' },
+  },
+  {
+    title:'devilReturn', year:'2024',
+    tags:['printed medium','compagin'], type:'gallery', folderName:'devilReturn',
+    images:['010.jpg','020.jpg','030.jpg'],
+    thumb:'./thumbs/devilReturn.png',
+    caption:'A campaign centered around Comet P12\'s return and gathering at Beach 67th Street for stargazing, announced to each member through envelopes containing tickets and posters, along with a short clip accessible via scanning the QR code on the poster.',
+    behind:{ images:['./behind/devilReturn/010.png','./behind/devilReturn/020.png','./behind/devilReturn/030.png','./behind/devilReturn/040.png'],
+      caption:'At that time i saw people posting about Devil Comet returning, and that gave me the inspiration to do something with black and red. But I want to lose the presence of the word devil, and not too stereotypical-gothic, so i picked a dotted font specifically' },
   },
   {
     title:'the one', year:'2026',
