@@ -15,11 +15,11 @@
   --t-fast: 0.28s cubic-bezier(0.4,0,0.2,1);
   --ui-slide: 0.45s cubic-bezier(0.4,0,0.2,1);
   --bg: #000000;
-  --ui: rgba(255,255,255,0.38);
+  --ui: rgb(255, 0, 0);
   --ui-hi: rgba(255,255,255,0.82);
   --ui-cap: rgb(255,255,255);
   --ui-desc: rgba(255,255,255,0.24);
-  --scrim-clr: rgba(0,0,0,0.5);
+  --scrim-clr: rgba(255, 255, 255, 0.108);
   --panel-bg: rgba(17,19,20,0.82);
   --body-font: var(--sans);
   --grid-line: transparent;
@@ -511,6 +511,15 @@ body.behind-mode #wip-label { opacity:1; }
 const PAGE = { siteTitle: 'Nio Jin' };
 
 const ITEMS = [
+{
+    title:'pcell.otf', year:'2025',
+    tags:['typeface','interactive','motion'], type:'video', src:'./videos/pcell.mp4',
+    thumb:'./thumbs/pcell.gif',
+    hasAudio:true,
+    caption:'An interactive evolution of the typeface. By translating 2D forms into 3D point clouds via Blender and importing them into TouchDesigner, the project creates a dynamic system where finger tracking modulates the font\'s parameters, turning rigid geometry into a responsive data-driven experience.',
+    behind:{ images:['./behind/pcellI/010.png','./behind/pcellI/020.png','./behind/pcellI/030.png'],
+      caption:'hade fun exploring blender more, convert type to 3d in blender >> then export point cloud file >> touchdesigner >> mediapipe >> finger-tracking' },
+  },
   {
     title:'the [Lost H]orizon', year:'2024',
     tags:['motion','web','interactive'], type:'video', src:'./videos/theLostH.mp4',
@@ -521,15 +530,7 @@ const ITEMS = [
     behind:{ images:['./behind/lostHW/010.jpg','./behind/lostHW/020.jpg','./behind/lostHW/030.jpg','./behind/lostHW/040.jpg','./behind/lostHW/050.jpg','./behind/lostHW/060.jpg','./behind/lostHW/070.jpg','./behind/lostHW/080.jpg','./behind/lostHW/090.webp','./behind/lostHW/0100.png','./behind/lostHW/0110.jpg','./behind/lostHW/0120.png'],
       caption:'ASCII camera feed was the core idea and the most time consuming part to code it out.' },
   },
-  {
-    title:'pcell.otf', year:'2025',
-    tags:['typeface','interactive','motion'], type:'video', src:'./videos/pcell.mp4',
-    thumb:'./thumbs/pcell.gif',
-    hasAudio:true,
-    caption:'An interactive evolution of the typeface. By translating 2D forms into 3D point clouds via Blender and importing them into TouchDesigner, the project creates a dynamic system where finger tracking modulates the font\'s parameters, turning rigid geometry into a responsive data-driven experience.',
-    behind:{ images:['./behind/pcellI/010.png','./behind/pcellI/020.png','./behind/pcellI/030.png'],
-      caption:'hade fun exploring blender more, convert type to 3d in blender >> then export point cloud file >> touchdesigner >> mediapipe >> finger-tracking' },
-  },
+ 
   {
     title:'re:', year:'2025',
     tags:['printed medium','editorial'], type:'gallery', folderName:'re',
