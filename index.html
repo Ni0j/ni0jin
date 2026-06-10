@@ -496,12 +496,11 @@ body.behind-mode #wip-label { opacity:1; }
   <div id="grid-about-overlay">
     <div id="grid-about-inner">
       <p id="grid-about-text">
-        Nio Jin is a New Media Artist & Designer, Creative Technologist who earned her Bachelor's degree in Communication Design from Parsons School of Design. Working across interactive systems, editorial design, and real-time visual environments, currently based in New York City.<span id="grid-about-bio-toggle" onclick="toggleGridBio()">+</span>
+        Multi-disciplinary designer and new media artist with experience in editorial design, interactive systems, real-time environments, and immersive media. Specializing in perception-driven experiences, speculative worldbuilding, system design, and the intersection of technology, narrative, and audience participation. Dedicated to creating interactive works that explore how belief, meaning, and human understanding are constructed through systems and mediated experiences.<span id="grid-about-bio-toggle" onclick="toggleGridBio()">+</span>
       </p>
       <span id="grid-about-bio-more">
-        <p class="about-bio-p">Treating design as a living logic system, their work explores how perception, belief, and meaning are constructed and negotiated, and how they could convince people to believe in something.</p>
-        <p class="about-bio-p">They’re really excited to learn more and are especially interested in the technology side of things, particularly game development and performance visuals.</p>
-        <!-- <p class="about-bio-p">Treating design as a living logic system, their work explores how perception, belief, and meaning are constructed and negotiated, and how they could convince people to believe in something.</p> -->
+        <p class="about-bio-p">Passionate about leveraging emerging technologies to expand creative possibilities and challenge conventional modes of interaction, with a strong foundation in communication design and a Bachelor’s degree from Parsons School of Design. </p>
+        <p class="about-bio-p"> Particularly interested in game development, application development, creative coding, immersive media, and performance visuals. </p>
        
       </span>
     </div>
@@ -1162,7 +1161,7 @@ function _reposCell(cell){
 
 function openGrid(){
   gridOpen=true;gridModeEl.classList.add('on');
-  const metaEl=document.getElementById('grid-meta');if(metaEl)metaEl.textContent='Total logged: '+ITEMS.length+' // Last updated: 05/15/2026';
+  const metaEl=document.getElementById('grid-meta');if(metaEl)metaEl.textContent='Total logged: '+ITEMS.length+' // Last updated: 06/08/2026';
   gridWall.style.opacity='0';
   setTimeout(()=>{
     if(!masonryInited)buildMasonry();else reflowMasonry();
