@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="site-warning-pending">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -98,16 +98,19 @@ html.site-warning-pending body>:not(#photosensitivity-gate):not(script){visibili
 .more-cta-title{font-size:var(--type-primary);line-height:1.35;font-weight:400;max-width:17rem;}
 .more-cta{display:block;width:100%;margin:0rem 0 0 0rem;padding:.9rem 1rem;background:var(--accent);border:1px solid var(--ink);color:var(--ink);text-decoration:none;font-size:var(--type-support);letter-spacing:normal;transition:background .2s,color .2s;}
 .more-cta:hover{background:var(--ink);color:var(--accent);}
-.more-directory{border-bottom:1px solid var(--ink);}
-.more-section{display:grid;grid-template-columns:6.5rem 1fr;gap:1rem;padding:.5rem 0; margin-top:0.5rem;margin-bottom: 0.5rem;}
+.more-directory{display:grid;grid-template-columns:6.5rem minmax(0,1fr);gap:.5rem 1rem;padding:1rem 0;border-bottom:1px solid var(--ink);}
+.more-directory .more-section{display:contents;}
 .more-section-title{font-weight:400;color:var(--ink-soft);letter-spacing:.04em;}
 .more-section-body{line-height:1.55;color:var(--ink-soft);}
+.more-directory nav .more-section-body{display:flex;flex-direction:column;align-items:flex-start;gap:.1rem;min-width:0;}
+.more-directory nav .more-nav-link{white-space:nowrap;}
 .more-section-body a,.more-section-body button{display:block;width:fit-content;appearance:none;border:0;background:transparent;color:var(--ink);padding:0 .12em;font:inherit;text-decoration:none;text-align:left;overflow-wrap:anywhere;box-decoration-break:clone;-webkit-box-decoration-break:clone;cursor:none;}
 .more-section-body a:hover,.more-section-body button:hover,.more-section-body a:focus-visible,.more-section-body button:focus-visible{background:var(--ink);color:var(--bg);}
+.more-directory>.more-cta{grid-column:1/-1;}
 .more-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;padding-top:1rem; font-size:var(--type-support);letter-spacing:normal;color:var(--ink-soft);}
 .more-foot span:last-child{white-space:nowrap;text-align:right;}
 body.more-open{overflow:hidden;}
-@media(max-width:600px){.location{display:none;}.more-profile{grid-template-columns:5.5rem 1fr;}.more-profile img{width:5.5rem;height:5.5rem;}.more-section{grid-template-columns:5.5rem 1fr;}.more-foot{flex-direction:column;align-items:flex-start;gap:.35rem;}.more-foot span:last-child{text-align:left;}}
+@media(max-width:600px){.location{display:none;}.more-profile{grid-template-columns:5.5rem 1fr;}.more-profile img{width:5.5rem;height:5.5rem;}.more-directory{grid-template-columns:5.5rem minmax(0,1fr);}.more-foot{flex-direction:column;align-items:flex-start;gap:.35rem;}.more-foot span:last-child{text-align:left;}}
 
 /* ============ LANDING ============ */
 #landing-video{position:absolute;inset:0;width:100%;height:100%;z-index:1;background:#0b0b0a;}
@@ -407,7 +410,7 @@ body.asset-label-hover #cur{opacity:0;}
 </head>
 <body>
 
-<section id="photosensitivity-gate" role="dialog" aria-modal="true" aria-labelledby="photosensitivity-title" aria-describedby="photosensitivity-copy">
+<section id="photosensitivity-gate" role="dialog" aria-modal="true" aria-labelledby="photosensitivity-title" aria-describedby="photosensitivity-copy" hidden>
   <div class="photosensitivity-dialog">
     <p class="photosensitivity-kicker">Photosensitivity warning</p>
     <h1 class="photosensitivity-title" id="photosensitivity-title">Do you have photosensitive epilepsy?</h1>
@@ -423,12 +426,16 @@ body.asset-label-hover #cur{opacity:0;}
   const gate=document.getElementById('photosensitivity-gate');
   const enter=document.getElementById('photosensitivity-enter');
   const leave=document.getElementById('photosensitivity-leave');
+  window.NIOJIN_TRANSITION_MODE='fold';
+  root.classList.add('photosensitivity-safe');
   function enterSite(mode){
     window.NIOJIN_TRANSITION_MODE=mode;
     root.classList.toggle('photosensitivity-safe',mode==='fold');
     root.classList.toggle('photosensitivity-flashing',mode==='glitch');
     gate.hidden=true;
     root.classList.remove('site-warning-pending');
+    const landingVideo=document.getElementById('landing-video');
+    if(landingVideo){landingVideo.currentTime=0;landingVideo.play().catch(()=>{});}
   }
   enter.addEventListener('click',()=>enterSite('fold'));
   leave.addEventListener('click',()=>enterSite('glitch'));
@@ -462,22 +469,27 @@ body.asset-label-hover #cur{opacity:0;}
               <div class="more-section-body">Designer / Artist</div>
               <h4 class="more-section-title">Focus</h4>
               <div class="more-section-body">Visual design, motion, interaction, and visual experiences.</div>
-              <h4 class="more-section-title">Background</h4>
-              <div class="more-section-body">BFA Communication Design 2026<br>Parsons School of Design</div>
+              <nav class="more-section" aria-label="Explore the site">
+                <h4 class="more-section-title">Works</h4><div class="more-section-body">
+          <button class="more-nav-link" type="button" data-target="index">Index</button>
+          <button class="more-nav-link" type="button" data-target="gallery">Gallery</button>
+          <button class="more-nav-link" type="button" data-target="song">Explore</button></div>
+        </nav>
+            
             </section>
         </div>
       
       <div class="more-directory">
-        <nav class="more-section" aria-label="Explore the site"><h4 class="more-section-title">Works</h4><div class="more-section-body">
-          <button class="more-nav-link" type="button" data-target="index">Index</button>
-          <button class="more-nav-link" type="button" data-target="gallery">Gallery</button>
-          <button class="more-nav-link" type="button" data-target="song">Explore</button></div></nav>
+        
         <section class="more-section"><h4 class="more-section-title">Contact</h4><div class="more-section-body"><a href="mailto:niojin.noi@gmail.com">niojin.noi@gmail.com</a><a href="https://www.instagram.com/7ni0jin/" target="_blank" rel="noopener">@7ni0jin</a></div></section>
+         <h4 class="more-section-title">Background</h4>
+              <div class="more-section-body">BFA Communication Design 2026<br>Parsons School of Design</div>
         <section class="more-section"><h4 class="more-section-title">Document</h4><div class="more-section-body"><a href="./CV_NioJin_Aug_.pdf" target="_blank" rel="noopener">Résumé</a></div></section>
+        
       </div>
           <div class="more-directory">
              <section class="more-section"><h4 class="more-section-title">Commissions</h4><div class="more-section-body">Open</div></section>
-   <a class="more-cta" href="mailto:niojin.noi@gmail.com?subject=Project%20inquiry">Take the First Step</a>
+   <a class="more-cta" href="mailto:niojin.noi@gmail.com?subject=Project%20inquiry">𓅰 𓅬 𓅭 𓅮 𓅯</a>
           </div>
     </div>
     <footer class="more-foot"><span>© 2026 Nio Jin. All rights reserved.</span><span>Aug 20 2026</span></footer>
@@ -486,7 +498,7 @@ body.asset-label-hover #cur{opacity:0;}
 
 <!-- ============ LANDING ============ -->
 <section id="view-landing" class="view on">
-  <video id="landing-video" autoplay muted loop playsinline preload="auto" data-desktop-src="./videos/landing.1.mp4" data-mobile-src="./videos/landing.1_mobile.mp4" data-mobile-poster="./videos/landing.1_mobile_poster.png"></video>
+  <video id="landing-video" muted loop playsinline preload="auto" data-desktop-src="./videos/landing.1.mp4" data-mobile-src="./videos/landing.1_mobile.mp4" data-mobile-poster="./videos/landing.1_mobile_poster.png"></video>
 
   <div id="landing-hover-zone"></div>
 
@@ -951,11 +963,11 @@ function syncLandingVideoSource(){
   if(isMobile)landingVideo.poster=landingVideo.dataset.mobilePoster;
   else landingVideo.removeAttribute('poster');
   if(landingVideo.currentSrc!==resolvedSource&&landingVideo.src!==resolvedSource){landingVideo.src=source;landingVideo.load();}
-  landingVideo.play().catch(()=>{});
+  if(window.NIOJIN_TRANSITION_MODE)landingVideo.play().catch(()=>{});
 }
 mobileLandingMedia.addEventListener('change',syncLandingVideoSource);
 syncLandingVideoSource();
-document.addEventListener('pointerdown',()=>{landingVideo.play().catch(()=>{});},{once:true,passive:true});
+document.addEventListener('pointerdown',()=>{if(window.NIOJIN_TRANSITION_MODE)landingVideo.play().catch(()=>{});},{once:true,passive:true});
 function openLandingBottom(){
   clearTimeout(landingCloseTimer);
   const entering=!landingBottomPanel.classList.contains('is-open');
