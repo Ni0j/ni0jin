@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="site-warning-pending">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -30,6 +30,19 @@ html,body{width:100%;height:100%;background:var(--bg);color:var(--ink);overflow:
 a:focus-visible,button:focus-visible{outline:1px solid currentColor;outline-offset:5px;}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
 
+/* ============ PHOTOSENSITIVITY GATE ============ */
+html.site-warning-pending,html.site-warning-pending body{background:#000;}
+html.site-warning-pending body>:not(#photosensitivity-gate):not(script){visibility:hidden;}
+#photosensitivity-gate{position:fixed;inset:0;z-index:2147483647;display:grid;place-items:center;padding:clamp(1.5rem,5vw,4rem);background:#000;color:#f2f2f2;cursor:auto;}
+#photosensitivity-gate[hidden]{display:none;}
+.photosensitivity-dialog{width:min(100%,34rem);}
+.photosensitivity-kicker{margin-bottom:1rem;font-size:.625rem;text-transform:uppercase;letter-spacing:.08em;}
+.photosensitivity-title{font-weight:400;line-height:.94;letter-spacing:-.04em;}
+.photosensitivity-copy{max-width:31rem;margin-top:1.5rem;font-size:.875rem;line-height:1.45;}
+.photosensitivity-actions{display:flex;flex-wrap:wrap;gap:1rem;margin-top:2rem;}
+.photosensitivity-actions button{appearance:none;border:1px solid #f2f2f2;padding:.65rem .85rem;background:transparent;color:inherit;font:inherit;cursor:pointer;}
+.photosensitivity-actions button:hover,.photosensitivity-actions button:focus-visible{background:#f2f2f2;color:#000;}
+
 /* ============ CUSTOM CURSOR ============ */
 #cur{position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;}
 #cur-h{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:1px;width:13px;background:#fff;transition:width .18s,opacity .18s;}
@@ -46,10 +59,13 @@ a:focus-visible,button:focus-visible{outline:1px solid currentColor;outline-offs
 .view{position:fixed;inset:0;z-index:10;opacity:0;pointer-events:none;transition:opacity .5s ease;overflow:hidden;background:var(--bg);}
 .view.on{opacity:1;pointer-events:all;}
 .view.is-preparing{z-index:9;opacity:1;pointer-events:none;}
+/* 3D fold transition for the photosensitivity-safe path */
 #view-landing{transform-origin:100% 50%;transform-style:preserve-3d;backface-visibility:hidden;transition:opacity .88s cubic-bezier(.22,.78,.2,1),transform .88s cubic-bezier(.22,.78,.2,1),box-shadow .88s ease;}
 #view-landing.is-folding{opacity:.08;transform:perspective(90rem) translateX(10vw) rotateY(-82deg);box-shadow:-3rem 0 5rem rgba(0,0,0,.28);pointer-events:none;}
 @supports not (transform-style:preserve-3d){#view-landing.is-folding{transform:translateX(105%);opacity:0;}}
 @media(prefers-reduced-motion:reduce){#view-landing{transition:opacity .15s linear;}#view-landing.is-folding{transform:none;opacity:0;}}
+#ascii-transition{position:fixed;inset:0;z-index:9997;width:100%;height:100%;opacity:0;visibility:hidden;pointer-events:none;background:transparent;image-rendering:pixelated;}
+#ascii-transition.is-active{opacity:1;visibility:visible;}
 
 /* ============ GLOBAL TOPBAR ============ */
 #global-topbar{position:fixed;top:0;left:0;right:0;z-index:300;display:flex;justify-content:space-between;align-items:flex-start;padding:calc(clamp(1.2rem,2.8vw,2rem) + env(safe-area-inset-top)) calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-right)) clamp(1.2rem,2.8vw,2rem) calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-left));pointer-events:none;color:#fff;mix-blend-mode:difference;}
@@ -73,8 +89,8 @@ a:focus-visible,button:focus-visible{outline:1px solid currentColor;outline-offs
 .more-title,.more-close{font:inherit;font-size:var(--type-primary);letter-spacing:.02em;}
 .more-close{appearance:none;border:0;background:none;color:inherit;padding:.15rem 0;line-height:1;cursor:none;}
 .back-arrow-icon{display:block;width:22px;height:12px;fill:none;stroke:currentColor;stroke-width:1;stroke-linecap:square;stroke-linejoin:miter;}
-.more-body{display:flex;flex-direction:column;flex:1;padding-top:clamp(1rem,3vh,5.5rem);}
-.more-profile{grid-template-columns:6.5rem 1fr;gap:1rem;align-items:start;margin-bottom:1.5rem;}
+.more-body{display:flex;flex-direction:column;flex:1;padding-top:clamp(0rem,0vh,0rem);}
+.more-profile{grid-template-columns:6.5rem 1fr;gap:1rem;align-items:start;}
 .more-profile img{display:block;width:6.5rem;height:7.5rem;object-fit:cover;}
 .more-intro{font-size:var(--type-primary);line-height:1.7;}
 .more-pronouns{margin-top:.8rem;font-size:var(--type-support);line-height:1.45;}
@@ -82,12 +98,12 @@ a:focus-visible,button:focus-visible{outline:1px solid currentColor;outline-offs
 .more-cta-title{font-size:var(--type-primary);line-height:1.35;font-weight:400;max-width:17rem;}
 .more-cta{display:block;width:100%;margin:0rem 0 0 0rem;padding:.9rem 1rem;background:var(--accent);border:1px solid var(--ink);color:var(--ink);text-decoration:none;font-size:var(--type-support);letter-spacing:normal;transition:background .2s,color .2s;}
 .more-cta:hover{background:var(--ink);color:var(--accent);}
-.more-directory{border-top:1px solid var(--ink);}
-.more-section{display:grid;grid-template-columns:6.5rem 1fr;gap:1rem;padding:.5rem 0; margin-top: 1rem;}
+.more-directory{border-bottom:1px solid var(--ink);}
+.more-section{display:grid;grid-template-columns:6.5rem 1fr;gap:1rem;padding:.5rem 0; margin-top:0.5rem;margin-bottom: 0.5rem;}
 .more-section-title{font-weight:400;color:var(--ink-soft);letter-spacing:.04em;}
 .more-section-body{line-height:1.55;color:var(--ink-soft);}
-.more-section-body a{display:block;width:fit-content;background:transparent;color:var(--ink);padding:0 .12em;text-decoration:none;overflow-wrap:anywhere;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
-.more-section-body a:hover{background:var(--ink);color:var(--bg);}
+.more-section-body a,.more-section-body button{display:block;width:fit-content;appearance:none;border:0;background:transparent;color:var(--ink);padding:0 .12em;font:inherit;text-decoration:none;text-align:left;overflow-wrap:anywhere;box-decoration-break:clone;-webkit-box-decoration-break:clone;cursor:none;}
+.more-section-body a:hover,.more-section-body button:hover,.more-section-body a:focus-visible,.more-section-body button:focus-visible{background:var(--ink);color:var(--bg);}
 .more-foot{display:flex;justify-content:space-between;align-items:flex-end;gap:1rem;padding-top:1rem; font-size:var(--type-support);letter-spacing:normal;color:var(--ink-soft);}
 .more-foot span:last-child{white-space:nowrap;text-align:right;}
 body.more-open{overflow:hidden;}
@@ -135,7 +151,7 @@ body.more-open{overflow:hidden;}
 #verb-current.has-value{width:auto;min-width:0;text-decoration:underline;text-underline-offset:.12em;text-decoration-thickness:1px;}
 #sentence-core.is-refreshing{animation:sentenceRefresh .32s steps(12,end) both;}
 @keyframes sentenceRefresh{from{clip-path:inset(0 100% 0 0);}to{clip-path:inset(0 0 0 0);}}
-#verb-current.is-awaiting::before{content:'▚▜███▞▝';display:inline-block;white-space:pre;animation:verbGlyphs .72s steps(1,end) infinite;}
+#verb-current.is-awaiting::before{content:'▚▜███▞▝';display:inline-block;white-space:pre;animation:verbGlyphs 1.2s steps(1,end) infinite;}
 @keyframes verbGlyphs{0%,32%{content:'▚▜███▞▝';}33%,65%{content:'▞██▚▚█▜';}66%,100%{content:'██▝▚▞██';}}
 #verb-options{position:absolute;left:0;right:0;top:calc(50% + 1.55rem);display:flex;justify-content:center;align-items:baseline;flex-wrap:wrap;gap:.35rem 1.1rem;max-height:2rem;opacity:1;visibility:visible;white-space:nowrap;transition:max-height .35s cubic-bezier(.16,1,.3,1),opacity .2s ease,visibility 0s;}
 #verb-options.is-collapsed{max-height:0;opacity:0;visibility:hidden;pointer-events:none;transition-delay:0s,0s,.35s;}
@@ -150,10 +166,14 @@ body.more-open{overflow:hidden;}
 #landing-vision-branch{position:absolute;left:100%;top:0;display:inline-flex;align-items:baseline;gap:.22em;margin-left:.34em;}
 #landing-vision-branch[hidden]{display:none;}
 #landing-vision{position:relative;min-width:6.8em;color:transparent;}
-#landing-vision::before{content:'▚▜███▞▝';position:absolute;inset:.08em .12em;color:var(--ink);white-space:nowrap;animation:visionGlyphs .72s steps(1,end) infinite;}
+#landing-vision::before{content:'▚▜███▞▝';position:absolute;inset:.08em .12em;color:var(--ink);white-space:nowrap;animation:visionGlyphs 1.2s steps(1,end) infinite;}
 #landing-vision:hover,#landing-vision:focus-visible{color:var(--bg);background:var(--ink);}
 #landing-vision:hover::before,#landing-vision:focus-visible::before{display:none;}
 @keyframes visionGlyphs{0%,32%{content:'▚▜███▞▝';}33%,65%{content:'▞██▚▚█▜';}66%,100%{content:'██▝▚▞██';}}
+html.photosensitivity-flashing #verb-current.is-awaiting::before,
+html.photosensitivity-flashing #landing-vision::before,
+html.photosensitivity-flashing .cloze-answer.is-awaiting::before,
+html.photosensitivity-flashing #landing-stuff.is-awaiting::before{animation-duration:.72s;}
 #make-continuation{position:absolute;left:100%;top:0;display:inline-flex;align-items:baseline;gap:.12em;margin-left:.34em;clip-path:inset(0 100% 0 0);}
 #make-continuation[hidden]{display:none;}
 #make-continuation.is-typing{animation:continuationType .72s steps(18,end) forwards;}
@@ -175,7 +195,7 @@ body.more-open{overflow:hidden;}
 #make-current{width:auto;min-width:4.5em;margin-left:.12em;text-align:left;}
 #make-current.is-contraction{margin-left:-.24em;}
 .cloze-answer:disabled{opacity:1;color:var(--ink);pointer-events:none;}
-.cloze-answer.is-awaiting::before,#landing-stuff.is-awaiting::before{content:'▚▜███▞▝';display:inline-block;white-space:pre;animation:verbGlyphs .72s steps(1,end) infinite;}
+.cloze-answer.is-awaiting::before,#landing-stuff.is-awaiting::before{content:'▚▜███▞▝';display:inline-block;white-space:pre;animation:verbGlyphs 1.2s steps(1,end) infinite;}
 .cloze-answer.is-ready{background:var(--accent);color:var(--ink);}
 .cloze-answer.is-ready:hover,.cloze-answer.is-ready:focus-visible{background:var(--ink);color:var(--bg);}
 .secondary-options{display:flex;justify-content:center;align-items:baseline;flex-wrap:wrap;gap:.35rem 1rem;margin-top:.4rem;}
@@ -187,7 +207,7 @@ body.more-open{overflow:hidden;}
 .store-inline{display:inline;width:auto;padding:.08em .12em;}
 #photography-note{max-height:0;margin-top:0;overflow:hidden;font-size:var(--type-primary);letter-spacing:.02em;visibility:hidden;transition:max-height .38s cubic-bezier(.16,1,.3,1),margin .3s ease,visibility 0s .38s;}
 #photography-note.is-open{max-height:2rem;margin-top:.8rem;visibility:visible;transition-delay:0s;}
-@media(max-width:700px){#view-landing{background:#0b0b0a;}#landing-video{inset:auto;top:50%;left:50%;width:100vh;width:100dvh;height:100vw;height:100dvw;max-width:none;max-height:none;object-fit:cover;transform:translate(-50%,-50%) rotate(90deg);transform-origin:center;}#landing-bottom{height:calc(13.5rem + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);padding-left:calc(1rem + env(safe-area-inset-left));padding-right:calc(1rem + env(safe-area-inset-right));}#landing-divider{position:absolute;top:0;left:0;right:0;height:2.75rem;}#landing-conversation{height:100%;}#landing-conversation::before{inset:2.75rem auto 0 50%;}#landing-sentence{top:calc(50% - 1.15rem);}#sentence-core{gap:.4em;}#verb-options{top:calc(50% + .5rem);gap:.4rem .85rem;max-height:2.25rem;overflow:visible;flex-wrap:nowrap;}#landing-response{top:calc(50% + .2rem);}.secondary-options{flex-wrap:nowrap;}.landing-opt,.cloze-line,.cloze-answer,.secondary-choice,#photography-note,.character-line{font-size:var(--type-primary);line-height:1.4;letter-spacing:.02em;}#verb-current{width:6.6em;}.verb-choice[data-verb="make"]{width:4.75rem;min-width:4.75rem;padding-left:.35em;padding-right:.35em;text-align:center;overflow:visible;}#landing-vision::before{transform:translateY(.12em);}.landing-self-icon{width:7rem;height:7rem;}#landing-profile{grid-template-columns:7rem max-content;width:min(22rem,100%);}}
+@media(max-width:700px){#view-landing{background:#0b0b0a;}#landing-video{inset:auto;top:50%;left:50%;width:100vh;width:100dvh;height:100vw;height:100dvw;max-width:none;max-height:none;object-fit:cover;transform:translate(-50%,-50%) rotate(90deg);transform-origin:center;}#landing-bottom{height:calc(13.5rem + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);padding-left:calc(1rem + env(safe-area-inset-left));padding-right:calc(1rem + env(safe-area-inset-right));}#landing-divider{position:absolute;top:0;left:0;right:0;height:2.75rem;}#landing-conversation{height:100%;}#landing-conversation::before{inset:2.75rem auto 0 50%;}#landing-sentence{top:calc(50% - 1.15rem);}#sentence-core{gap:.4em;}#verb-options{top:calc(50% + .5rem);gap:.4rem .85rem;max-height:2.25rem;overflow:visible;flex-wrap:nowrap;}#landing-response{top:calc(50% + .2rem);}.secondary-options{flex-wrap:nowrap;gap:.25rem .55rem;}.landing-opt,.cloze-line,.cloze-answer,.secondary-choice,#photography-note,.character-line{font-size:var(--type-primary);line-height:1.4;letter-spacing:.02em;}#verb-current{width:6.6em;}.verb-choice[data-verb="make"]{width:4.75rem;min-width:4.75rem;padding-left:.35em;padding-right:.35em;text-align:center;overflow:visible;}#landing-vision::before{transform:translateY(.12em);}.landing-self-icon{width:7rem;height:7rem;}#landing-profile{grid-template-columns:7rem max-content;width:min(22rem,100%);}}
 
 /* ============ VISION / IYKYK CONFIRMATION ============ */
 #vision-layer{position:fixed;inset:0;z-index:620;display:grid;place-items:center;padding:1.5rem;visibility:hidden;pointer-events:none;}
@@ -293,8 +313,9 @@ body.more-open{overflow:hidden;}
 #gallery-scroll{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:calc(clamp(1.2rem,2.8vw,2rem)*2 + 1.4rem + env(safe-area-inset-top));padding-bottom:env(safe-area-inset-bottom);}
 #gallery-filters{display:flex;gap:.55rem;flex-wrap:wrap;margin:0 clamp(1.5rem,4vw,3rem) 1.4rem;padding-bottom:1.4rem;border-bottom:0px solid var(--line);}
 #gallery-filters .gallery-filter:first-child{order:2;margin-left:auto;}
-#gallery-wall{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:36px 20px;padding:0 clamp(1.5rem,4vw,3rem) 5rem;}
+#gallery-wall{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:36px 20px;padding:0 clamp(1.5rem,4vw,3rem) 5rem;}
 .gw-card{display:block;cursor:none;text-decoration:none;}
+.gw-card--core,.gw-card--support{grid-column:span 4;}
 .gw-media{aspect-ratio:1;overflow:hidden;margin-bottom:10px;display:grid;place-items:start center;}
 .gw-media img,.gw-media video{display:block;width:100%;height:100%;object-fit:contain;object-position:center top;filter:grayscale(1);transition:filter .5s cubic-bezier(.16,1,.3,1);}
 .gw-card:hover .gw-media img,.gw-card:hover .gw-media video{filter:grayscale(0);}
@@ -303,6 +324,7 @@ body.more-open{overflow:hidden;}
 .gw-card:hover .gw-title{background:var(--ink);color:var(--bg);padding:0 .12em;}
 @media (max-width:760px){
   #gallery-wall{grid-template-columns:repeat(2,minmax(0,1fr));gap:25px 12px;}
+  .gw-card--core,.gw-card--support{grid-column:span 1;}
 }
 @media (hover:none),(pointer:coarse){html,body,a,button{cursor:auto;}#cur,.trail{display:none!important;}}
 @media (hover:none),(pointer:coarse){
@@ -345,8 +367,11 @@ body.more-open{overflow:hidden;}
 #view-detail{background:#0b0b0a;}
 #detail-scroll{position:absolute;inset:0;z-index:1;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;}
 #detail-scroll::-webkit-scrollbar{display:none;}
-.detail-slide{min-height:100svh;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;padding:clamp(4.5rem,9vw,7rem) clamp(1.5rem,6vw,5rem) clamp(8rem,14vw,11rem);}
+.detail-slide{position:relative;min-height:100svh;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;padding:clamp(4.5rem,9vw,7rem) clamp(1.5rem,6vw,5rem) clamp(8rem,14vw,11rem);}
 .detail-slide img,.detail-slide video{max-width:100%;max-height:calc(100svh - 12rem);width:auto;height:auto;object-fit:contain;}
+#asset-cursor-label{position:fixed;left:0;top:0;z-index:10000;display:none;pointer-events:none;transform:translate(12px,12px);padding:.16rem .28rem;background:#f1f1f1;color:#0b0b0a;font-size:var(--type-support);line-height:1.25;white-space:nowrap;}
+#asset-cursor-label.is-visible{display:block;}
+body.asset-label-hover #cur{opacity:0;}
 #detail-slides.is-revealing .detail-slide:first-child img,#detail-slides.is-revealing .detail-slide:first-child video{transform-origin:var(--asset-origin,center);animation:assetReveal .72s cubic-bezier(.16,1,.3,1) both;}
 @keyframes assetReveal{from{opacity:0;transform:scale(.12)}to{opacity:1;transform:scale(1)}}
 #detail-caption-wrap{position:absolute;left:0;right:0;bottom:0;padding:clamp(1.2rem,2.8vw,2rem) calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-right)) calc(clamp(1.2rem,2.8vw,2rem) + env(safe-area-inset-bottom)) calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-left));z-index:6;background:linear-gradient(to top, rgba(0,0,0,.6), transparent);}
@@ -382,7 +407,38 @@ body.more-open{overflow:hidden;}
 </head>
 <body>
 
+<section id="photosensitivity-gate" role="dialog" aria-modal="true" aria-labelledby="photosensitivity-title" aria-describedby="photosensitivity-copy">
+  <div class="photosensitivity-dialog">
+    <p class="photosensitivity-kicker">Photosensitivity warning</p>
+    <h1 class="photosensitivity-title" id="photosensitivity-title">Do you have photosensitive epilepsy?</h1>
+    <div class="photosensitivity-actions">
+      <button id="photosensitivity-enter" type="button">Yes</button>
+      <button id="photosensitivity-leave" type="button">No</button>
+    </div>
+  </div>
+</section>
+<script>
+(()=>{
+  const root=document.documentElement;
+  const gate=document.getElementById('photosensitivity-gate');
+  const enter=document.getElementById('photosensitivity-enter');
+  const leave=document.getElementById('photosensitivity-leave');
+  function enterSite(mode){
+    window.NIOJIN_TRANSITION_MODE=mode;
+    root.classList.toggle('photosensitivity-safe',mode==='fold');
+    root.classList.toggle('photosensitivity-flashing',mode==='glitch');
+    gate.hidden=true;
+    root.classList.remove('site-warning-pending');
+  }
+  enter.addEventListener('click',()=>enterSite('fold'));
+  leave.addEventListener('click',()=>enterSite('glitch'));
+  requestAnimationFrame(()=>enter.focus());
+})();
+</script>
+
 <div id="cur"><div id="cur-h"></div><div id="cur-v"></div><svg id="cur-ring" viewBox="0 0 28 28" xmlns="http://www.w3.org/2000/svg"><circle/></svg></div>
+<div id="asset-cursor-label" aria-hidden="true"></div>
+<canvas id="ascii-transition" aria-hidden="true"></canvas>
 <div id="load"><div class="ld"></div><div class="ld"></div><div class="ld"></div></div>
 
 <!-- ============ GLOBAL TOPBAR ============ -->
@@ -393,25 +449,38 @@ body.more-open{overflow:hidden;}
   <p class="location">Based in New York City</p>
   <button id="global-version" type="button" aria-controls="more-drawer" aria-expanded="false">More</button>
 </div>
-
 <div id="more-layer" aria-hidden="true">
-  <button id="more-backdrop" type="button" aria-label="Close more information" tabindex="-1"></button>
+  <button id="more-backdrop" type="button" aria-label="Close More" tabindex="-1"></button>
   <aside id="more-drawer" role="dialog" aria-modal="true" aria-labelledby="more-title">
     <header class="more-head"><h2 class="more-title" id="more-title">More</h2><button class="more-close" id="more-close" type="button" aria-label="Back"><svg class="back-arrow-icon" viewBox="0 0 22 12" aria-hidden="true"><path d="M6 1 1 6l5 5M1 6h20"/></svg></button></header>
     <div class="more-body">
-      <section class="more-profile" aria-label="About Nio Jin">
-
-       <p class="more-intro">Nio Jin is a designer and artist working across graphic design, digital experiences, and interactive media. <br>Their practice moves between visual, sonic, and spatial forms, with a particular interest in how an experience unfolds through image, interface, and time.
-<br><br>
-Their work spans independent and collaborative contexts, including projects in design, technology, and research. They based in New York and holds a BFA in Communication Design from Parsons School of Design.</p>
+    
       </section>
-      <a class="more-cta" href="mailto:niojin.noi@gmail.com?subject=Project%20inquiry">Get in touch</a>
+        <div class="more-directory">
+            <section class="more-section">
+              <h4 class="more-section-title">Nio Jin</h4>
+              <div class="more-section-body">Designer / Artist</div>
+              <h4 class="more-section-title">Focus</h4>
+              <div class="more-section-body">Visual design, motion, interaction, and visual experiences.</div>
+              <h4 class="more-section-title">Background</h4>
+              <div class="more-section-body">BFA Communication Design 2026<br>Parsons School of Design</div>
+            </section>
+        </div>
+      
       <div class="more-directory">
+        <nav class="more-section" aria-label="Explore the site"><h4 class="more-section-title">Works</h4><div class="more-section-body">
+          <button class="more-nav-link" type="button" data-target="index">Index</button>
+          <button class="more-nav-link" type="button" data-target="gallery">Gallery</button>
+          <button class="more-nav-link" type="button" data-target="song">Explore</button></div></nav>
         <section class="more-section"><h4 class="more-section-title">Contact</h4><div class="more-section-body"><a href="mailto:niojin.noi@gmail.com">niojin.noi@gmail.com</a><a href="https://www.instagram.com/7ni0jin/" target="_blank" rel="noopener">@7ni0jin</a></div></section>
-        <section class="more-section"><h4 class="more-section-title">Document</h4><div class="more-section-body"><a href="./CV_NioJin_July_.pdf" target="_blank" rel="noopener">Résumé</a></div></section>
+        <section class="more-section"><h4 class="more-section-title">Document</h4><div class="more-section-body"><a href="./CV_NioJin_Aug_.pdf" target="_blank" rel="noopener">Résumé</a></div></section>
       </div>
+          <div class="more-directory">
+             <section class="more-section"><h4 class="more-section-title">Commissions</h4><div class="more-section-body">Open</div></section>
+   <a class="more-cta" href="mailto:niojin.noi@gmail.com?subject=Project%20inquiry">Take the First Step</a>
+          </div>
     </div>
-    <footer class="more-foot"><span>© 2026 Nio Jin. All rights reserved.</span><span>Aug 10 2026</span></footer>
+    <footer class="more-foot"><span>© 2026 Nio Jin. All rights reserved.</span><span>Aug 20 2026</span></footer>
   </aside>
 </div>
 
@@ -454,10 +523,9 @@ Their work spans independent and collaborative contexts, including projects in d
         <div id="landing-response">
           <div id="make-stage" class="cloze-stage" aria-label="Choose a view">
             <div class="secondary-options" id="make-options" role="group" aria-label="Choose a view">
-              <button class="secondary-choice" type="button" data-target="index">Index</button>
-              <button class="secondary-choice" type="button" data-target="gallery">Gallery</button>
-              <button class="secondary-choice" type="button" data-target="song">Explore</button>
-              <button class="secondary-choice" type="button" data-target="store" disabled aria-disabled="true">WIP...</button>
+              <button class="secondary-choice" type="button" data-target="index">a) an ordered list, please</button>
+              <button class="secondary-choice" type="button" data-target="gallery">b) a grid of assets, please</button>
+              <button class="secondary-choice" type="button" data-target="song">c) who are you?</button>
             </div>
           </div>
           <p id="photography-note" aria-live="polite">WIP...</p>
@@ -480,8 +548,8 @@ Their work spans independent and collaborative contexts, including projects in d
 <section id="view-song" class="view">
   <canvas id="mindmap-canvas" aria-label="Interactive map of what Nio Jin cares about and the work that follows"></canvas>
   <nav id="map-mode" aria-label="Narrative map mode">
-    <button class="map-mode-choice is-active" type="button" data-map-mode="focus" aria-pressed="true">Focus</button>
-    <button class="map-mode-choice" type="button" data-map-mode="expand" aria-pressed="false">Expand</button>
+    <button class="map-mode-choice" type="button" data-map-mode="focus" aria-pressed="false">Focus</button>
+    <button class="map-mode-choice is-active" type="button" data-map-mode="expand" aria-pressed="true">Expand</button>
   </nav>
 </section>
 
@@ -539,123 +607,112 @@ Their work spans independent and collaborative contexts, including projects in d
    CONTENT
    ========================================================= */
 const ITEMS = [
-    {
-    title:'the [Lost H]orizon', year:'2024',
-    tags:['motion','web','interactive'], treePath:['interactive & experience','web experiences'], type:'video', src:'./videos/theLostH.mp4',
-    thumb:'./thumbs/theLostHorizon.gif',
-    caption:'A locked desktop simulation turns a live camera feed into ASCII. Its access code, 27182, is hidden in the printed dossier, joining the physical archive to the digital work.',
-    hook:'Reality, unlocked by 27182.',
-  },
-{
-    title:'pcell.otf', year:'2025',
-    tags:['typeface','interactive','motion'], treePath:['type design','interactive type'], type:'video', src:'./videos/pcell.mp4',
-    thumb:'./thumbs/pcell.gif',
-    caption:'A typeface translated into a responsive 3D point cloud. Finger tracking changes its form in real time.',
-    hook:'Typeface follows the hand.',
-  },
   {
-    title:'re:', year:'2025',
-    tags:['printed medium','editorial'], treePath:['editorial & publishing','publications'], type:'gallery', folderName:'re',
-    images:['010.jpg','020.jpg','030.jpg','040.mp4'],
-    thumb:'./thumbs/re.jpg',
-    caption:'A school project developed around the prefix "RE:", functioning as an editorial platform to re-examine and reconstruct diverse perspectives.',
-    hook:'Re-editing as a way of seeing again.',
-  },
-  {
-    title:'auto-obiturary', year:'2025',
-    tags:['printed medium','book'], treePath:['editorial & publishing','artist books'], type:'gallery', folderName:'autoO',
-    images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg'],
-    thumb:'./thumbs/autoO.jpg',
-    caption:'A hand-finished artist catalogue tracing Boku no Lyric no Boyomi toward the symbolic death of his public persona. The black-and-white edition contains an accordion-fold book and fourteen song cards. Shown at Offset Book Fair 2025.',
-    hook:'Fourteen songs stage a public disappearance.',
-  },
-  {
-    title:'the one', year:'2026',
-    tags:['printed medium','book'], treePath:['editorial & publishing','artist books'], type:'gallery', folderName:'theOne',
-    images:['010.jpg','020.jpg','030.jpg'],
-    thumb:'./thumbs/theOneE.jpg',
-    caption:'As religious authority recedes, belief relocates into figures, lifestyles, and consumer cultures. The book exposes that spectacle by translating projection into ink and audio into transcript.',
-    hook:'Where belief goes after religion.',
-  },
-  {
-    title:'the [Lost H]orizon', year:'2024',
-    tags:['printed medium','book'], treePath:['editorial & publishing','publications'], type:'gallery', folderName:'the [Lost H]orizon',
-    images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg','070.jpg','080.jpg','090.jpg','0100.jpg','0110.jpg','0120.jpg','0140.jpg','0150.jpg','0160.jpg'],
-    thumb:'./thumbs/theLostHorizon1.jpg',
-    caption:'A physical dossier that rearranges external discourses to question how reality is constructed. Its documents conceal the protocol 27182, required to enter the digital work.',
-    hook:'Evidence for a horizon that may not exist.',
-  },
-  {
-    title:'pcell.otf', year:'2025',
-    tags:['typeface','motion'], treePath:['type design','typeface systems'], type:'gallery', folderName:'pcell',
-    images:['010.jpg','020.jpg','030.mp4'],
-    thumb:'./thumbs/pcellS.jpg',
-    caption:'A structural display typeface built from hexagonal geometry and benzene-ring ambigrams. Its specimen moves the letterforms between two and three dimensions.',
-    hook:'Hexagonal letters built to leave the page.',
-  },
-  {
-    title:'devilReturn', year:'2024',
-    tags:['printed medium','compagin'], treePath:['brand identity & campaigns','campaigns'], type:'gallery', folderName:'devilReturn',
-    images:['020.jpg','010.jpg','030.jpg'],
-    thumb:'./thumbs/devilReturn.png',
-    caption:'A campaign staging Comet P12\'s return as a gathering at Beach 67th Street. Mailed tickets and posters lead to a short film through a QR code.',
-    hook:'Meet a returning comet at Beach 67th.',
-  },
-  {
-    title:'the one', year:'2026',
-    tags:['motion','interactive'], treePath:['interactive & experience','interactive installations'], type:'video', src:'./videos/theOne.mp4',
+    title:'the One', year:'2026', tier:'core', type:'mixed',
+    tags:['interactive','publication','motion'], treePath:['interactive & experience','interactive installations'],
     thumb:'./thumbs/theone.gif',
-    caption:'A 14′38″ audio-driven projection about belief relocating into figures, lifestyles, and consumer cultures. Contact makes participants visible to the system, absorbing them into its spectacle.',
-    hook:'Spectacle makes its audience legible.',
+    assets:[
+      {src:'./videos/theOne.mp4',type:'video',label:'Audio-driven projection',hasAudio:true},
+      {src:'./images/theOne/010.jpg',type:'image',label:'Publication'},
+      {src:'./images/theOne/020.jpg',type:'image'},
+      {src:'./images/theOne/030.jpg',type:'image'}
+    ],
+    caption:'An audio-driven projection and publication examining where belief relocates after religious authority recedes. The installation makes participants visible to the system, while the book translates its spectacle into image, ink, and transcript. Rather than offering a literal world, the work leaves space for the viewer to construct their own.',
+    hook:'Belief moves through image, sound, publication, and participation.'
   },
   {
-    title:'jellyfish that live inside my computer', year:'2025',
-    tags:['motion','interactive'], treePath:['interactive & experience','responsive systems'], type:'video', src:'./videos/jellyfish.mp4',
-    thumb:'./thumbs/jellyfish.gif',
+    title:'the [Lost H]orizon', year:'2024', tier:'core', type:'mixed',
+    tags:['web','interactive','publication'], treePath:['interactive & experience','web experiences'],
+    thumb:'./thumbs/theLostHorizon1.jpg',
+    assets:[
+      
+      {src:'./videos/theLostH.mp4',type:'video',label:'Locked desktop simulation and ASCII camera'},
+      {src:'./images/the [Lost H]orizon/010.jpg',type:'image',label:'Physical dossier'},
+      // {src:'./images/the [Lost H]orizon/020.jpg',type:'image'},
+      // {src:'./images/the [Lost H]orizon/030.jpg',type:'image'},
+      // {src:'./images/the [Lost H]orizon/040.jpg',type:'image'},
+      {src:'./images/the [Lost H]orizon/050.jpg',type:'image'},
+      {src:'./images/the [Lost H]orizon/060.jpg',type:'image'},
+      {src:'./images/the [Lost H]orizon/070.jpg',type:'image'},
+      {src:'./images/the [Lost H]orizon/080.jpg',type:'image'},
+      {src:'./images/the [Lost H]orizon/090.jpg',type:'image'},
+     
+      {src:'./images/the [Lost H]orizon/0100.jpg',type:'image'},
+      {src:'./images/the [Lost H]orizon/0110.jpg',type:'image'},
+      {src:'./images/the [Lost H]orizon/0120.jpg',type:'image'},
+             {src:'./images/the [Lost H]orizon/0160.jpg',type:'image',label:'light reveals code'},
+      {src:'./images/the [Lost H]orizon/0140.jpg',type:'image'},
+      {src:'./images/the [Lost H]orizon/0150.jpg',type:'image'},
+
+    ],
+    caption:'A physical dossier and locked desktop simulation investigating how reality is constructed through fragmented evidence. The printed archive conceals the protocol required to enter the digital work, turning reading into a form of access.',
+    hook:'Research becomes a protocol, a system, and an experience.'
+  },
+  {
+    title:'pcell.otf', year:'2025', tier:'core', type:'mixed',
+    tags:['typeface','interactive','motion'], treePath:['type design','interactive type'],
+    thumb:'./thumbs/pcell.gif',
+    assets:[
+      {src:'./videos/pcell.mp4',type:'video',label:'Responsive point cloud'},
+      {src:'./images/pcell/010.jpg',type:'image',label:'Typeface specimen'},
+      {src:'./images/pcell/020.jpg',type:'image'},
+      {src:'./images/pcell/030.mp4',type:'video'}
+    ],
+    caption:'A display typeface built from hexagonal geometry and benzene-ring ambigrams, extended into a responsive 3D point cloud that changes through hand movement.',
+    hook:'A visual structure moves from typography into space and interaction.'
+  },
+  {
+    title:'Auto-Obituary', year:'2025', tier:'core', type:'gallery',
+    tags:['printed medium','book'], treePath:['editorial & publishing','artist books'], folderName:'autoO',
+    images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg'], thumb:'./thumbs/autoO.jpg',
+    caption:'An artist publication staging the symbolic death of Boku no Lyric no Boyomi through an accordion-fold book, fourteen song cards, and an archive-like visual system.',
+    hook:'Fourteen songs stage a public disappearance.'
+  },
+  {
+    title:'GALA', year:'2025', tier:'core', type:'video',
+    tags:['live','audioreactive','motion'], treePath:['motion & live visuals','vj'], src:'./videos/gala.mp4', thumb:'./thumbs/gala.gif', hasAudio:true,
+    caption:'A live audio-reactive visual system created and performed for XG’s “GALA” at Volvox Labs. Sound intensity and rhythm continuously reshape the image, with manual intervention during the performance.',
+    hook:'Sound and light become a live instrument.'
+  },
+  {
+    title:'devilReturn', year:'2024', tier:'core', type:'gallery',
+    tags:['printed medium','campaign'], treePath:['brand identity & campaigns','campaigns'], folderName:'devilReturn',
+    images:['020.jpg','010.jpg','030.jpg'], thumb:'./thumbs/devilReturn.png',
+    caption:'A speculative campaign turning Comet P12’s return into a public gathering at Beach 67th Street. Posters and mailed tickets operate as both event artifacts and entry points to the accompanying film.',
+    hook:'A returning comet becomes a public gathering.'
+  },
+  {
+    title:'re:', year:'2025', tier:'support', type:'gallery',
+    tags:['printed medium','editorial'], treePath:['editorial & publishing','publications'], folderName:'re',
+    images:['010.jpg','020.jpg','030.jpg','040.mp4'], thumb:'./images/re/030.jpg',
+    caption:'An editorial platform organized around “RE:” as a method of returning to, reframing, and reconstructing existing narratives.',
+    hook:'Reframing becomes an editorial method.'
+  },
+  {
+    title:'jellyfish that live inside my computer', year:'2025', tier:'support', type:'video',
+    tags:['motion','interactive'], treePath:['interactive & experience','responsive systems'], src:'./videos/jellyfish.mp4', thumb:'./thumbs/jellyfish.gif',
     caption:'An evolving interactive interface of jellyfish, inspired by Tamagotchi-like companionship.',
-    hook:'Small life inside the machine.',
+    hook:'Small life inside the machine.'
   },
   {
-    title:'GALA', year:'2025',
-    tags:['live','audioreactive','motion'], treePath:['motion & live visuals','vj'], type:'video', src:'./videos/gala.mp4',
-    thumb:'./thumbs/gala.gif',
-    caption:'A live audio-reactive VJ set performed at Volvox Labs, featuring a visual reinterpretation of GALA by XG.',
-    hook:'Sound and light become a live instrument.',
+    title:'Music Visual Playground', year:'2025–2026', tier:'support', type:'mixed',
+    tags:['motion','music visual'], treePath:['motion & live visuals','music visuals'], thumb:'./thumbs/zombie.gif',
+    assets:[
+      {src:'./videos/zombie.mp4',type:'video',label:'Zombie — MilliMax',hasAudio:true},
+      {src:'./videos/afternoon.mp4',type:'video',label:'the afternoon we tried suicide — I Broke My Robot',hasAudio:true},
+      {src:'./videos/kc2.mp4',type:'video',label:'KOCAINE CASTLE — KC, nowimyoung, HAON, Sik-K, Hira',hasAudio:true},
+      {src:'./videos/tru.mp4',type:'video',label:'tru — CRO',hasAudio:true},
+      {src:'./videos/alone.mp4',type:'video',label:'I’ll be alone — I Broke My Robot',hasAudio:true}
+    ],
+    caption:'An ongoing series of moving-image studies translating music into unstable surfaces, symbols, rhythms, and responsive visual behaviors.',
+    hook:'Music becomes unstable surface, symbol, and rhythm.'
   },
   {
-    title:'the afternoon we tried suicide', year:'2025',
-    tags:['motion','audioreactive'], treePath:['motion & live visuals','audio reactive'], type:'video', src:'./videos/afternoon.mp4',
-    thumb:'./thumbs/afternoon.gif',
-    caption:'Audio reactive visual experiment featuring The Afternoon We Tried Suicide by I Broke My Robot',
-    hook:'Sound becomes an unstable image.',
-  },
-  {
-    title:'Zombie', year:'2026',
-    tags:['audioreactive','motion'], treePath:['motion & live visuals','audio reactive'], type:'video', src:'./videos/zombie.mp4',
-    thumb:'./thumbs/zombie.gif',
-    caption:'An audio-reactive visual based on Zombie by Millimax and DRIP TARKO.',
-    hook:'Zombie, translated into visual pulse.',
-  },
-  {
-    title:'KOCAINE CASTLE', year:'2026', treePath:['motion & live visuals','music visuals'], type:'video', src:'./videos/kc2.mp4', thumb:'./thumbs/kc2.gif',
-    caption:'', hook:'Bass builds the castle.',
-  },
-  {
-    title:'tru', year:'2026', type:'video', src:'./videos/tru.mp4', thumb:'./thumbs/tru.gif',
-    treePath:['motion & live visuals','music visuals'],
-    caption:'', hook:'Signal, rhythm, residue.',
-  },
-  {
-    title:'ill be alone', year:'2026', type:'video', src:'./videos/alone.mp4', thumb:'./thumbs/alone.gif',
-    treePath:['motion & live visuals','music visuals'],
-    caption:'', hook:'Alone, but never still.',
-  },
-  {
-    title:'52.05718\u00b0 N, 4.40660\u00b0 E', year:'2026', type:'image', src:'./images/photoetching1.jpg', thumb:'./thumbs/photoetching1.jpg',
-    treePath:['image-making','printmaking'],
-    caption:'Photo etching on Rives BFK Grey, 5.5 × 7.25 inches. Photographed in Den Haag.',
+    title:'52.05718\u00b0 N, 4.40660\u00b0 E', year:'2026', tier:'support', type:'image',
+    tags:['printmaking'], treePath:['image-making','printmaking'], src:'./images/photoetching1.jpg', thumb:'./thumbs/photoetching1.jpg',
+    caption:'Photo etching on Rives BFK Grey, made from a photograph taken in Den Haag.',
     hook:'Den Haag, held in etched light.'
-  },
+  }
 ];
 
 /* =========================================================
@@ -665,10 +722,10 @@ const ITEMS = [
    ========================================================= */
 const SHOP_ITEMS = [
   {
-    id:'auto-obiturary', visible:true, workIndex:3,
-    title:'auto-obiturary', year:'2025', image:'./thumbs/autoO.jpg',
+    id:'Auto-Obituary', visible:true, workIndex:3,
+    title:'Auto-Obituary', year:'2025', image:'./thumbs/autoO.jpg',
     status:'Coming…', edition:'Edition of 1', price:'Price forthcoming',
-    format:'Hand-finished artist catalogue', dimensions:'To be confirmed', production:'Confirmed after inquiry',
+    format:'Hand-finished artist catalogue', dimensions:'To be confirmed', production:'Confirmed upon inquiry',
     description:'A black-and-white artist catalogue presented as an accordion-fold scroll book with a set of fourteen cards.',
     checkoutUrl:''
   },
@@ -783,6 +840,7 @@ function showView(name){
   if(name!=='detail') prevView=name;
 }
 let viewTransitionTimer=null,viewTransitionCleanupTimer=null;
+/* LEGACY TRANSITION COPY — previous 3D fold
 function transitionFromLanding(target){
   if(!target||!views[target]||(target==='store'&&!STORE_ACCESS_ENABLED))return;
   if(target==='index'&&!indexBuilt)buildIndex();
@@ -793,7 +851,63 @@ function transitionFromLanding(target){
   const duration=window.matchMedia('(prefers-reduced-motion: reduce)').matches?150:880;
   viewTransitionTimer=setTimeout(()=>{showView(target);if(target==='song')startSong();},duration);
 }
-document.querySelectorAll('.landing-direct-link').forEach(button=>button.addEventListener('click',()=>transitionFromLanding(button.dataset.target)));
+*/
+const asciiTransition=document.getElementById('ascii-transition');
+const ASCII_TRANSITION_CHARS='01#@%+=-:;/*\\[]{}<>░▒▓█';
+let asciiTransitionFrame=0,asciiTransitionRunning=false;
+function prepareTransitionTarget(target){
+  if(target==='index'&&!indexBuilt)buildIndex();
+  if(target==='gallery'&&!galleryBuilt)buildGallery();
+  if(target==='store'&&!storeBuilt)buildStore();
+  if(target==='song'&&!mapBuilt)buildSong();
+}
+function transitionFromLanding(target){
+  if(!target||!views[target]||(target==='store'&&!STORE_ACCESS_ENABLED)||asciiTransitionRunning)return;
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){showView(target);if(target==='song')startSong();return;}
+  prepareTransitionTarget(target);
+  if(window.NIOJIN_TRANSITION_MODE==='fold'){
+    views[target].classList.add('is-preparing');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>views.landing.classList.add('is-folding')));
+    viewTransitionTimer=setTimeout(()=>{showView(target);if(target==='song')startSong();},880);
+    return;
+  }
+  asciiTransitionRunning=true;
+  const ratio=Math.min(window.devicePixelRatio||1,2),width=window.innerWidth,height=window.innerHeight;
+  const cellWidth=8+Math.floor(Math.random()*7),cellHeight=cellWidth+3+Math.floor(Math.random()*6);
+  asciiTransition.width=Math.round(width*ratio);asciiTransition.height=Math.round(height*ratio);
+  asciiTransition.style.width=`${width}px`;asciiTransition.style.height=`${height}px`;
+  const ctx=asciiTransition.getContext('2d');ctx.setTransform(ratio,0,0,ratio,0,0);
+  const cells=[];
+  for(let y=-cellHeight;y<height+cellHeight;y+=cellHeight){for(let x=-cellWidth;x<width+cellWidth;x+=cellWidth){cells.push({x:x+(Math.random()-.5)*cellWidth*.9,y:y+(Math.random()-.5)*cellHeight*.55,char:ASCII_TRANSITION_CHARS[Math.floor(Math.random()*ASCII_TRANSITION_CHARS.length)],tone:Math.random()});}}
+  for(let i=cells.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[cells[i],cells[j]]=[cells[j],cells[i]];}
+  const start=performance.now(),duration=760,switchPoint=.48;let switched=false;
+  asciiTransition.classList.add('is-active');
+  function draw(now){
+    const progress=Math.min(1,(now-start)/duration);
+    if(!switched&&progress>=switchPoint){switched=true;showView(target);if(target==='song')startSong();}
+    const local=progress<switchPoint?progress/switchPoint:(1-progress)/(1-switchPoint);
+    const strength=Math.max(0,Math.min(1,local));
+    ctx.clearRect(0,0,width,height);
+    const flickerFrame=Math.floor((now-start)/52),visible=Math.floor(cells.length*strength*.12),offset=(flickerFrame*137)%cells.length;
+    ctx.font=`${Math.max(8,cellHeight-3)}px "Cossette Texte", monospace`;ctx.textBaseline='top';
+    for(let i=0;i<visible;i++){
+      const cell=cells[(offset+i)%cells.length],flicker=Math.random();
+      ctx.globalAlpha=.72+flicker*.28;
+      ctx.fillStyle=cell.tone<.08?'#00fffb':cell.tone<.18?'#f1f1f1':'#0b0b0a';
+      ctx.fillRect(Math.floor(cell.x),Math.floor(cell.y),cellWidth+1,cellHeight+1);
+      if(cell.tone>.1||flicker>.72){ctx.fillStyle=cell.tone<.08?'#0b0b0a':'#f1f1f1';ctx.fillText(flicker>.9?ASCII_TRANSITION_CHARS[Math.floor(Math.random()*ASCII_TRANSITION_CHARS.length)]:cell.char,cell.x+1,cell.y);}
+    }
+    if(strength>.16){
+      ctx.globalAlpha=.35+.35*Math.random();
+      const bandY=Math.floor(Math.random()*height/cellHeight)*cellHeight,bandX=Math.random()*width*.7;ctx.fillStyle=flickerFrame%3===0?'#00fffb':'#f1f1f1';ctx.fillRect(bandX,bandY,width*(.04+Math.random()*.12),1+Math.floor(Math.random()*2));
+    }
+    ctx.globalAlpha=1;
+    if(progress<1)asciiTransitionFrame=requestAnimationFrame(draw);
+    else{ctx.clearRect(0,0,width,height);asciiTransition.classList.remove('is-active');asciiTransitionRunning=false;}
+  }
+  cancelAnimationFrame(asciiTransitionFrame);asciiTransitionFrame=requestAnimationFrame(draw);
+}
+document.querySelectorAll('.landing-direct-link').forEach(button=>button.addEventListener('click',()=>views.landing.classList.contains('on')?transitionFromLanding(button.dataset.target):showView(button.dataset.target)));
 document.querySelectorAll('.landing-opt').forEach(a=>{
   a.addEventListener('click',e=>{
     e.preventDefault();e.stopImmediatePropagation();
@@ -815,6 +929,11 @@ function closeMore(){
 globalVersion.addEventListener('click',openMore);
 document.getElementById('more-close').addEventListener('click',closeMore);
 document.getElementById('more-backdrop').addEventListener('click',closeMore);
+document.querySelectorAll('.more-nav-link').forEach(link=>link.addEventListener('click',()=>{
+  const target=link.dataset.target;
+  closeMore();
+  transitionFromLanding(target);
+}));
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&moreLayer.classList.contains('is-open')){closeMore();globalVersion.focus();}});
 showView('landing');
 
@@ -880,7 +999,7 @@ const landingVision=document.getElementById('landing-vision');
 const landingObjectPeriod=document.getElementById('landing-object-period');
 const makeContinuation=document.getElementById('make-continuation');
 const makeStage=document.getElementById('make-stage');
-const makeChoices=[...document.querySelectorAll('#make-options [data-target]')];
+const makeChoices=[...document.querySelectorAll('#make-options .secondary-choice')];
 const makeCurrent=document.getElementById('make-current');
 const photographyNote=document.getElementById('photography-note');
 let landingVerb=null,pendingMakeOptions=false;
@@ -940,7 +1059,8 @@ landingStuff.addEventListener('click',()=>{
 landingVision.addEventListener('click',()=>{photographyNote.classList.remove('is-open');openVision();});
 makeChoices.forEach(choice=>choice.addEventListener('click',()=>{
   makeChoices.forEach(option=>option.classList.toggle('is-selected',option===choice));
-  transitionFromLanding(choice.dataset.target);
+  if(choice.dataset.action==='about'){openMore();return;}
+  if(choice.dataset.target)transitionFromLanding(choice.dataset.target);
 }));
 makeCurrent.addEventListener('animationend',event=>{if(event.animationName==='continuationType')makeCurrent.classList.remove('is-refreshing');});
 makeCurrent.addEventListener('click',()=>{
@@ -978,49 +1098,49 @@ const MAP_NODES = [
   {id:'belief-note',label:"appreciation for people who follow a belief that isn't backed by reason, purely intuitive but unshakeable, beyond question",kind:'phrase',x:-495,y:-300},
   {id:'chasing-star',label:"it's like chasing a star, even though it won't always be there...",kind:'phrase',x:-603,y:-417},
   {id:'star-gazing',label:'mixing it into a stargazing event...',kind:'phrase',x:-446,y:-480},
-  {id:'work-devil',label:'devilReturn',kind:'work',item:7,x:-610,y:-535},
+  {id:'work-devil',label:'devilReturn',kind:'work',item:5,x:-610,y:-535},
   {id:'religion',label:'religion, belief, spirituality',kind:'phrase',x:-230,y:40},
   {id:'after-religion',label:'after religion?',kind:'phrase',x:-458,y:13},
   {id:'everyone-god',label:"everyone could be a god when there's an audience",kind:'phrase',x:-821,y:-50},
   {id:'analog',label:'analog',kind:'phrase',x:-876,y:-113},
-  {id:'work-one-book',label:'the one (book)',kind:'work',item:4,x:-889,y:-237},
+  {id:'work-one-book',label:'the one (book)',kind:'work',item:0,x:-889,y:-237},
   {id:'recreate-scene',label:'recreate that scene',kind:'phrase',x:-890,y:140},
-  {id:'work-one-installation',label:'the one (installation)',kind:'work',item:8,x:-890,y:247},
+  {id:'work-one-installation',label:'the one (installation)',kind:'work',item:0,x:-890,y:247},
   {id:'world-structure',label:'world (structure, rules, worldbuilding)',kind:'phrase',x:-210,y:-170},
   {id:'creatures',label:'how creatures interact / how they live in this world / how cultures form...',kind:'phrase',x:-150,y:-330},
   {id:'megastructure',label:'megastructure',kind:'phrase',x:106,y:-270},
   {id:'language-world',label:'i want a language / typeface that could reflect the world behind it',kind:'phrase',x:180,y:-398},
-  {id:'work-pcell-type',label:'pcell.otf',kind:'work',item:6,x:280,y:-505},
+  {id:'work-pcell-type',label:'pcell.otf',kind:'work',item:2,x:280,y:-505},
   {id:'dimensions',label:'in different dimensions?',kind:'phrase',x:440,y:-530},
-  {id:'work-pcell-body',label:'pcell.otf (body interaction)',kind:'work',item:1,x:675,y:-442},
+  {id:'work-pcell-body',label:'pcell.otf (body interaction)',kind:'work',item:2,x:675,y:-442},
   {id:'fascinate',label:'fascinated by',kind:'phrase',x:56,y:-187},
   {id:'preserving',label:'preserving',kind:'phrase',x:213,y:-151},
-  {id:'work-den-haag',label:'den haag photo etching',kind:'work',item:16,x:349,y:-242},
-  {id:'work-jellyfish',label:'jellyfish living in my computer',kind:'work',item:9,x:377,y:-192},
+  {id:'work-den-haag',label:'',kind:'work',item:9,x:349,y:-242},
+  {id:'work-jellyfish',label:'jellyfish living in my computer',kind:'work',item:7,x:377,y:-192},
   {id:'felt',label:'feel',kind:'phrase',x:90,y:-48},
   {id:'language-prison',label:'language could be a prison for freedom',kind:'phrase',x:168,y:-73},
   {id:'constraints',label:'constrained by identity / constrained by words',kind:'phrase',x:390,y:-83},
-  {id:'work-auto',label:'auto-obiturary',kind:'work',item:3,x:630,y:-14},
+  {id:'work-auto',label:'Auto-Obituary',kind:'work',item:3,x:630,y:-14},
   {id:'reconsider',label:'people sometimes really need to reconsider a lot of things...',kind:'phrase',x:390,y:31},
-  {id:'work-re',label:'re:',kind:'work',item:2,x:654,y:123},
+  {id:'work-re',label:'re:',kind:'work',item:6,x:654,y:123},
   {id:'perception',label:'perception / reality / cognition',kind:'phrase',x:-92,y:150},
   {id:'binary-world',label:'what if this world were built on 0 and 1',kind:'phrase',x:-300,y:260},
   {id:'archive',label:'and what if there were a specific archive for all these files, evidence, and research',kind:'phrase',x:-560,y:350},
-  {id:'work-lost-book',label:'the lost horizon',kind:'work',item:5,x:-820,y:350},
+  {id:'work-lost-book',label:'the lost horizon',kind:'work',item:1,x:-820,y:350},
   {id:'interactive-admin',label:'an interactive archive website?',kind:'phrase',x:-700,y:500},
-  {id:'work-lost-web',label:'the lost horizon website',kind:'work',item:0,x:-930,y:540},
+  {id:'work-lost-web',label:'the lost horizon website',kind:'work',item:1,x:-930,y:540},
   {id:'natural-number',label:'natural numbers... the key to something',kind:'phrase',x:-790,y:660},
   {id:'music',label:'music',kind:'phrase',x:143,y:93},
   {id:'live-visuals',label:'visuals for live music performances that shift / double perception',kind:'phrase',x:8,y:225},
   {id:'vj-set',label:'vj set',kind:'phrase',x:-158,y:360},
-  {id:'work-gala',label:'(gala)',kind:'work',item:10,x:-262,y:488},
+  {id:'work-gala',label:'GALA',kind:'work',item:4,x:-262,y:488},
   {id:'narrative',label:'narrative',kind:'phrase',x:-73,y:398},
-  {id:'work-zombie',label:'(zombie)',kind:'work',item:12,x:-90,y:492},
+  {id:'work-zombie',label:'Zombie',mapTitle:'Zombie',kind:'work',item:8,x:-90,y:492},
   {id:'geometric',label:'geometric',kind:'phrase',x:110,y:395},
-  {id:'work-alone',label:"i'll be alone",kind:'work',item:15,x:45,y:483},
-  {id:'work-kocaine',label:'kocaine castle',kind:'work',item:13,x:198,y:483},
+  {id:'work-alone',label:'I’ll be alone',mapTitle:'I’ll be alone',kind:'work',item:8,x:45,y:483},
+  {id:'work-kocaine',label:'KOCAINE CASTLE',mapTitle:'KOCAINE CASTLE',kind:'work',item:8,x:198,y:483},
   {id:'choreography',label:'choreography',kind:'phrase',x:210,y:363},
-  {id:'work-tru',label:'tru',kind:'work',item:14,x:297,y:458}
+  {id:'work-tru',label:'tru',mapTitle:'tru',kind:'work',item:8,x:297,y:458}
 ];
 const MAP_LINKS = [
   ['self','wonder'],['wonder','aesthetic'],['aesthetic','belief-note'],['belief-note','chasing-star'],['chasing-star','star-gazing'],['star-gazing','work-devil'],
@@ -1031,7 +1151,7 @@ const MAP_LINKS = [
   ['wonder','perception'],['perception','binary-world'],['perception','live-visuals'],['binary-world','archive'],['archive','work-lost-book'],['work-lost-book','interactive-admin'],['interactive-admin','work-lost-web'],['interactive-admin','natural-number'],['natural-number','work-lost-web'],
   ['felt','music'],['music','live-visuals'],['live-visuals','vj-set'],['vj-set','work-gala'],['live-visuals','narrative'],['narrative','work-zombie'],['live-visuals','geometric'],['geometric','work-alone'],['geometric','work-kocaine'],['live-visuals','choreography'],['choreography','work-tru']
 ];
-let mapBuilt=false,mapMode='focus',mapSelected='self',mapHovered=null,mapPathOrigin=null,mapHasExplored=false,mapTravelFrame=0,mapGlitchFrame=0,mapCamera={x:0,y:0,scale:.6},mapPointer={down:false,x:0,y:0,cx:0,cy:0,lightX:null,lightY:null},mapPinch=null;
+let mapBuilt=false,mapMode='expand',mapSelected='self',mapHovered=null,mapPathOrigin=null,mapHasExplored=false,mapTravelFrame=0,mapGlitchFrame=0,mapCamera={x:0,y:0,scale:.6},mapPointer={down:false,x:0,y:0,cx:0,cy:0,lightX:null,lightY:null},mapPinch=null;
 const mapActiveTouches=new Map();
 const MAP_GLITCH_PATTERNS=[
   [0,7,-3,12,-6,3,9,-8,4,13,-4,6,-10,2,8,-5,11,-2,5,-9,3,10,-6,1],
@@ -1105,7 +1225,7 @@ function drawMap(){
   const aperture=mapAperture();if(mapMode==='focus'){const glow=ctx.createRadialGradient(aperture.x,aperture.y,0,aperture.x,aperture.y,aperture.radius);glow.addColorStop(0,'rgba(241,241,241,.035)');glow.addColorStop(.72,'rgba(241,241,241,.014)');glow.addColorStop(1,'rgba(241,241,241,0)');ctx.fillStyle=glow;ctx.fillRect(aperture.x-aperture.radius,aperture.y-aperture.radius,aperture.radius*2,aperture.radius*2);}
   mapLinks().forEach(link=>{const a=mapPoint(link.a),b=mapPoint(link.b),control={x:(a.x+b.x)/2+(a.y-b.y)*.08,y:(a.y+b.y)/2+(b.x-a.x)*.08};ctx.save();ctx.strokeStyle=mapMode==='expand'?'rgba(241,241,241,.34)':'rgba(241,241,241,.18)';ctx.lineWidth=link.a.kind==='root'||link.b.kind==='root'?1:.7;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.quadraticCurveTo(control.x,control.y,b.x,b.y);ctx.stroke();ctx.restore();const reveal=mapLinkReveal(link);if(reveal){ctx.save();ctx.strokeStyle='rgba(241,241,241,.96)';ctx.lineWidth=1.25;ctx.beginPath();ctx.moveTo(reveal.p0.x,reveal.p0.y);ctx.quadraticCurveTo(reveal.control.x,reveal.control.y,reveal.end.x,reveal.end.y);ctx.stroke();ctx.restore();}});
   const fontSizes={root:'.625rem',phrase:'.625rem',work:'.625rem'};
-  function paintNode(node,alpha){const point=mapPoint(node),hovered=mapHovered===node.id,pulsing=node.id==='self'&&!mapHasExplored,active=hovered||pulsing,nodeSize=node.kind==='root'?10:8,displayLabel=node.kind==='work'&&ITEMS[node.item]?workLabel(ITEMS[node.item].title):node.label,lines=wrapMapLabel(displayLabel,node.kind==='work'?22:26),lineHeight=12;ctx.save();ctx.globalAlpha=alpha;ctx.font=`${fontSizes[node.kind]||'.625rem'} "Cossette Texte", "Helvetica Neue", Arial, sans-serif`;const textWidth=Math.max(...lines.map(line=>ctx.measureText(line).width)),paddingX=6,paddingY=4,boxWidth=Math.ceil(textWidth+paddingX*2),boxHeight=Math.ceil(lines.length*lineHeight+paddingY*2),boxX=point.x+nodeSize/2+5,boxY=point.y-boxHeight/2,colour=active?'#00fffb':node.kind==='work'?'rgba(241,241,241,.72)':'rgba(241,241,241,.58)';ctx.fillStyle='#0b0b0a';ctx.fillRect(boxX,boxY,boxWidth,boxHeight);ctx.strokeStyle=colour;ctx.lineWidth=1;ctx.strokeRect(Math.round(boxX)+.5,Math.round(boxY)+.5,boxWidth,boxHeight);ctx.fillStyle=active?'#00fffb':node.kind==='work'?'rgba(241,241,241,.82)':'#f1f1f1';ctx.fillRect(point.x-nodeSize/2,point.y-nodeSize/2,nodeSize,nodeSize);ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle=active?'#00fffb':'#f1f1f1';lines.forEach((line,index)=>ctx.fillText(line,boxX+paddingX,boxY+paddingY+lineHeight*(index+.5)));ctx.restore();}
+  function paintNode(node,alpha){const point=mapPoint(node),hovered=mapHovered===node.id,pulsing=node.id==='self'&&!mapHasExplored,active=hovered||pulsing,nodeSize=node.kind==='root'?10:8,canonicalTitle=node.mapTitle||(ITEMS[node.item]?ITEMS[node.item].title:node.label),displayLabel=node.kind==='work'?workLabel(canonicalTitle):node.label,lines=wrapMapLabel(displayLabel,node.kind==='work'?22:26),lineHeight=12;ctx.save();ctx.globalAlpha=alpha;ctx.font=`${fontSizes[node.kind]||'.625rem'} "Cossette Texte", "Helvetica Neue", Arial, sans-serif`;const textWidth=Math.max(...lines.map(line=>ctx.measureText(line).width)),paddingX=6,paddingY=4,boxWidth=Math.ceil(textWidth+paddingX*2),boxHeight=Math.ceil(lines.length*lineHeight+paddingY*2),boxX=point.x+nodeSize/2+5,boxY=point.y-boxHeight/2,colour=active?'#00fffb':node.kind==='work'?'rgba(241,241,241,.72)':'rgba(241,241,241,.58)';ctx.fillStyle='#0b0b0a';ctx.fillRect(boxX,boxY,boxWidth,boxHeight);ctx.strokeStyle=colour;ctx.lineWidth=1;ctx.strokeRect(Math.round(boxX)+.5,Math.round(boxY)+.5,boxWidth,boxHeight);ctx.fillStyle=active?'#00fffb':node.kind==='work'?'rgba(241,241,241,.82)':'#f1f1f1';ctx.fillRect(point.x-nodeSize/2,point.y-nodeSize/2,nodeSize,nodeSize);ctx.textAlign='left';ctx.textBaseline='middle';ctx.fillStyle=active?'#00fffb':'#f1f1f1';lines.forEach((line,index)=>ctx.fillText(line,boxX+paddingX,boxY+paddingY+lineHeight*(index+.5)));ctx.restore();}
   const pulse=.62+.3*(.5+.5*Math.sin(performance.now()/650));
   MAP_NODES.forEach(node=>paintNode(node,mapMode==='expand' ? .96 : node.id==='self' ? (mapHasExplored ? .9 : pulse) : mapHovered===node.id ? .96 : .2));
   if(mapMode==='focus'){ctx.save();ctx.beginPath();ctx.arc(aperture.x,aperture.y,aperture.radius,0,Math.PI*2);ctx.clip();MAP_NODES.forEach(node=>{if(node.id!=='self'||mapHasExplored)paintNode(node,.96);});ctx.restore();}
@@ -1138,7 +1258,7 @@ function buildSong(){
   canvas.addEventListener('wheel',event=>{event.preventDefault();noteMapInteraction();mapHasExplored=true;mapCamera.scale=Math.min(2.3,Math.max(.45,mapCamera.scale*(event.deltaY>0?.9:1.1)));if(mapPointer.lightX!==null)updateMapHover(mapPointer.lightX,mapPointer.lightY);drawMap();},{passive:false});
   window.addEventListener('resize',resizeMap);mapBuilt=true;
 }
-function startSong(){if(!mapBuilt)buildSong();clearInterval(mapGlitchTimer);mapGlitchTimer=setInterval(()=>{mapGlitchFrame=(mapGlitchFrame+1)%3;drawMap();},150);resizeMap();scheduleMapInstructions();}
+function startSong(){if(!mapBuilt)buildSong();clearInterval(mapGlitchTimer);const interval=window.NIOJIN_TRANSITION_MODE==='fold'?400:150;mapGlitchTimer=setInterval(()=>{mapGlitchFrame=(mapGlitchFrame+1)%3;drawMap();},interval);resizeMap();scheduleMapInstructions();}
 function stopSong(){clearTimeout(mapHintIdleTimer);clearTimeout(mapHintVisibleTimer);clearTimeout(songInterfaceTimer);clearInterval(mapGlitchTimer);clearMapChoiceHint();hideMapInstructions();hideSongInterface();}
 
 /* =========================================================
@@ -1311,7 +1431,7 @@ function buildIndex(){
    GALLERY
    ========================================================= */
 let galleryBuilt=false,galleryLoaded=0,activeGalleryFilter='all';
-const GALLERY_BATCH_SIZE=9;
+const GALLERY_BATCH_SIZE=10;
 function filteredGalleryItems(){
   return ITEMS.map((item,index)=>({item,index})).filter(({item})=>activeGalleryFilter==='all'||(item.tags||[]).includes(activeGalleryFilter));
 }
@@ -1320,7 +1440,7 @@ function appendGalleryBatch(){
   const selection=filteredGalleryItems();
   const batch=selection.slice(galleryLoaded,galleryLoaded+GALLERY_BATCH_SIZE);
   batch.forEach(({item,index:i})=>{
-    const card=document.createElement('a');card.className='gw-card';card.href='#';
+    const card=document.createElement('a');card.className=`gw-card gw-card--${item.tier||'core'}`;card.href='#';
     const mediaWrap=document.createElement('div');mediaWrap.className='gw-media';
     /* Load video previews on hover. */
     if(item.type==='video'){
@@ -1408,6 +1528,7 @@ function buildStore(){
    DETAIL VIEWER — scroll through every asset inside one work
    ========================================================= */
 let detailCur=0,detailVolume=0,detailMediaObserver=null,detailControlsTimer=null,detailReturnView='landing';
+const assetCursorLabel=document.getElementById('asset-cursor-label');
 function wakeDetailControls(){
   const detailView=document.getElementById('view-detail');if(!detailView.classList.contains('on'))return;
   clearTimeout(detailControlsTimer);detailView.classList.remove('controls-idle');
@@ -1415,12 +1536,22 @@ function wakeDetailControls(){
 }
 function holdDetailControls(){clearTimeout(detailControlsTimer);document.getElementById('view-detail').classList.remove('controls-idle');}
 function assetSource(item){return item.src || (item.type==='gallery' ? `./images/${item.folderName}/${(item.images||[])[0]||''}` : '');}
-function createDetailAsset(source,isVideo,item){
+function hideAssetCursorLabel(){assetCursorLabel.classList.remove('is-visible');document.body.classList.remove('asset-label-hover');}
+function createDetailAsset(source,isVideo,item,label,hasAudio=false){
   const slide=document.createElement('figure');slide.className='detail-slide';
-  if(isVideo){const video=document.createElement('video');video.src=source;video.loop=true;video.muted=detailVolume===0;video.volume=detailVolume;video.playsInline=true;video.preload='metadata';slide._vid=video;slide.appendChild(video);}
-  else{const image=document.createElement('img');image.src=source;image.loading='lazy';image.alt=item.title||'';slide.appendChild(image);}
+  slide.dataset.hasAudio=String(Boolean(hasAudio));
+  let media;
+  if(isVideo){media=document.createElement('video');media.src=source;media.loop=true;media.muted=detailVolume===0;media.volume=detailVolume;media.playsInline=true;media.preload='metadata';slide._vid=media;slide.appendChild(media);}
+  else{media=document.createElement('img');media.src=source;media.loading='lazy';media.alt=item.title||'';slide.appendChild(media);}
+  if(label){
+    slide.setAttribute('aria-label',label);
+    media.addEventListener('pointerenter',event=>{if(event.pointerType==='touch')return;assetCursorLabel.textContent=label;assetCursorLabel.classList.add('is-visible');document.body.classList.add('asset-label-hover');});
+    media.addEventListener('pointermove',event=>{assetCursorLabel.style.left=event.clientX+'px';assetCursorLabel.style.top=event.clientY+'px';});
+    media.addEventListener('pointerleave',hideAssetCursorLabel);
+  }
   return slide;
 }
+function updateDetailSoundForSlide(slide){document.getElementById('detail-sound').classList.toggle('is-visible',slide?.dataset.hasAudio==='true');}
 function setDetailVolume(value){
   detailVolume=Number(value);document.getElementById('detail-volume').value=detailVolume;
   document.getElementById('detail-volume-value').textContent=String(Math.round(detailVolume*100)).padStart(2,'0');
@@ -1430,14 +1561,15 @@ function watchDetailMedia(){
   if(detailMediaObserver)detailMediaObserver.disconnect();
   const root=document.getElementById('detail-scroll');
   detailMediaObserver=new IntersectionObserver(entries=>{
-    entries.forEach(entry=>{const video=entry.target;if(entry.isIntersecting&&entry.intersectionRatio>=.6)video.play().catch(()=>{});else video.pause();});
+    entries.forEach(entry=>{const video=entry.target;if(entry.isIntersecting&&entry.intersectionRatio>=.6){video.play().catch(()=>{});updateDetailSoundForSlide(video.closest('.detail-slide'));}else video.pause();});
   },{root,threshold:[0,.6,1]});
   document.querySelectorAll('#detail-slides video').forEach(video=>detailMediaObserver.observe(video));
 }
 function updateDetailScrollHint(){
   const scroll=document.getElementById('detail-scroll'),slides=[...document.querySelectorAll('#detail-slides .detail-slide')],hint=document.getElementById('detail-scroll-hint');
-  const total=slides.length;hint.classList.toggle('is-visible',total>1);if(total<2)return;
+  const total=slides.length;hint.classList.toggle('is-visible',total>1);
   const current=Math.min(total-1,Math.max(0,Math.round(scroll.scrollTop/Math.max(scroll.clientHeight,1))));
+  updateDetailSoundForSlide(slides[current]);if(total<2)return;
   const complete=current===total-1;hint.classList.toggle('is-complete',complete);
   document.getElementById('detail-scroll-label').textContent=complete?'End of work':'Scroll to continue';
   document.getElementById('detail-scroll-position').textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');
@@ -1452,13 +1584,15 @@ function openDetail(i,origin){
   if(sourceView&&sourceView!=='detail')detailReturnView=sourceView;
   detailCur=i;const item=ITEMS[i],slides=document.getElementById('detail-slides'),scroll=document.getElementById('detail-scroll');
   slides.innerHTML='';
-  if(item.type==='gallery'){
+  if((item.assets||[]).length){
+    item.assets.forEach(asset=>slides.appendChild(createDetailAsset(asset.src,asset.type==='video'||/\.(mp4|mov|webm)$/i.test(asset.src),item,asset.label,asset.hasAudio)));
+  }else if(item.type==='gallery'){
     (item.images||[]).forEach(file=>slides.appendChild(createDetailAsset(`./images/${item.folderName}/${file}`,/\.(mp4|mov|webm)$/i.test(file),item)));
-  }else slides.appendChild(createDetailAsset(assetSource(item),item.type==='video',item));
+  }else slides.appendChild(createDetailAsset(assetSource(item),item.type==='video',item,null,item.hasAudio));
   document.getElementById('detail-title').textContent=workLabel(item.title);
   document.getElementById('detail-year').textContent=item.year||'';
   document.getElementById('detail-caption').textContent=item.caption||'';
-  document.getElementById('detail-sound').classList.toggle('is-visible',item.type==='video'||(item.images||[]).some(file=>/\.(mp4|mov|webm)$/i.test(file)));
+  updateDetailSoundForSlide(slides.querySelector('.detail-slide'));
   const revealX=(origin&&origin.x)||window.innerWidth/2,revealY=(origin&&origin.y)||window.innerHeight/2;
   slides.style.setProperty('--asset-origin',revealX+'px '+revealY+'px');slides.classList.remove('is-revealing');void slides.offsetWidth;slides.classList.add('is-revealing');
   setTimeout(()=>slides.classList.remove('is-revealing'),760);
@@ -1467,6 +1601,7 @@ function openDetail(i,origin){
 }
 function closeDetail(){
   clearTimeout(detailControlsTimer);document.getElementById('view-detail').classList.remove('controls-idle');
+  hideAssetCursorLabel();document.getElementById('detail-sound').classList.remove('is-visible');
   if(detailMediaObserver)detailMediaObserver.disconnect();
   document.getElementById('detail-scroll-hint').classList.remove('is-visible','is-complete');
   stopDetailMedia();
