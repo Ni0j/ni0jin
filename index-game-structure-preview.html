@@ -118,16 +118,19 @@ body.more-open{overflow:hidden;}
 #landing-video{object-fit:cover;opacity:1;transition:opacity .45s ease;}
 body.more-open #landing-video{opacity:.35;}
 
-/* The landing page is a two-stage scroll: moving image, then the archived
-   conversation. Scroll progress drives the ASCII field between them. */
-#view-landing{overflow:hidden;}
-#landing-scroll-track{position:absolute;inset:0;z-index:3;overflow-y:auto;overscroll-behavior-y:contain;scrollbar-width:none;}
-#landing-scroll-track::-webkit-scrollbar{display:none;}
-#landing-scroll-stage{position:relative;height:220vh;height:220dvh;}
-#landing-video-frame{position:absolute;inset:0;z-index:1;width:100%;height:100%;overflow:hidden;opacity:1;transform:translateZ(0);will-change:opacity;pointer-events:none;}
-#landing-scroll-ascii,#landing-scroll-cover{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none;}
-#landing-scroll-ascii{z-index:4;background:transparent;image-rendering:pixelated;}
-#landing-scroll-cover{z-index:5;background:#f2f2f2;opacity:0;will-change:opacity;}
+/* ============ GAME-STRUCTURE PREVIEW ============
+   One start action, then the landing field fades into the index. The former
+   lower-third conversation remains in the file as an archive of the original
+   interaction, but is no longer part of the entry flow. */
+#landing-hover-zone,#landing-indicator,#landing-bottom{display:none!important;}
+#landing-title-screen{position:absolute;inset:0;z-index:4;display:grid;place-items:center;color:#f1f1f1;transition:opacity .42s ease,visibility 0s .42s;}
+#landing-title-screen.is-dismissed{opacity:0;visibility:hidden;pointer-events:none;}
+.title-screen-copy{display:flex;flex-direction:column;align-items:center;text-align:center;gap:1rem;padding:2rem;}
+.title-screen-name{font-weight:400;font-size:clamp(2.5rem,6.8vw,7rem);letter-spacing:-.055em;line-height:.86;}
+.title-screen-role{font-size:var(--type-primary);letter-spacing:.02em;}
+.title-screen-enter{appearance:none;border:0;background:transparent;color:inherit;margin-top:1.15rem;padding:.55rem .7rem;font:inherit;font-size:var(--type-support);letter-spacing:.06em;text-transform:uppercase;cursor:none;transition:background .18s ease,color .18s ease;}
+.title-screen-enter:hover,.title-screen-enter:focus-visible{background:#f1f1f1;color:#0b0b0a;}
+@media(max-width:600px){.title-screen-name{font-size:clamp(2.75rem,14vw,5rem);}}
 
 /* Landing menu trigger */
 #landing-hover-zone{position:absolute;left:0;right:0;bottom:0;height:33.334vh;z-index:2;}
@@ -227,21 +230,6 @@ html.photosensitivity-flashing #landing-stuff.is-awaiting::before{animation-dura
 #photography-note.is-open{max-height:2rem;margin-top:.8rem;visibility:visible;transition-delay:0s;}
 @media(max-width:700px){#view-landing{background:#0b0b0a;}#landing-video{inset:auto;top:50%;left:50%;width:100vh;width:100dvh;height:100vw;height:100dvw;max-width:none;max-height:none;object-fit:cover;transform:translate(-50%,-50%) rotate(90deg);transform-origin:center;}#landing-bottom{height:calc(clamp(10.5rem,24dvh,11.5rem) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);padding-left:calc(1rem + env(safe-area-inset-left));padding-right:calc(1rem + env(safe-area-inset-right));}#landing-sentence{top:calc(50% - 1.15rem);}#sentence-core{gap:.4em;}#verb-options{top:calc(50% + .5rem);gap:.4rem .85rem;max-height:2.25rem;overflow:visible;flex-wrap:nowrap;}#landing-response{top:calc(50% + .2rem);}.secondary-options{flex-wrap:nowrap;gap:.25rem .55rem;}.landing-opt,.cloze-line,.cloze-answer,.secondary-choice,#photography-note,.character-line{font-size:var(--type-primary);line-height:1.4;letter-spacing:.02em;}#verb-current{width:6.6em;}.verb-choice[data-verb="make"]{width:4.75rem;min-width:4.75rem;padding-left:.35em;padding-right:.35em;text-align:center;overflow:visible;}#landing-vision::before{transform:translateY(.12em);}.landing-self-icon{width:7rem;height:7rem;}#landing-profile{grid-template-columns:7rem max-content;width:min(22rem,100%);}}
 
-/* The original menu markup and interaction stay intact, but it is now the
-   centered destination of the landing scroll rather than a hover drawer. */
-#landing-hover-zone,#landing-indicator{display:none!important;}
-#landing-bottom{
-  display:flex!important;position:absolute;inset:0;z-index:6;
-  height:100%!important;margin:0;
-  background:transparent;opacity:0;visibility:hidden;
-  transform:none!important;
-  transition:opacity .35s ease,visibility 0s .35s;
-  pointer-events:none!important;
-}
-#landing-bottom::before{display:none;}
-#landing-bottom.is-scroll-revealed{opacity:1;visibility:visible;transition:opacity .35s ease;pointer-events:none!important;}
-#landing-bottom.is-scroll-revealed button,#landing-bottom.is-scroll-revealed a,#landing-bottom.is-scroll-revealed [tabindex]{pointer-events:auto;}
-
 /* ============ VISION / IYKYK CONFIRMATION ============ */
 #vision-layer{position:fixed;inset:0;z-index:620;display:grid;place-items:center;padding:1.5rem;visibility:hidden;pointer-events:none;}
 #vision-layer.is-open{visibility:visible;pointer-events:all;}
@@ -319,7 +307,15 @@ html.photosensitivity-flashing #landing-stuff.is-awaiting::before{animation-dura
 @media(max-width:700px){#profile-map-wrap{padding:4.8rem .5rem 1rem;}.profile-map-node text{font-size:.56rem;}.profile-map-node.is-branch text,.profile-map-root text{font-size:.72rem;}}
 
 /* ============ INDEX ============ */
-#index-scroll{position:absolute;top:0;left:0;right:0;bottom:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:calc(clamp(1.2rem,2.8vw,2rem)*2 + 1.6rem + env(safe-area-inset-top));padding-bottom:env(safe-area-inset-bottom);}
+#index-preview{position:absolute;inset:0;z-index:1;display:grid;place-items:center;pointer-events:none;overflow:hidden;}
+#index-preview-sheet{position:relative;width:min(56vw,46rem);height:min(60vh,36rem);overflow:hidden;background:#d8d8d8;opacity:0;transform-origin:100% 50%;transform-style:preserve-3d;backface-visibility:hidden;will-change:transform,opacity;}
+#index-preview.is-visible #index-preview-sheet{animation:indexPreviewFold .88s cubic-bezier(.22,.78,.2,1) both;}
+#index-preview img{display:block;width:100%;height:100%;object-fit:contain;opacity:.58;transform:scale(1.12);}
+#index-preview.is-visible img{animation:indexPreviewImageSettle .9s cubic-bezier(.16,1,.3,1) both;}
+@keyframes indexPreviewFold{from{opacity:.08;transform:perspective(90rem) translateX(10vw) rotateY(-82deg);box-shadow:-3rem 0 5rem rgba(0,0,0,.28)}to{opacity:1;transform:perspective(90rem) translateX(0) rotateY(0);box-shadow:none}}
+@keyframes indexPreviewImageSettle{from{transform:scale(1.12)}to{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){#index-preview.is-visible #index-preview-sheet,#index-preview.is-visible img{animation:none;}#index-preview-sheet{opacity:1;transform:none;}#index-preview img{transform:none;}}
+#index-scroll{position:absolute;top:0;left:0;right:0;bottom:0;z-index:2;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:calc(clamp(1.2rem,2.8vw,2rem)*2 + 1.6rem + env(safe-area-inset-top));padding-bottom:env(safe-area-inset-bottom);}
 #index-table{width:100%;padding:0 clamp(1.5rem,4vw,3rem) 6rem;}
 #index-controls{display:flex;justify-content:flex-end;padding:0 0 1.4rem;border-bottom:1px solid var(--ink);margin-bottom:1.4rem;}
 .index-filter{appearance:none;border:0;background:transparent;padding:0 .12em;font-family:var(--font);font-size:var(--type-support);letter-spacing:normal;color:var(--ink-soft);cursor:none;transition:background .2s,color .2s;}
@@ -495,7 +491,7 @@ body.asset-label-hover #cur{opacity:0;}
 <div id="more-layer" aria-hidden="true">
   <button id="more-backdrop" type="button" aria-label="Close More" tabindex="-1"></button>
   <aside id="more-drawer" role="dialog" aria-modal="true" aria-labelledby="more-title">
-    <header class="more-head"><h2 class="more-title" id="more-title">More</h2><button class="more-close" id="more-close" type="button" aria-label="Back"><svg class="back-arrow-icon" viewBox="0 0 22 12" aria-hidden="true"><path d="M6 1 1 6l5 5M1 6h20"/></svg></button></header>
+    <header class="more-head"><h2 class="more-title" id="more-title">Pause / Archive</h2><button class="more-close" id="more-close" type="button" aria-label="Resume"><svg class="back-arrow-icon" viewBox="0 0 22 12" aria-hidden="true"><path d="M6 1 1 6l5 5M1 6h20"/></svg></button></header>
     <div class="more-body">
     
       </section>
@@ -506,7 +502,7 @@ body.asset-label-hover #cur{opacity:0;}
               <h4 class="more-section-title">Focus</h4>
               <div class="more-section-body">Visual design, motion, interaction, and visual experiences.</div>
               <nav class="more-section" aria-label="Explore the site">
-                <h4 class="more-section-title">Works</h4><div class="more-section-body">
+                <h4 class="more-section-title">Browse</h4><div class="more-section-body">
           <button class="more-nav-link" type="button" data-target="index">Index</button>
           <button class="more-nav-link" type="button" data-target="gallery">Gallery</button>
           <button class="more-nav-link" type="button" data-target="song">Explore</button></div>
@@ -535,11 +531,15 @@ body.asset-label-hover #cur{opacity:0;}
 
 <!-- ============ LANDING ============ -->
 <section id="view-landing" class="view on">
-  <div id="landing-video-frame">
-    <video id="landing-video" muted loop playsinline preload="auto" data-desktop-src="./videos/landing.1.mp4" data-mobile-src="./videos/landing.1_mobile.mp4" data-mobile-poster="./videos/landing.1_mobile_poster.png"></video>
-  </div>
-  <canvas id="landing-scroll-ascii" aria-hidden="true"></canvas>
-  <div id="landing-scroll-cover" aria-hidden="true"></div>
+  <video id="landing-video" muted loop playsinline preload="auto" data-desktop-src="./videos/landing.1.mp4" data-mobile-src="./videos/landing.1_mobile.mp4" data-mobile-poster="./videos/landing.1_mobile_poster.png"></video>
+
+  <section id="landing-title-screen" aria-labelledby="title-screen-name">
+    <div class="title-screen-copy">
+      <h1 class="title-screen-name" id="title-screen-name">Nio Jin</h1>
+      <p class="title-screen-role">human :: designer :: artist</p>
+      <button class="title-screen-enter" id="enter-practice" type="button">Click any button to start</button>
+    </div>
+  </section>
 
   <div id="landing-hover-zone"></div>
 
@@ -587,9 +587,6 @@ body.asset-label-hover #cur{opacity:0;}
       </div>
     </div>
   </div>
-  <div id="landing-scroll-track">
-    <div id="landing-scroll-stage"></div>
-  </div>
 </section>
 
 <div id="vision-layer" aria-hidden="true">
@@ -619,6 +616,7 @@ body.asset-label-hover #cur{opacity:0;}
 
 <!-- ============ INDEX ============ -->
 <section id="view-index" class="view">
+  <div id="index-preview" aria-hidden="true"><div id="index-preview-sheet"><img id="index-preview-image" alt=""></div></div>
   <div id="index-scroll">
     <div id="index-table">
       <div id="index-controls"><button id="index-mode-toggle" class="index-filter" type="button" aria-pressed="true">A–Z view</button></div>
@@ -837,7 +835,7 @@ const STORE_ACCESS_ENABLED=false;
 const globalVersion=document.getElementById('global-version');
 const moreLayer=document.getElementById('more-layer');
 let prevView='landing';
-let landingScrollReady=false,landingScrollComplete=false;
+var landingStartPending=false;
 let mapHintIdleTimer=null,mapHintVisibleTimer=null;
 let mapChoiceHintTimer=null;
 let songInterfaceTimer=null;
@@ -890,7 +888,10 @@ function showView(name){
   Object.entries(views).forEach(([k,el])=>el.classList.toggle('on',k===name));
   if(name==='landing'||!landingWasFolding)views.landing.classList.remove('is-folding');
   else viewTransitionCleanupTimer=setTimeout(()=>views.landing.classList.remove('is-folding'),920);
-  if(name==='landing'&&landingScrollReady)resetLandingScroll();
+  if(name==='landing'){
+    document.getElementById('landing-title-screen')?.classList.remove('is-dismissed');
+    landingStartPending=false;
+  }
   globalVersion.classList.add('vis');
   if(name!=='song') stopSong();
   if(name==='index' && !indexBuilt) buildIndex();
@@ -999,6 +1000,15 @@ document.querySelectorAll('.more-nav-link').forEach(link=>link.addEventListener(
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&moreLayer.classList.contains('is-open')){closeMore();globalVersion.focus();}});
 showView('landing');
 
+/* GAME-STRUCTURE PREVIEW — one start action, then the existing 3D fold into Index. */
+const titleScreen=document.getElementById('landing-title-screen');
+document.getElementById('enter-practice').addEventListener('click',()=>{
+  if(landingStartPending)return;
+  landingStartPending=true;
+  titleScreen.classList.add('is-dismissed');
+  transitionFromLanding('index');
+});
+
 /* LANDING MENU */
 const landingHoverZone=document.getElementById('landing-hover-zone');
 const landingBottomPanel=document.getElementById('landing-bottom');
@@ -1040,7 +1050,6 @@ function scheduleCloseLandingBottom(){
 document.addEventListener('pointermove',event=>{
   if(event.pointerType!=='mouse')return;
   if(!views.landing.classList.contains('on'))return;
-  if(!landingScrollComplete)return;
   if(event.clientY>=window.innerHeight*(2/3))openLandingBottom();
   else if(!landingBottomPanel.matches(':hover'))scheduleCloseLandingBottom();
 });
@@ -1131,69 +1140,6 @@ makeCurrent.addEventListener('click',()=>{
   transitionFromLanding(target);
 });
 document.addEventListener('keydown',event=>{if(event.key==='Escape')closeLandingProfile();});
-
-/* LANDING SCROLL — build the existing glitch language progressively from the
-   scroll position, then let the light field cover it before revealing the
-   archived conversation. */
-const landingScrollCanvas=document.getElementById('landing-scroll-ascii');
-const landingScrollCover=document.getElementById('landing-scroll-cover');
-const landingScrollTrack=document.getElementById('landing-scroll-track');
-const landingVideoFrame=document.getElementById('landing-video-frame');
-const landingScrollContext=landingScrollCanvas.getContext('2d');
-const LANDING_ASCII_SIZE={cellWidth:12,cellHeight:16};
-const LANDING_BLOCK_PALETTE=['#8C8C8C','#BFBFBF','#252526','#585859','#F2F2F2'];
-let landingScrollCells=[],landingScrollFrame=0,landingScrollProgress=0;
-function rebuildLandingScrollField(){
-  const ratio=Math.min(window.devicePixelRatio||1,2),width=window.innerWidth,height=window.innerHeight;
-  const {cellWidth,cellHeight}=LANDING_ASCII_SIZE;
-  landingScrollCanvas.width=Math.round(width*ratio);landingScrollCanvas.height=Math.round(height*ratio);
-  landingScrollCanvas.style.width=`${width}px`;landingScrollCanvas.style.height=`${height}px`;
-  landingScrollContext.setTransform(ratio,0,0,ratio,0,0);
-  landingScrollCells=[];
-  for(let y=0;y<height+cellHeight;y+=cellHeight){
-    for(let x=0;x<width+cellWidth;x+=cellWidth){
-      landingScrollCells.push({x,y,threshold:Math.random(),colour:LANDING_BLOCK_PALETTE[Math.floor(Math.random()*LANDING_BLOCK_PALETTE.length)]});
-    }
-  }
-}
-function paintLandingScroll(){
-  landingScrollFrame=0;
-  const {cellWidth,cellHeight}=LANDING_ASCII_SIZE;
-  const width=window.innerWidth,height=window.innerHeight,strength=Math.min(1,landingScrollProgress/.68);
-  landingScrollContext.clearRect(0,0,width,height);
-  if(strength<=.002)return;
-  landingScrollCells.forEach(cell=>{
-    if(cell.threshold>strength)return;
-    landingScrollContext.globalAlpha=1;
-    landingScrollContext.fillStyle=cell.colour;
-    landingScrollContext.fillRect(cell.x,cell.y,cellWidth+1,cellHeight+1);
-  });
-  landingScrollContext.globalAlpha=1;
-}
-function updateLandingScroll(){
-  const maxScroll=Math.max(1,landingScrollTrack.scrollHeight-landingScrollTrack.clientHeight);
-  landingScrollProgress=Math.max(0,Math.min(1,landingScrollTrack.scrollTop/maxScroll));
-  const coverProgress=Math.max(0,Math.min(1,(landingScrollProgress-.62)/.28));
-  landingScrollCover.style.opacity=coverProgress.toFixed(3);
-  landingVideoFrame.style.opacity=Math.max(0,1-landingScrollProgress/.9).toFixed(3);
-  if(!landingScrollFrame)landingScrollFrame=requestAnimationFrame(paintLandingScroll);
-  const complete=landingScrollProgress>=.94;
-  if(complete!==landingScrollComplete){
-    landingScrollComplete=complete;
-    landingBottomPanel.classList.toggle('is-scroll-revealed',complete);
-    if(complete)openLandingBottom();
-    else{clearTimeout(landingCloseTimer);landingBottomPanel.classList.remove('is-open');landingIndicator.classList.remove('is-hidden');}
-  }
-}
-function resetLandingScroll(){
-  landingScrollTrack.scrollTop=0;landingScrollProgress=0;landingScrollComplete=false;
-  landingBottomPanel.classList.remove('is-scroll-revealed','is-open');landingScrollCover.style.opacity='0';
-  landingVideoFrame.style.opacity='1';
-  cancelAnimationFrame(landingScrollFrame);landingScrollFrame=0;paintLandingScroll();
-}
-landingScrollTrack.addEventListener('scroll',updateLandingScroll,{passive:true});
-window.addEventListener('resize',()=>{rebuildLandingScrollField();updateLandingScroll();});
-landingScrollReady=true;rebuildLandingScrollField();updateLandingScroll();
 
 /* Add the future divination website URL here when it is ready. */
 const DIVINATION_URL='';
@@ -1471,6 +1417,13 @@ function alphabeticalItems(){
 }
 function bindWorkOpen(element,index,sourceView){
   let pointerArmed=false;
+  if(sourceView==='index'){
+    const item=ITEMS[index];
+    element.addEventListener('pointerenter',()=>showIndexPreview(item));
+    element.addEventListener('pointerleave',hideIndexPreview);
+    element.addEventListener('focus',()=>showIndexPreview(item));
+    element.addEventListener('blur',hideIndexPreview);
+  }
   element.addEventListener('pointerdown',()=>{pointerArmed=true;});
   element.addEventListener('pointerup',()=>{setTimeout(()=>{pointerArmed=false;},0);});
   element.addEventListener('pointercancel',()=>{pointerArmed=false;});
@@ -1507,6 +1460,20 @@ function indexCategoryPath(item){
   return tags.length?tags:[item.type||'uncategorized'];
 }
 const INDEX_TREE_ORDER=['editorial & publishing','interactive & experience','motion & live visuals','type design','brand identity & campaigns','image-making','artist books','publications','web experiences','interactive installations','responsive systems','vj','audio reactive','music visuals','interactive type','typeface systems','campaigns','printmaking'];
+const indexPreview=document.getElementById('index-preview');
+const indexPreviewImage=document.getElementById('index-preview-image');
+let indexPreviewHideTimer=null;
+function showIndexPreview(item){
+  const source=item?.thumb || (item?.type==='image'?item.src:'');
+  if(!source)return;
+  clearTimeout(indexPreviewHideTimer);
+  if(indexPreviewImage.getAttribute('src')!==source)indexPreviewImage.src=source;
+  indexPreview.classList.add('is-visible');
+}
+function hideIndexPreview(){
+  clearTimeout(indexPreviewHideTimer);
+  indexPreviewHideTimer=setTimeout(()=>indexPreview.classList.remove('is-visible'),110);
+}
 function compareTreeCategories(a,b){
   const ai=INDEX_TREE_ORDER.indexOf(a),bi=INDEX_TREE_ORDER.indexOf(b),ar=ai<0?INDEX_TREE_ORDER.length:ai,br=bi<0?INDEX_TREE_ORDER.length:bi;
   return ar-br||a.localeCompare(b,undefined,{sensitivity:'base'});
