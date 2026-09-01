@@ -128,6 +128,8 @@ body.more-open #landing-video{opacity:.35;}
 #landing-scroll-ascii,#landing-scroll-cover{position:absolute;inset:0;display:block;width:100%;height:100%;pointer-events:none;}
 #landing-scroll-ascii{z-index:4;background:transparent;image-rendering:pixelated;}
 #landing-scroll-cover{z-index:5;background:#f2f2f2;opacity:0;will-change:opacity;}
+#landing-idle-hint{position:absolute;left:50%;bottom:clamp(1.5rem,4vw,3rem);z-index:7;transform:translate(-50%,.35rem);font-size:var(--type-support);letter-spacing:.04em;color:#f2f2f2;mix-blend-mode:difference;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .5s ease,transform .7s cubic-bezier(.16,1,.3,1),visibility 0s .5s;}
+#landing-idle-hint.is-visible{opacity:.72;visibility:visible;transform:translate(-50%,0);transition-delay:0s;}
 
 /* Landing menu trigger */
 #landing-hover-zone{position:absolute;left:0;right:0;bottom:0;height:33.334vh;z-index:2;}
@@ -347,7 +349,7 @@ html.photosensitivity-flashing #landing-stuff.is-awaiting::before{animation-dura
 #gallery-filters{display:flex;gap:.55rem;flex-wrap:wrap;margin:0 clamp(1.5rem,4vw,3rem) 1.4rem;padding-bottom:1.4rem;border-bottom:0px solid var(--line);}
 #gallery-filters .gallery-filter:first-child{order:2;margin-left:auto;}
 #gallery-wall{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:36px 20px;padding:0 clamp(1.5rem,4vw,3rem) 5rem;}
-.gw-card{display:block;cursor:none;text-decoration:none;}
+.gw-card{display:block;cursor:none;text-decoration:none;content-visibility:auto;contain-intrinsic-size:auto 360px;}
 .gw-card--core,.gw-card--support{grid-column:span 4;}
 .gw-media{aspect-ratio:1;overflow:hidden;margin-bottom:10px;display:grid;place-items:start center;}
 .gw-media img,.gw-media video{display:block;width:100%;height:100%;object-fit:contain;object-position:center top;filter:grayscale(1);transition:filter .5s cubic-bezier(.16,1,.3,1);}
@@ -546,6 +548,7 @@ body.asset-label-hover #cur{opacity:0;}
   <div id="landing-indicator">
     <span class="indicator-label"></span>
   </div>
+  <p id="landing-idle-hint" aria-live="polite">Scroll to enter.</p>
 
   <div id="landing-bottom">
     <div id="landing-divider"></div>
@@ -667,7 +670,7 @@ const ITEMS = [
   {
     title:'the One', year:'2026', tier:'core', type:'mixed',
     tags:['interactive','publication','motion'], treePath:['interactive & experience','interactive installations'],
-    thumb:'./thumbs/theone.gif',
+    thumb:'./thumbs/optimized/theone.jpg', animatedThumb:'./thumbs/theone.gif',
     assets:[
       {src:'./videos/theOne.mp4',type:'video',label:'Audio-driven projection',hasAudio:true},
       {src:'./images/theOne/010.jpg',type:'image',label:'Publication'},
@@ -680,7 +683,7 @@ const ITEMS = [
   {
     title:'the [Lost H]orizon', year:'2024', tier:'core', type:'mixed',
     tags:['web','interactive','publication'], treePath:['interactive & experience','web experiences'],
-    thumb:'./thumbs/theLostHorizon1.jpg',
+    thumb:'./thumbs/optimized/the-lost-horizon.jpg',
     assets:[
       
       {src:'./videos/theLostH.mp4',type:'video',label:'Locked desktop simulation and ASCII camera'},
@@ -708,7 +711,7 @@ const ITEMS = [
   {
     title:'pcell.otf', year:'2025', tier:'core', type:'mixed',
     tags:['typeface','interactive','motion'], treePath:['type design','interactive type'],
-    thumb:'./thumbs/pcell.gif',
+    thumb:'./thumbs/optimized/pcell.jpg', animatedThumb:'./thumbs/pcell.gif',
     assets:[
       {src:'./videos/pcell.mp4',type:'video',label:'Responsive point cloud'},
       {src:'./images/pcell/010.jpg',type:'image',label:'Typeface specimen'},
@@ -721,39 +724,39 @@ const ITEMS = [
   {
     title:'Auto-Obituary', year:'2025', tier:'core', type:'gallery',
     tags:['printed medium','book'], treePath:['editorial & publishing','artist books'], folderName:'autoO',
-    images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg'], thumb:'./thumbs/autoO.jpg',
+    images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg'], thumb:'./thumbs/optimized/auto-obituary.jpg',
     caption:'An artist publication staging the symbolic death of Boku no Lyric no Boyomi through an accordion-fold book, fourteen song cards, and an archive-like visual system.',
     hook:'Fourteen songs stage a public disappearance.'
   },
   {
     title:'GALA', year:'2025', tier:'core', type:'video',
-    tags:['live','audioreactive','motion'], treePath:['motion & live visuals','vj'], src:'./videos/gala.mp4', thumb:'./thumbs/gala.gif', hasAudio:true,
+    tags:['live','audioreactive','motion'], treePath:['motion & live visuals','vj'], src:'./videos/gala.mp4', thumb:'./thumbs/optimized/gala.jpg', animatedThumb:'./thumbs/gala.gif', hasAudio:true,
     caption:'A live audio-reactive visual system created and performed for XG’s “GALA” at Volvox Labs. Sound intensity and rhythm continuously reshape the image, with manual intervention during the performance.',
     hook:'Sound and light become a live instrument.'
   },
   {
     title:'devilReturn', year:'2024', tier:'core', type:'gallery',
     tags:['printed medium','campaign'], treePath:['brand identity & campaigns','campaigns'], folderName:'devilReturn',
-    images:['020.jpg','010.jpg','030.jpg'], thumb:'./thumbs/devilReturn.png',
+    images:['020.jpg','010.jpg','030.jpg'], thumb:'./thumbs/optimized/devil-return.jpg',
     caption:'A speculative campaign turning Comet P12’s return into a public gathering at Beach 67th Street. Posters and mailed tickets operate as both event artifacts and entry points to the accompanying film.',
     hook:'A returning comet becomes a public gathering.'
   },
   {
     title:'re:', year:'2025', tier:'support', type:'gallery',
     tags:['printed medium','editorial'], treePath:['editorial & publishing','publications'], folderName:'re',
-    images:['010.jpg','020.jpg','030.jpg','040.mp4'], thumb:'./images/re/030.jpg',
+    images:['010.jpg','020.jpg','030.jpg','040.mp4'], thumb:'./thumbs/optimized/re.jpg',
     caption:'An editorial platform organized around “RE:” as a method of returning to, reframing, and reconstructing existing narratives.',
     hook:'Reframing becomes an editorial method.'
   },
   {
     title:'jellyfish that live inside my computer', year:'2025', tier:'support', type:'video',
-    tags:['motion','interactive'], treePath:['interactive & experience','responsive systems'], src:'./videos/jellyfish.mp4', thumb:'./thumbs/jellyfish.gif',
+    tags:['motion','interactive'], treePath:['interactive & experience','responsive systems'], src:'./videos/jellyfish.mp4', thumb:'./thumbs/optimized/jellyfish.jpg', animatedThumb:'./thumbs/jellyfish.gif',
     caption:'An evolving interactive interface of jellyfish, inspired by Tamagotchi-like companionship.',
     hook:'Small life inside the machine.'
   },
   {
     title:'Music Visual Playground', year:'2025–2026', tier:'support', type:'mixed',
-    tags:['motion','music visual'], treePath:['motion & live visuals','music visuals'], thumb:'./thumbs/zombie.gif',
+    tags:['motion','music visual'], treePath:['motion & live visuals','music visuals'], thumb:'./thumbs/optimized/music-visual-playground.jpg', animatedThumb:'./thumbs/zombie.gif',
     assets:[
       {src:'./videos/zombie.mp4',type:'video',label:'Zombie(feat. DRIP TARKO) — MilliMax',hasAudio:true},
       {src:'./videos/afternoon.mp4',type:'video',label:'the afternoon we tried suicide — I Broke My Robot',hasAudio:true},
@@ -769,7 +772,7 @@ const ITEMS = [
   },
   {
     title:'52.05718\u00b0 N, 4.40660\u00b0 E', year:'2026', tier:'support', type:'image',
-    tags:['printmaking'], treePath:['image-making','printmaking'], src:'./images/photoetching1.jpg', thumb:'./thumbs/photoetching1.jpg',
+    tags:['printmaking'], treePath:['image-making','printmaking'], src:'./images/photoetching1.jpg', thumb:'./thumbs/optimized/photoetching.jpg',
     caption:'Photo etching on Rives BFK Grey, made from a photograph taken in Den Haag.',
     hook:'Den Haag, held in etched light.'
   }
@@ -1023,7 +1026,7 @@ function openLandingBottom(){
   const entering=!landingBottomPanel.classList.contains('is-open');
   landingBottomPanel.classList.add('is-open');
   landingIndicator.classList.add('is-hidden');
-  if(entering)typeIn([sentenceCore,...(!verbOptions.classList.contains('is-collapsed')?verbChoices:[])],34);
+  if(entering&&!landingVerb)typeIn([sentenceCore,...(!verbOptions.classList.contains('is-collapsed')?verbChoices:[])],34);
 }
 function scheduleCloseLandingBottom(){
   clearTimeout(landingCloseTimer);
@@ -1130,11 +1133,18 @@ const landingScrollCanvas=document.getElementById('landing-scroll-ascii');
 const landingScrollCover=document.getElementById('landing-scroll-cover');
 const landingScrollTrack=document.getElementById('landing-scroll-track');
 const landingVideoFrame=document.getElementById('landing-video-frame');
+const landingIdleHint=document.getElementById('landing-idle-hint');
 const landingScrollContext=landingScrollCanvas.getContext('2d');
 const LANDING_ASCII_SIZE={cellWidth:12,cellHeight:16};
 const LANDING_BLOCK_PALETTE=['#8C8C8C','#BFBFBF','#252526','#585859','#F2F2F2'];
 const LANDING_VISUAL_EFFECTS=['kde-sphere','kde-drum','depth-wave','depth-closure','spiral-depth','spiral-portal'];
-let landingScrollCells=[],landingScrollFrame=0,landingScrollProgress=0,landingVisualEffect='',landingScrollCycleArmed=true;
+let landingScrollCells=[],landingScrollFrame=0,landingScrollProgress=0,landingVisualEffect='',landingScrollCycleArmed=true,landingIdleTimer=null;
+function hideLandingIdleHint(){clearTimeout(landingIdleTimer);landingIdleTimer=null;landingIdleHint.classList.remove('is-visible');}
+function scheduleLandingIdleHint(){
+  hideLandingIdleHint();
+  if(!views.landing.classList.contains('on')||landingScrollProgress>.002)return;
+  landingIdleTimer=setTimeout(()=>{if(views.landing.classList.contains('on')&&landingScrollProgress<=.002)landingIdleHint.classList.add('is-visible');landingIdleTimer=null;},5000);
+}
 function chooseLandingVisualEffect(){
   const available=LANDING_VISUAL_EFFECTS.filter(effect=>effect!==landingVisualEffect);
   landingVisualEffect=available[Math.floor(Math.random()*available.length)];
@@ -1218,8 +1228,9 @@ function paintLandingScroll(){
 function updateLandingScroll(){
   const maxScroll=Math.max(1,landingScrollTrack.scrollHeight-landingScrollTrack.clientHeight);
   const nextProgress=Math.max(0,Math.min(1,landingScrollTrack.scrollTop/maxScroll));
-  if(nextProgress<=.002)landingScrollCycleArmed=true;
+  if(nextProgress<=.002){landingScrollCycleArmed=true;if(!landingIdleTimer&&!landingIdleHint.classList.contains('is-visible'))scheduleLandingIdleHint();}
   else if(landingScrollCycleArmed){landingScrollCycleArmed=false;chooseLandingVisualEffect();rebuildLandingScrollField();}
+  if(nextProgress>.002)hideLandingIdleHint();
   landingScrollProgress=nextProgress;
   const coverProgress=Math.max(0,Math.min(1,(landingScrollProgress-.62)/.28));
   landingScrollCover.style.opacity=coverProgress.toFixed(3);
@@ -1237,11 +1248,12 @@ function resetLandingScroll(){
   landingScrollTrack.scrollTop=0;landingScrollProgress=0;landingScrollComplete=false;landingScrollCycleArmed=true;
   landingBottomPanel.classList.remove('is-scroll-revealed','is-open');landingScrollCover.style.opacity='0';
   landingVideoFrame.style.opacity='1';
-  cancelAnimationFrame(landingScrollFrame);landingScrollFrame=0;rebuildLandingScrollField();paintLandingScroll();
+  cancelAnimationFrame(landingScrollFrame);landingScrollFrame=0;rebuildLandingScrollField();paintLandingScroll();scheduleLandingIdleHint();
 }
 landingScrollTrack.addEventListener('scroll',updateLandingScroll,{passive:true});
+['pointermove','pointerdown','wheel','touchstart','keydown'].forEach(eventName=>window.addEventListener(eventName,()=>{if(views.landing.classList.contains('on')&&landingScrollProgress<=.002)scheduleLandingIdleHint();},{passive:true}));
 window.addEventListener('resize',()=>{rebuildLandingScrollField();updateLandingScroll();});
-landingScrollReady=true;chooseLandingVisualEffect();rebuildLandingScrollField();updateLandingScroll();
+landingScrollReady=true;chooseLandingVisualEffect();rebuildLandingScrollField();updateLandingScroll();scheduleLandingIdleHint();
 
 /* Add the future divination website URL here when it is ready. */
 const DIVINATION_URL='';
@@ -1605,7 +1617,7 @@ function buildIndex(){
    GALLERY
    ========================================================= */
 let galleryBuilt=false,galleryLoaded=0,activeGalleryFilter='all';
-const GALLERY_BATCH_SIZE=10;
+const GALLERY_BATCH_SIZE=6;
 function filteredGalleryItems(){
   return ITEMS.map((item,index)=>({item,index})).filter(({item})=>activeGalleryFilter==='all'||(item.tags||[]).includes(activeGalleryFilter));
 }
@@ -1624,8 +1636,13 @@ function appendGalleryBatch(){
       card.addEventListener('mouseleave',()=>video.pause());
       mediaWrap.appendChild(video);
     }else{
-      const image=document.createElement('img');image.loading='lazy';image.decoding='async';image.alt=item.title||'';
+      const image=document.createElement('img');image.loading='lazy';image.decoding='async';image.fetchPriority='low';image.alt=item.title||'';
       image.src=item.thumb || item.src || (item.type==='gallery' ? `./images/${item.folderName}/${(item.images||[])[0]||''}` : '');
+      if(item.animatedThumb){
+        const stillSource=image.src;
+        card.addEventListener('mouseenter',()=>{image.src=item.animatedThumb;});
+        card.addEventListener('mouseleave',()=>{image.src=stillSource;});
+      }
       mediaWrap.appendChild(image);
     }
     const title=document.createElement('span');title.className='gw-title';title.textContent=workLabel(item.title);
