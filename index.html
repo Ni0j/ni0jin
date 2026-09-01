@@ -225,7 +225,7 @@ html.photosensitivity-flashing #landing-stuff.is-awaiting::before{animation-dura
 .store-inline{display:inline;width:auto;padding:.08em .12em;}
 #photography-note{max-height:0;margin-top:0;overflow:hidden;font-size:var(--type-primary);letter-spacing:.02em;visibility:hidden;transition:max-height .38s cubic-bezier(.16,1,.3,1),margin .3s ease,visibility 0s .38s;}
 #photography-note.is-open{max-height:2rem;margin-top:.8rem;visibility:visible;transition-delay:0s;}
-@media(max-width:700px){#view-landing{background:#0b0b0a;}#landing-video{inset:auto;top:50%;left:50%;width:100vh;width:100dvh;height:100vw;height:100dvw;max-width:none;max-height:none;object-fit:cover;transform:translate(-50%,-50%) rotate(90deg);transform-origin:center;}#landing-bottom{height:calc(clamp(10.5rem,24dvh,11.5rem) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);padding-left:calc(1rem + env(safe-area-inset-left));padding-right:calc(1rem + env(safe-area-inset-right));}#landing-sentence{top:calc(50% - 1.15rem);}#sentence-core{gap:.4em;}#verb-options{top:calc(50% + .5rem);gap:.4rem .85rem;max-height:2.25rem;overflow:visible;flex-wrap:nowrap;}#landing-response{top:calc(50% + .2rem);}.secondary-options{flex-wrap:nowrap;gap:.25rem .55rem;}.landing-opt,.cloze-line,.cloze-answer,.secondary-choice,#photography-note,.character-line{font-size:var(--type-primary);line-height:1.4;letter-spacing:.02em;}#verb-current{width:6.6em;}.verb-choice[data-verb="make"]{width:4.75rem;min-width:4.75rem;padding-left:.35em;padding-right:.35em;text-align:center;overflow:visible;}#landing-vision::before{transform:translateY(.12em);}.landing-self-icon{width:7rem;height:7rem;}#landing-profile{grid-template-columns:7rem max-content;width:min(22rem,100%);}}
+@media(max-width:700px){#view-landing{background:#0b0b0a;}#landing-video{inset:auto;top:50%;left:50%;width:100vh;width:100dvh;height:100vw;height:100dvw;max-width:none;max-height:none;object-fit:cover;transform:translate(-50%,-50%) rotate(90deg);transform-origin:center;}#landing-bottom{height:calc(clamp(10.5rem,24dvh,11.5rem) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);padding-left:calc(1rem + env(safe-area-inset-left));padding-right:calc(1rem + env(safe-area-inset-right));}#landing-sentence{top:calc(50% - 1.15rem);}#sentence-core{gap:.4em;}#verb-options{top:calc(50% + .5rem);gap:.4rem .85rem;max-height:2.25rem;overflow:visible;flex-wrap:nowrap;}#landing-response{top:calc(50% + .2rem);}.secondary-options{flex-wrap:nowrap;gap:.25rem .55rem;}.landing-opt,.cloze-line,.cloze-answer,.secondary-choice,#photography-note,.character-line{font-size:var(--type-primary);line-height:1.4;letter-spacing:.02em;}#verb-current{width:6.6em;}.verb-choice{padding-left:.35em;padding-right:.35em;text-align:center;overflow:visible;}#landing-vision::before{transform:translateY(.12em);}.landing-self-icon{width:7rem;height:7rem;}#landing-profile{grid-template-columns:7rem max-content;width:min(22rem,100%);}}
 
 /* The original menu markup and interaction stay intact, but it is now the
    centered destination of the landing scroll rather than a hover drawer. */
@@ -557,16 +557,16 @@ body.asset-label-hover #cur{opacity:0;}
             <button id="verb-current" class="is-awaiting" type="button" aria-live="polite" aria-label="No verb selected" disabled></button>
           </span>
           <span id="landing-object">
-            <button id="landing-stuff" class="sentence-word" type="button" aria-controls="make-stage" aria-expanded="false" disabled>stuff</button>
+            <button id="landing-stuff" class="sentence-word" type="button" disabled>stuff</button>
             <span id="landing-vision-branch" hidden><span aria-hidden="true">/</span><button id="landing-vision" class="sentence-word" type="button" aria-label="vision">vision</button></span><span id="landing-object-period" aria-hidden="true">.</span>
           </span>
           <span id="make-continuation" hidden><span>What</span><button id="make-current" class="cloze-answer" type="button" disabled aria-label="Choose what follows">_____</button></span>
         </span>
       </div>
-      <div id="verb-options" role="group" aria-label="Choose a verb">
-        <button class="verb-choice" type="button" data-verb="make">a) make</button>
-        <button class="verb-choice" type="button" data-verb="see">b) see</button>
-        <button class="verb-choice" type="button" data-verb="all">c) all of the above</button>
+      <div id="verb-options" role="group" aria-label="Choose a perspective">
+        <button class="verb-choice" type="button" data-verb="make">a. make</button>
+        <button class="verb-choice" type="button" data-verb="frame">b. frame</button>
+        <button class="verb-choice" type="button" data-verb="trace">c. trace</button>
       </div>
       <div id="landing-secondary">
         <section id="landing-profile" aria-label="About Nio Jin" hidden>
@@ -603,8 +603,8 @@ body.asset-label-hover #cur{opacity:0;}
 
 <!-- ============ SONG / IMMERSIVE ============ -->
 <section id="view-song" class="view">
-  <canvas id="mindmap-canvas" aria-label="Interactive map of what Nio Jin cares about and the work that follows"></canvas>
-  <nav id="map-mode" aria-label="Narrative map mode">
+  <canvas id="mindmap-canvas" aria-label="Research map of questions, works, and recurring lines of inquiry"></canvas>
+  <nav id="map-mode" aria-label="Research map mode">
     <button class="map-mode-choice" type="button" data-map-mode="focus" aria-pressed="false">Focus</button>
     <button class="map-mode-choice is-active" type="button" data-map-mode="expand" aria-pressed="true">Expand</button>
   </nav>
@@ -1065,6 +1065,7 @@ const makeStage=document.getElementById('make-stage');
 const makeChoices=[...document.querySelectorAll('#make-options .secondary-choice')];
 const makeCurrent=document.getElementById('make-current');
 const photographyNote=document.getElementById('photography-note');
+const LANDING_VERB_TARGETS={make:'index',frame:'gallery',trace:'song'};
 let landingVerb=null,pendingMakeOptions=false;
 function setClozeStage(stage,open){stage.classList.toggle('is-open',open);}
 function closeLandingStages(){setClozeStage(makeStage,false);makeContinuation.hidden=true;makeContinuation.classList.remove('is-typing');makeCurrent.classList.remove('is-refreshing');landingObjectPeriod.hidden=false;landingVisionBranch.hidden=true;photographyNote.classList.remove('is-open');landingStuff.setAttribute('aria-expanded','false');}
@@ -1087,37 +1088,27 @@ function resetLandingVerb(){
   landingVerb=null;pendingMakeOptions=false;closeLandingStages();resetMakeChoice();
   verbCurrent.textContent='';verbCurrent.disabled=true;verbCurrent.className='is-awaiting';verbCurrent.setAttribute('aria-label','No verb selected');
   verbOptions.classList.remove('is-collapsed');verbChoices.forEach(option=>option.classList.remove('is-selected'));
-  landingStuff.textContent='stuff';landingStuff.disabled=true;landingStuff.classList.remove('is-ready','is-awaiting');landingStuff.setAttribute('aria-controls','make-stage');
+  landingStuff.textContent='stuff';landingStuff.disabled=true;landingStuff.classList.remove('is-ready','is-awaiting');landingStuff.removeAttribute('aria-controls');landingStuff.removeAttribute('aria-expanded');landingStuff.removeAttribute('data-target');
 }
 verbCurrent.addEventListener('click',resetLandingVerb);
-sentenceCore.addEventListener('animationend',event=>{if(event.animationName!=='sentenceRefresh')return;sentenceCore.classList.remove('is-refreshing');if(pendingMakeOptions&&landingVerb==='make'){pendingMakeOptions=false;setClozeStage(makeStage,true);landingStuff.setAttribute('aria-expanded','true');typeIn(makeChoices,42);}});
+sentenceCore.addEventListener('animationend',event=>{if(event.animationName==='sentenceRefresh')sentenceCore.classList.remove('is-refreshing');});
 verbChoices.forEach(choice=>choice.addEventListener('click',()=>{
   landingVerb=choice.dataset.verb;
   pendingMakeOptions=false;
-  const completedVerb=landingVerb==='all'?'make + see':landingVerb;
+  const completedVerb=landingVerb;
   verbCurrent.textContent=completedVerb;verbCurrent.disabled=false;verbCurrent.classList.remove('is-awaiting');verbCurrent.classList.add('has-value');verbCurrent.setAttribute('aria-label',`Selected: ${completedVerb}. Select again to change.`);
   verbChoices.forEach(option=>option.classList.toggle('is-selected',option===choice));
   verbOptions.classList.add('is-collapsed');
-  closeLandingStages();resetMakeChoice();
+  closeLandingStages();landingStuff.removeAttribute('aria-expanded');resetMakeChoice();
   landingStuff.classList.remove('is-ready','is-awaiting');
-  if(landingVerb==='see'){
-    landingStuff.setAttribute('aria-controls','photography-note');completeLandingNoun('stuff');landingVisionBranch.hidden=false;
-  }else if(landingVerb==='all'){
-    landingStuff.setAttribute('aria-controls','photography-note');completeLandingNoun('stuff');
-  }else{
-    landingStuff.setAttribute('aria-controls','make-stage');completeLandingNoun('stuff');pendingMakeOptions=true;
-  }
+  landingStuff.dataset.target=LANDING_VERB_TARGETS[landingVerb];
+  landingStuff.setAttribute('aria-label',`Enter ${landingVerb}`);
+  completeLandingNoun('stuff');
   sentenceCore.classList.remove('type-in','is-refreshing');void sentenceCore.offsetWidth;sentenceCore.classList.add('is-refreshing');
 }));
 landingStuff.addEventListener('click',()=>{
-  if(landingVerb==='make'){
-    sentenceCore.classList.remove('is-refreshing');
-    const open=!makeStage.classList.contains('is-open');setClozeStage(makeStage,open);makeContinuation.hidden=true;landingObjectPeriod.hidden=false;landingStuff.setAttribute('aria-expanded',open?'true':'false');if(open)typeIn(makeChoices,42);
-  }else if(landingVerb==='see'){
-    photographyNote.classList.toggle('is-open');if(photographyNote.classList.contains('is-open'))typeIn([photographyNote],0);
-  }else if(landingVerb==='all'){
-    photographyNote.classList.add('is-open');typeIn([photographyNote],0);
-  }
+  const target=landingStuff.dataset.target;
+  if(target)transitionFromLanding(target);
 });
 landingVision.addEventListener('click',()=>{photographyNote.classList.remove('is-open');openVision();});
 makeChoices.forEach(choice=>choice.addEventListener('click',()=>{
@@ -1142,7 +1133,13 @@ const landingVideoFrame=document.getElementById('landing-video-frame');
 const landingScrollContext=landingScrollCanvas.getContext('2d');
 const LANDING_ASCII_SIZE={cellWidth:12,cellHeight:16};
 const LANDING_BLOCK_PALETTE=['#8C8C8C','#BFBFBF','#252526','#585859','#F2F2F2'];
-let landingScrollCells=[],landingScrollFrame=0,landingScrollProgress=0;
+const LANDING_VISUAL_EFFECTS=['kde-sphere','kde-drum','depth-wave','depth-closure','spiral-depth','spiral-portal'];
+let landingScrollCells=[],landingScrollFrame=0,landingScrollProgress=0,landingVisualEffect='',landingScrollCycleArmed=true;
+function chooseLandingVisualEffect(){
+  const available=LANDING_VISUAL_EFFECTS.filter(effect=>effect!==landingVisualEffect);
+  landingVisualEffect=available[Math.floor(Math.random()*available.length)];
+  landingScrollCanvas.dataset.visualEffect=landingVisualEffect;
+}
 function rebuildLandingScrollField(){
   const ratio=Math.min(window.devicePixelRatio||1,2),width=window.innerWidth,height=window.innerHeight;
   const {cellWidth,cellHeight}=LANDING_ASCII_SIZE;
@@ -1150,29 +1147,80 @@ function rebuildLandingScrollField(){
   landingScrollCanvas.style.width=`${width}px`;landingScrollCanvas.style.height=`${height}px`;
   landingScrollContext.setTransform(ratio,0,0,ratio,0,0);
   landingScrollCells=[];
+  if(landingVisualEffect==='kde-sphere'){
+    const count=Math.min(1400,Math.max(720,Math.round(width*height/760))),golden=Math.PI*(3-Math.sqrt(5));
+    for(let index=0;index<count;index++){
+      const y=1-2*(index+.5)/count,radius=Math.sqrt(1-y*y),theta=index*golden;
+      landingScrollCells.push({x:Math.cos(theta)*radius,y,z:Math.sin(theta)*radius,threshold:.03+Math.random()*.48});
+    }
+    return;
+  }
+  if(landingVisualEffect==='kde-drum'){
+    const columns=64,rows=28;
+    for(let row=0;row<rows;row++)for(let column=0;column<columns;column++)landingScrollCells.push({theta:(column/columns)*Math.PI*2,y:(row/(rows-1))-.5,threshold:.02+Math.random()*.5,colour:LANDING_BLOCK_PALETTE[(column+row*2)%LANDING_BLOCK_PALETTE.length]});
+    return;
+  }
+  if(landingVisualEffect==='depth-wave'||landingVisualEffect==='depth-closure'){
+    const columns=58,rows=38;
+    for(let row=0;row<rows;row++)for(let column=0;column<columns;column++){
+      const u=column/(columns-1),v=row/(rows-1),nx=(u-.5)*2,ny=(v-.5)*2;
+      const radius=Math.min(1,Math.hypot(nx,ny)),angle=Math.atan2(ny,nx);
+      if(landingVisualEffect==='depth-wave')landingScrollCells.push({u,v,threshold:.03+Math.min(.55,Math.hypot(u-.5,v-.5)*.75)+Math.random()*.08});
+      else{
+        const ripple=Math.sin(angle*2.15+radius*5.4)*.045;
+        const threshold=Math.max(.025,Math.min(.96,.055+(1-radius)*.82+ripple+(Math.random()-.5)*.055));
+        landingScrollCells.push({u,v,radius,angle,threshold});
+      }
+    }
+    return;
+  }
   for(let y=0;y<height+cellHeight;y+=cellHeight){
     for(let x=0;x<width+cellWidth;x+=cellWidth){
-      landingScrollCells.push({x,y,threshold:Math.random(),colour:LANDING_BLOCK_PALETTE[Math.floor(Math.random()*LANDING_BLOCK_PALETTE.length)]});
+      const cx=x+cellWidth/2,cy=y+cellHeight/2,nx=(cx-width/2)/(width/2),ny=(cy-height/2)/(height/2);
+      const radius=Math.min(1,Math.hypot(nx,ny)),angle=Math.atan2(ny,nx),spiral=angle+radius*7.5;
+      const portal=landingVisualEffect==='spiral-portal';
+      const contour=Math.sin(spiral*(portal?2.25:2.35))*(portal?.07:.085),jitter=(Math.random()-.5)*(portal?.035:.055);
+      const threshold=Math.max(portal?.02:.025,Math.min(portal?.97:.96,(portal?.045:.09)+(1-radius)*(portal?.88:.76)+contour+jitter));
+      landingScrollCells.push({x:cx,y:cy,radius,angle,spiral,threshold,phase:Math.random()*.3});
     }
   }
 }
+function paintSphere(width,height,strength){
+  const radius=Math.min(width,height)*.43,turn=landingScrollProgress*Math.PI*1.7,tilt=.2+Math.sin(landingScrollProgress*Math.PI)*.16;
+  const cosY=Math.cos(turn),sinY=Math.sin(turn),cosX=Math.cos(tilt),sinX=Math.sin(tilt);
+  landingScrollCells.forEach(cell=>{if(cell.threshold>strength)return;const rx=cell.x*cosY-cell.z*sinY,rz=cell.x*sinY+cell.z*cosY,ry=cell.y*cosX-rz*sinX,depth=cell.y*sinX+rz*cosX,depth01=(depth+1)/2,size=3+depth01*9,x=width/2+rx*radius,y=height/2+ry*radius;landingScrollContext.globalAlpha=.28+strength*.72;landingScrollContext.fillStyle=LANDING_BLOCK_PALETTE[Math.min(4,Math.floor(depth01*5))];landingScrollContext.fillRect(Math.round(x-size/2),Math.round(y-size/2),Math.ceil(size),Math.ceil(size));});
+}
+function paintDrum(width,height,strength){
+  const radius=Math.min(width*.34,height*.48),drumHeight=height*.78,turn=landingScrollProgress*Math.PI*2.35;
+  landingScrollCells.forEach(cell=>{if(cell.threshold>strength)return;const angle=cell.theta+turn,x=width/2+Math.cos(angle)*radius,y=height/2+cell.y*drumHeight,edgeSpeed=.35+.65*Math.abs(Math.sin(angle)),size=3+edgeSpeed*5;landingScrollContext.globalAlpha=.3+strength*.7;landingScrollContext.fillStyle=cell.colour;landingScrollContext.fillRect(Math.round(x-size/2),Math.round(y-size/2),Math.ceil(size),Math.ceil(size));});
+}
+function paintDepthField(width,height,strength,closure){
+  const phase=landingScrollProgress*Math.PI*3,yaw=Math.sin(landingScrollProgress*Math.PI)*(closure?.36:.42),cosYaw=Math.cos(yaw),sinYaw=Math.sin(yaw);
+  landingScrollCells.forEach(cell=>{if(cell.threshold>strength)return;const px=(cell.u-.5)*width*1.08,py=(cell.v-.5)*height*1.08;const depth=closure?(Math.sin(cell.u*Math.PI*4.8+phase+cell.angle*.28)+Math.cos(cell.v*Math.PI*3.8-phase*.68-cell.radius*.9))*.235:(Math.sin(cell.u*Math.PI*5+phase)+Math.cos(cell.v*Math.PI*4-phase*.72))*.25;const rx=px*cosYaw+depth*width*(closure?.32:.34)*sinYaw,scale=1+depth*(closure?.22:.2),pull=closure?1-Math.max(0,strength-.58)*.075:1;const x=width/2+rx*scale*pull,y=height/2+(py*scale-depth*height*.12)*pull,depth01=Math.max(0,Math.min(1,depth+.5)),size=3+depth01*9;landingScrollContext.globalAlpha=.28+strength*.72;landingScrollContext.fillStyle=LANDING_BLOCK_PALETTE[Math.min(4,Math.floor(depth01*5))];landingScrollContext.fillRect(Math.round(x-size/2),Math.round(y-size/2),Math.ceil(size),Math.ceil(size));});
+}
+function paintSpiralDepth(width,height,strength,portal){
+  const {cellWidth,cellHeight}=LANDING_ASCII_SIZE;
+  landingScrollCells.forEach(cell=>{if(cell.threshold>strength)return;let depth01,angularParallax,perspective,blockScale;if(portal){const frontier=Math.max(0,1-Math.abs(strength-cell.threshold)/.14),helix=(Math.sin(cell.spiral*1.5-landingScrollProgress*Math.PI*2.8+cell.phase)+1)/2;depth01=Math.max(0,Math.min(1,.1+helix*.38+frontier*.62));angularParallax=(helix-.5)*Math.sin(landingScrollProgress*Math.PI)*.035;perspective=.89+depth01*.1+frontier*.055;blockScale=.2+depth01*.76;}else{const pulse=Math.sin(cell.spiral*1.72-landingScrollProgress*Math.PI*3.6+cell.phase),ridge=Math.cos(cell.radius*Math.PI*9-cell.angle*1.15+landingScrollProgress*Math.PI*1.4),depth=Math.max(-1,Math.min(1,pulse*.72+ridge*.28));depth01=(depth+1)/2;angularParallax=(depth-.15)*Math.sin(landingScrollProgress*Math.PI)*.045;perspective=.9+depth01*.13;blockScale=.28+depth01*.92;}const cosA=Math.cos(angularParallax),sinA=Math.sin(angularParallax),dx=cell.x-width/2,dy=cell.y-height/2,px=(dx*cosA-dy*sinA)*perspective,py=(dx*sinA+dy*cosA)*perspective,blockWidth=Math.max(2,cellWidth*blockScale),blockHeight=Math.max(2,cellHeight*blockScale),x=width/2+px-blockWidth/2,y=height/2+py-blockHeight/2;landingScrollContext.globalAlpha=portal?.28+depth01*.7:.45+depth01*.55;landingScrollContext.fillStyle=LANDING_BLOCK_PALETTE[Math.min(portal?3:4,Math.floor(depth01*(portal?4:4.999)))];landingScrollContext.fillRect(Math.round(x),Math.round(y),Math.ceil(blockWidth),Math.ceil(blockHeight));});
+}
 function paintLandingScroll(){
   landingScrollFrame=0;
-  const {cellWidth,cellHeight}=LANDING_ASCII_SIZE;
   const width=window.innerWidth,height=window.innerHeight,strength=Math.min(1,landingScrollProgress/.68);
   landingScrollContext.clearRect(0,0,width,height);
   if(strength<=.002)return;
-  landingScrollCells.forEach(cell=>{
-    if(cell.threshold>strength)return;
-    landingScrollContext.globalAlpha=1;
-    landingScrollContext.fillStyle=cell.colour;
-    landingScrollContext.fillRect(cell.x,cell.y,cellWidth+1,cellHeight+1);
-  });
+  if(landingVisualEffect==='kde-sphere')paintSphere(width,height,strength);
+  else if(landingVisualEffect==='kde-drum')paintDrum(width,height,strength);
+  else if(landingVisualEffect==='depth-wave')paintDepthField(width,height,strength,false);
+  else if(landingVisualEffect==='depth-closure')paintDepthField(width,height,strength,true);
+  else if(landingVisualEffect==='spiral-depth')paintSpiralDepth(width,height,strength,false);
+  else paintSpiralDepth(width,height,strength,true);
   landingScrollContext.globalAlpha=1;
 }
 function updateLandingScroll(){
   const maxScroll=Math.max(1,landingScrollTrack.scrollHeight-landingScrollTrack.clientHeight);
-  landingScrollProgress=Math.max(0,Math.min(1,landingScrollTrack.scrollTop/maxScroll));
+  const nextProgress=Math.max(0,Math.min(1,landingScrollTrack.scrollTop/maxScroll));
+  if(nextProgress<=.002)landingScrollCycleArmed=true;
+  else if(landingScrollCycleArmed){landingScrollCycleArmed=false;chooseLandingVisualEffect();rebuildLandingScrollField();}
+  landingScrollProgress=nextProgress;
   const coverProgress=Math.max(0,Math.min(1,(landingScrollProgress-.62)/.28));
   landingScrollCover.style.opacity=coverProgress.toFixed(3);
   landingVideoFrame.style.opacity=Math.max(0,1-landingScrollProgress/.9).toFixed(3);
@@ -1186,14 +1234,14 @@ function updateLandingScroll(){
   }
 }
 function resetLandingScroll(){
-  landingScrollTrack.scrollTop=0;landingScrollProgress=0;landingScrollComplete=false;
+  landingScrollTrack.scrollTop=0;landingScrollProgress=0;landingScrollComplete=false;landingScrollCycleArmed=true;
   landingBottomPanel.classList.remove('is-scroll-revealed','is-open');landingScrollCover.style.opacity='0';
   landingVideoFrame.style.opacity='1';
-  cancelAnimationFrame(landingScrollFrame);landingScrollFrame=0;paintLandingScroll();
+  cancelAnimationFrame(landingScrollFrame);landingScrollFrame=0;rebuildLandingScrollField();paintLandingScroll();
 }
 landingScrollTrack.addEventListener('scroll',updateLandingScroll,{passive:true});
 window.addEventListener('resize',()=>{rebuildLandingScrollField();updateLandingScroll();});
-landingScrollReady=true;rebuildLandingScrollField();updateLandingScroll();
+landingScrollReady=true;chooseLandingVisualEffect();rebuildLandingScrollField();updateLandingScroll();
 
 /* Add the future divination website URL here when it is ready. */
 const DIVINATION_URL='';
@@ -1219,53 +1267,53 @@ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&visionLayer
    ========================================================= */
 const MAP_NODES = [
   {id:'self',label:'i',kind:'root',x:0,y:0},
-  {id:'wonder',label:'wonder',kind:'phrase',x:-100,y:70},
-  {id:'aesthetic',label:'aesthetic',kind:'phrase',x:-285,y:-105},
-  {id:'belief-note',label:"appreciation for people who follow a belief that isn't backed by reason, purely intuitive but unshakeable, beyond question",kind:'phrase',x:-495,y:-300},
-  {id:'chasing-star',label:"it's like chasing a star, even though it won't always be there...",kind:'phrase',x:-603,y:-417},
-  {id:'star-gazing',label:'mixing it into a stargazing event...',kind:'phrase',x:-446,y:-480},
+  {id:'wonder',label:'what makes wonder possible?',kind:'phrase',x:-100,y:70},
+  {id:'aesthetic',label:'when does an aesthetic begin to operate like belief?',kind:'phrase',x:-285,y:-105},
+  {id:'belief-note',label:'why can belief remain convincing without evidence or reason?',kind:'phrase',x:-495,y:-300},
+  {id:'chasing-star',label:'how do we follow something we know may disappear?',kind:'phrase',x:-603,y:-417},
+  {id:'star-gazing',label:'can collective looking become a ritual?',kind:'phrase',x:-446,y:-480},
   {id:'work-devil',label:'devilReturn',kind:'work',item:5,x:-610,y:-535},
-  {id:'religion',label:'religion, belief, spirituality',kind:'phrase',x:-230,y:40},
-  {id:'after-religion',label:'after religion?',kind:'phrase',x:-458,y:13},
-  {id:'everyone-god',label:"everyone could be a god when there's an audience",kind:'phrase',x:-821,y:-50},
-  {id:'analog',label:'analog',kind:'phrase',x:-876,y:-113},
+  {id:'religion',label:'how do religion, belief, and spirituality diverge?',kind:'phrase',x:-230,y:40},
+  {id:'after-religion',label:'where does belief go after religion?',kind:'phrase',x:-458,y:13},
+  {id:'everyone-god',label:'can an audience turn anyone into a god?',kind:'phrase',x:-821,y:-50},
+  {id:'analog',label:'what changes when belief becomes an analog object?',kind:'phrase',x:-876,y:-113},
   {id:'work-one-book',label:'the one (book)',kind:'work',item:0,x:-889,y:-237},
-  {id:'recreate-scene',label:'recreate that scene',kind:'phrase',x:-890,y:140},
+  {id:'recreate-scene',label:'can an installation reconstruct the conditions of belief?',kind:'phrase',x:-890,y:140},
   {id:'work-one-installation',label:'the one (installation)',kind:'work',item:0,x:-890,y:247},
-  {id:'world-structure',label:'world (structure, rules, worldbuilding)',kind:'phrase',x:-210,y:-170},
-  {id:'creatures',label:'how creatures interact / how they live in this world / how cultures form...',kind:'phrase',x:-150,y:-330},
-  {id:'megastructure',label:'megastructure',kind:'phrase',x:106,y:-270},
-  {id:'language-world',label:'i want a language / typeface that could reflect the world behind it',kind:'phrase',x:180,y:-398},
+  {id:'world-structure',label:'how do structures and rules produce a world?',kind:'phrase',x:-210,y:-170},
+  {id:'creatures',label:'how do rules shape behaviour, relationships, and culture?',kind:'phrase',x:-150,y:-330},
+  {id:'megastructure',label:'can one structure hold an entire world?',kind:'phrase',x:106,y:-270},
+  {id:'language-world',label:'can a typeface reveal the world that produced it?',kind:'phrase',x:180,y:-398},
   {id:'work-pcell-type',label:'pcell.otf',kind:'work',item:2,x:280,y:-505},
-  {id:'dimensions',label:'in different dimensions?',kind:'phrase',x:440,y:-530},
+  {id:'dimensions',label:'how does the same form behave across dimensions?',kind:'phrase',x:440,y:-530},
   {id:'work-pcell-body',label:'pcell.otf (body interaction)',kind:'work',item:2,x:675,y:-442},
-  {id:'fascinate',label:'fascinated by',kind:'phrase',x:56,y:-187},
-  {id:'preserving',label:'preserving',kind:'phrase',x:213,y:-151},
+  {id:'fascinate',label:'what keeps returning across the work?',kind:'phrase',x:56,y:-187},
+  {id:'preserving',label:'what is worth preserving, and in what form?',kind:'phrase',x:213,y:-151},
   {id:'work-den-haag',label:'',kind:'work',item:9,x:349,y:-242},
   {id:'work-jellyfish',label:'jellyfish living in my computer',kind:'work',item:7,x:377,y:-192},
-  {id:'felt',label:'feel',kind:'phrase',x:90,y:-48},
-  {id:'language-prison',label:'language could be a prison for freedom',kind:'phrase',x:168,y:-73},
-  {id:'constraints',label:'constrained by identity / constrained by words',kind:'phrase',x:390,y:-83},
+  {id:'felt',label:'what can be felt before it can be named?',kind:'phrase',x:90,y:-48},
+  {id:'language-prison',label:'when does language enable freedom, and when does it contain it?',kind:'phrase',x:168,y:-73},
+  {id:'constraints',label:'how do identity and words define the limits of a person?',kind:'phrase',x:390,y:-83},
   {id:'work-auto',label:'Auto-Obituary',kind:'work',item:3,x:630,y:-14},
-  {id:'reconsider',label:'people sometimes really need to reconsider a lot of things...',kind:'phrase',x:390,y:31},
+  {id:'reconsider',label:'what must be unlearned before something can be seen differently?',kind:'phrase',x:390,y:31},
   {id:'work-re',label:'re:',kind:'work',item:6,x:654,y:123},
-  {id:'perception',label:'perception / reality / cognition',kind:'phrase',x:-92,y:150},
-  {id:'binary-world',label:'what if this world were built on 0 and 1',kind:'phrase',x:-300,y:260},
-  {id:'archive',label:'and what if there were a specific archive for all these files, evidence, and research',kind:'phrase',x:-560,y:350},
+  {id:'perception',label:'how does perception decide what feels real?',kind:'phrase',x:-92,y:150},
+  {id:'binary-world',label:'what kind of reality emerges from only 0 and 1?',kind:'phrase',x:-300,y:260},
+  {id:'archive',label:'what counts as evidence inside a constructed world?',kind:'phrase',x:-560,y:350},
   {id:'work-lost-book',label:'the lost horizon',kind:'work',item:1,x:-820,y:350},
-  {id:'interactive-admin',label:'an interactive archive website?',kind:'phrase',x:-700,y:500},
+  {id:'interactive-admin',label:'can an archive become a space one navigates rather than reads?',kind:'phrase',x:-700,y:500},
   {id:'work-lost-web',label:'the lost horizon website',kind:'work',item:1,x:-930,y:540},
-  {id:'natural-number',label:'natural numbers... the key to something',kind:'phrase',x:-790,y:660},
-  {id:'music',label:'music',kind:'phrase',x:143,y:93},
-  {id:'live-visuals',label:'visuals for live music performances that shift / double perception',kind:'phrase',x:8,y:225},
-  {id:'vj-set',label:'vj set',kind:'phrase',x:-158,y:360},
+  {id:'natural-number',label:'can natural numbers operate as keys within a fictional system?',kind:'phrase',x:-790,y:660},
+  {id:'music',label:'how does sound reorganise attention?',kind:'phrase',x:143,y:93},
+  {id:'live-visuals',label:'how can live visuals shift or double perception?',kind:'phrase',x:8,y:225},
+  {id:'vj-set',label:'what changes when the experiment happens in front of an audience?',kind:'phrase',x:-158,y:360},
   {id:'work-gala',label:'GALA',kind:'work',item:4,x:-262,y:488},
-  {id:'narrative',label:'narrative',kind:'phrase',x:-73,y:398},
+  {id:'narrative',label:'when does motion begin to read as narrative?',kind:'phrase',x:-73,y:398},
   {id:'work-zombie',label:'Zombie',mapTitle:'Zombie',kind:'work',item:8,x:-90,y:492},
-  {id:'geometric',label:'geometric',kind:'phrase',x:110,y:395},
+  {id:'geometric',label:'how can geometry carry mood or meaning?',kind:'phrase',x:110,y:395},
   {id:'work-alone',label:'I’ll be alone',mapTitle:'I’ll be alone',kind:'work',item:8,x:45,y:483},
   {id:'work-kocaine',label:'KOCAINE CASTLE',mapTitle:'KOCAINE CASTLE',kind:'work',item:8,x:198,y:483},
-  {id:'choreography',label:'choreography',kind:'phrase',x:210,y:363},
+  {id:'choreography',label:'how can image, sound, and movement choreograph attention?',kind:'phrase',x:210,y:363},
   {id:'work-tru',label:'tru',mapTitle:'tru',kind:'work',item:8,x:297,y:458}
 ];
 const MAP_LINKS = [
