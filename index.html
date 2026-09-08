@@ -1530,19 +1530,12 @@ function alphabeticalItems(){
   });
 }
 function bindWorkOpen(element,index,sourceView){
-  let pointerArmed=false;
-  element.addEventListener('pointerdown',()=>{pointerArmed=true;});
-  element.addEventListener('pointerup',()=>{setTimeout(()=>{pointerArmed=false;},0);});
-  element.addEventListener('pointercancel',()=>{pointerArmed=false;});
   if(!element.matches('a,button')){
     element.tabIndex=0;element.setAttribute('role','button');
     element.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();element.click();}});
   }
   element.addEventListener('click',event=>{
     event.preventDefault();
-    const keyboardActivation=event.detail===0;
-    if(!keyboardActivation&&!pointerArmed)return;
-    pointerArmed=false;
     if(!views[sourceView].classList.contains('on'))return;
     openDetail(index,{x:event.clientX,y:event.clientY});
   });
