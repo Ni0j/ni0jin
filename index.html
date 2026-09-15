@@ -167,19 +167,22 @@ body.more-open #landing-video{opacity:.35;}
 #verb-picker{position:relative;display:inline-block;}
 #verb-current{position:relative;display:inline-block;width:6.4em;padding:.08em .12em;text-align:center;appearance:none;border:0;background:transparent;color:var(--ink);font:inherit;cursor:none;}
 #verb-current:not(:disabled):hover,#verb-current:not(:disabled):focus-visible{background:var(--ink);color:var(--bg);}
-#verb-current.has-value{width:auto;min-width:0;text-decoration:underline;text-underline-offset:.12em;text-decoration-thickness:1px;}
+#verb-current.has-value{width:auto;min-width:0;}
 #sentence-core.is-refreshing{animation:sentenceRefresh .32s steps(12,end) both;}
 @keyframes sentenceRefresh{from{clip-path:inset(0 100% 0 0);}to{clip-path:inset(0 0 0 0);}}
 #verb-current.is-awaiting::before{content:'▚▜███▞▝';display:inline-block;white-space:pre;animation:verbGlyphs 1.2s steps(1,end) infinite;}
 @keyframes verbGlyphs{0%,32%{content:'▚▜███▞▝';}33%,65%{content:'▞██▚▚█▜';}66%,100%{content:'██▝▚▞██';}}
 #verb-options{position:absolute;left:0;right:0;top:calc(50% + 1.55rem);display:flex;justify-content:center;align-items:baseline;flex-wrap:wrap;gap:.35rem 1.1rem;max-height:2rem;opacity:1;visibility:visible;white-space:nowrap;transition:max-height .35s cubic-bezier(.16,1,.3,1),opacity .2s ease,visibility 0s;}
 #verb-options.is-collapsed{max-height:0;opacity:0;visibility:hidden;pointer-events:none;transition-delay:0s,0s,.35s;}
-.verb-choice{position:relative;font-size:var(--type-primary);letter-spacing:.02em;padding:.08em .12em;background:transparent;}
+.verb-choice{position:relative;font-size:var(--type-primary);letter-spacing:.02em;padding:.08em .12em;background:transparent;text-decoration:underline;text-underline-offset:.16em;text-decoration-thickness:1px;}
 .verb-choice.is-selected{background:var(--ink);color:var(--bg);}
 #landing-stuff{margin-left:-.12em;}
 #landing-stuff:disabled{color:var(--ink);opacity:1;pointer-events:none;}
-#landing-stuff.is-ready{background:var(--accent);color:var(--ink);}
+#landing-stuff.is-ready{background:transparent;color:var(--ink);text-decoration:underline;text-underline-offset:.16em;text-decoration-thickness:1px;}
 #landing-stuff.is-ready:hover{background:var(--ink);color:var(--bg);}
+#landing-action-back{position:absolute;top:calc(clamp(1.2rem,2.8vw,2rem) + 2.15rem + env(safe-area-inset-top));left:calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-left));z-index:8;appearance:none;border:0;background:transparent;color:var(--ink);padding:.15rem 0;font:inherit;cursor:none;opacity:.9;transition:opacity .35s ease;}
+#landing-action-back:hover,#landing-action-back:focus-visible{opacity:.52;}
+#landing-action-back[hidden]{display:none;}
 #landing-object{position:relative;display:inline-flex;align-items:baseline;}
 #landing-object-period{margin-left:-.12em;}
 #landing-vision-branch{position:absolute;left:100%;top:0;display:inline-flex;align-items:baseline;gap:.22em;margin-left:.34em;}
@@ -218,7 +221,7 @@ html.photosensitivity-flashing #landing-stuff.is-awaiting::before{animation-dura
 .cloze-answer.is-ready{background:var(--accent);color:var(--ink);}
 .cloze-answer.is-ready:hover,.cloze-answer.is-ready:focus-visible{background:var(--ink);color:var(--bg);}
 .secondary-options{display:flex;justify-content:center;align-items:baseline;flex-wrap:wrap;gap:.35rem 1rem;margin-top:.4rem;}
-.secondary-choice{appearance:none;border:0;background:transparent;color:var(--ink);padding:.08em .12em;font:inherit;font-size:var(--type-primary);letter-spacing:.02em;cursor:none;}
+.secondary-choice{appearance:none;border:0;background:transparent;color:var(--ink);padding:.08em .12em;font:inherit;font-size:var(--type-primary);letter-spacing:.02em;cursor:none;text-decoration:underline;text-underline-offset:.16em;text-decoration-thickness:1px;}
 .secondary-choice:hover,.secondary-choice:focus-visible,.secondary-choice.is-selected{background:var(--ink);color:var(--bg);}
 .secondary-choice:disabled{opacity:.38;pointer-events:none;}
 .landing-opt{position:relative;display:block;padding:.08em .12em;font-family:var(--font);font-size:var(--type-primary);letter-spacing:.02em;background:transparent;color:var(--ink);text-decoration:none;cursor:none;width:fit-content;transition:background .2s,color .2s;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
@@ -346,16 +349,22 @@ html.photosensitivity-flashing #landing-stuff.is-awaiting::before{animation-dura
 /* ============ GALLERY ============ */
 #gallery-scroll{position:absolute;inset:0;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-top:calc(clamp(1.2rem,2.8vw,2rem)*2 + 1.4rem + env(safe-area-inset-top));padding-bottom:env(safe-area-inset-bottom);}
 #gallery-filters{display:flex;gap:.55rem;flex-wrap:wrap;margin:0 clamp(1.5rem,4vw,3rem) 1.4rem;padding-bottom:1.4rem;border-bottom:0px solid var(--line);}
-#gallery-filters .gallery-filter:first-child{order:2;margin-left:auto;}
+.gallery-filter.index-filter.is-active,.gallery-filter.index-filter.is-active:not(:hover){background:var(--ink);color:var(--bg);}
 #gallery-wall{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:36px 20px;padding:0 clamp(1.5rem,4vw,3rem) 5rem;}
 .gw-card{display:block;cursor:none;text-decoration:none;content-visibility:auto;contain-intrinsic-size:auto 360px;}
 .gw-card--core,.gw-card--support{grid-column:span 4;}
-.gw-media{aspect-ratio:1;overflow:hidden;margin-bottom:10px;display:grid;place-items:start center;}
+.gw-media{position:relative;aspect-ratio:1;overflow:hidden;margin-bottom:10px;display:grid;place-items:start center;}
 .gw-media img,.gw-media video{display:block;width:100%;height:100%;object-fit:contain;object-position:center top;filter:grayscale(1);transition:filter .5s cubic-bezier(.16,1,.3,1);}
 .gw-card:hover .gw-media img,.gw-card:hover .gw-media video{filter:grayscale(0);}
 .gw-title{display:block;width:fit-content;font-family:var(--font);font-size:var(--type-primary);letter-spacing:.02em;color:var(--ink);}
-.gw-meta{display:block;font-family:var(--font);font-size:var(--type-support);letter-spacing:normal;color:var(--ink-soft);margin-top:2px;}
+.gw-meta{display:block;font-family:var(--font);font-size:var(--type-support);letter-spacing:normal;color:var(--ink-soft);margin-top:4px;}
+.gw-year{display:block;white-space:nowrap;}
+.gw-tags{display:flex;gap:.3rem;flex-wrap:wrap;min-width:0;margin-top:.3rem;}
+.gw-tag{display:inline-block;border:1px solid var(--line);padding:.18rem .32rem;line-height:1;white-space:nowrap;}
 .gw-card:hover .gw-title{background:var(--ink);color:var(--bg);padding:0 .12em;}
+.asset-loader{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink);font-size:var(--type-support);pointer-events:none;}
+.asset-loader::before{content:'▚▜███▞▝';white-space:pre;animation:verbGlyphs 1.2s steps(1,end) infinite;}
+.gw-media.is-loaded .asset-loader,.detail-slide.is-loaded .asset-loader{display:none;}
 @media (max-width:760px){
   #gallery-wall{grid-template-columns:repeat(2,minmax(0,1fr));gap:25px 12px;}
   .gw-card--core,.gw-card--support{grid-column:span 1;}
@@ -406,6 +415,7 @@ html.photosensitivity-flashing #landing-stuff.is-awaiting::before{animation-dura
 #detail-scroll{position:absolute;inset:0;z-index:1;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;}
 #detail-scroll::-webkit-scrollbar{display:none;}
 .detail-slide{position:relative;min-height:100svh;scroll-snap-align:start;display:flex;align-items:center;justify-content:center;padding:clamp(4.5rem,9vw,7rem) clamp(1.5rem,6vw,5rem) clamp(8rem,14vw,11rem);}
+.detail-slide .asset-loader{color:#f1f1f1;}
 .detail-slide img,.detail-slide video{max-width:100%;max-height:calc(100svh - 12rem);width:auto;height:auto;object-fit:contain;}
 #asset-cursor-label{position:fixed;left:0;top:0;z-index:10000;display:none;pointer-events:none;transform:translate(12px,12px);padding:.16rem .28rem;background:#f1f1f1;color:#0b0b0a;font-size:var(--type-support);line-height:1.25;white-space:nowrap;}
 #asset-cursor-label.is-visible{display:block;}
@@ -503,7 +513,7 @@ body.asset-label-hover #cur{opacity:0;}
               <h4 class="more-section-title">Nio Jin</h4>
               <div class="more-section-body">Artist, Designer & Design Strategist</div>
               <h4 class="more-section-title">Focus</h4>
-              <div class="more-section-body">Visual design, motion, interaction, and visual experiences.</div>
+              <div class="more-section-body">Visual design, motion, interaction, and perceptual experiences across sound, image, and space.</div>
               <nav class="more-section" aria-label="Explore the site">
                 <h4 class="more-section-title">Works</h4><div class="more-section-body">
           <button class="more-nav-link" type="button" data-target="index">Index</button>
@@ -523,7 +533,7 @@ body.asset-label-hover #cur{opacity:0;}
         
       </div>
           <div class="more-directory">
-             <section class="more-section"><h4 class="more-section-title">Commissions</h4><div class="more-section-body">Open</div></section>
+             <section class="more-section"><h4 class="more-section-title">Commissions</h4><div class="more-section-body">Open to collaborations involving sound, performance, motion, interaction, and visual experience.</div></section>
    <a class="more-cta" href="mailto:niojin.noi@gmail.com?subject=Project%20inquiry">𓅰 𓅬 𓅭 𓅮 𓅯</a>
           </div>
     </div>
@@ -585,6 +595,7 @@ body.asset-label-hover #cur{opacity:0;}
       </div>
     </div>
   </div>
+  <button id="landing-action-back" type="button" aria-label="Back to actions" hidden><svg class="back-arrow-icon" viewBox="0 0 22 12" aria-hidden="true"><path d="M6 1 1 6l5 5M1 6h20"/></svg></button>
   <div id="landing-scroll-track">
     <div id="landing-scroll-stage"></div>
   </div>
@@ -664,40 +675,40 @@ body.asset-label-hover #cur{opacity:0;}
 const ITEMS = [
   {
     title:'the One', year:'2026', tier:'core', type:'mixed',
-    tags:['interactive','publication','motion'], treePath:['interactive & experience','interactive installations'],
+    tags:['interactive','publication','motion','audio'], galleryFilters:['interactive','motion','printed medium','audio / live','research'], treePath:['interactive & experience','interactive installations'],
     thumb:'./thumbs/optimized/theone.jpg', animatedThumb:'./thumbs/theone.gif',
     assets:[
-      {src:'./videos/theOne.mp4',type:'video',label:'Audio-driven projection',hasAudio:true},
-      {src:'./images/theOne/010.jpg',type:'image',label:'Publication'},
-      {src:'./images/theOne/020.jpg',type:'image'},
-      {src:'./images/theOne/030.jpg',type:'image'}
+      {src:'./videos/theOne.mp4',type:'video',label:'Audio-driven projection',hasAudio:true,tags:['motion','audio / live','interactive']},
+      {src:'./images/theOne/010.jpg',type:'image',label:'Publication',tags:['printed medium']},
+      {src:'./images/theOne/020.jpg',type:'image',tags:['printed medium']},
+      {src:'./images/theOne/030.jpg',type:'image',tags:['printed medium']}
     ],
     caption:'An audio-driven projection and publication examining where belief relocates after religious authority recedes. The installation makes participants visible to the system, while the book translates its spectacle into image, ink, and transcript. Rather than offering a literal world, the work leaves space for the viewer to construct their own.',
     hook:'Belief moves through image, sound, publication, and participation.'
   },
   {
     title:'the [Lost H]orizon', year:'2024', tier:'core', type:'mixed',
-    tags:['web','interactive','publication'], treePath:['interactive & experience','web experiences'],
+    tags:['web','interactive','publication','research'], galleryFilters:['interactive','printed medium','research'], treePath:['interactive & experience','web experiences'],
     thumb:'./thumbs/optimized/the-lost-horizon.jpg',
     assets:[
       
-      {src:'./videos/theLostH.mp4',type:'video',label:'Locked desktop simulation and ASCII camera'},
-      {src:'./images/the [Lost H]orizon/010.jpg',type:'image',label:'Physical dossier'},
+      {src:'./videos/theLostH.mp4',type:'video',label:'Locked desktop simulation and ASCII camera',tags:['interactive']},
+      {src:'./images/the [Lost H]orizon/010.jpg',type:'image',label:'Physical dossier',tags:['printed medium']},
       // {src:'./images/the [Lost H]orizon/020.jpg',type:'image'},
       // {src:'./images/the [Lost H]orizon/030.jpg',type:'image'},
       // {src:'./images/the [Lost H]orizon/040.jpg',type:'image'},
-      {src:'./images/the [Lost H]orizon/050.jpg',type:'image'},
-      {src:'./images/the [Lost H]orizon/060.jpg',type:'image'},
-      {src:'./images/the [Lost H]orizon/070.jpg',type:'image'},
-      {src:'./images/the [Lost H]orizon/080.jpg',type:'image'},
-      {src:'./images/the [Lost H]orizon/090.jpg',type:'image'},
+      {src:'./images/the [Lost H]orizon/050.jpg',type:'image',tags:['printed medium']},
+      {src:'./images/the [Lost H]orizon/060.jpg',type:'image',tags:['printed medium']},
+      {src:'./images/the [Lost H]orizon/070.jpg',type:'image',tags:['printed medium']},
+      {src:'./images/the [Lost H]orizon/080.jpg',type:'image',tags:['printed medium']},
+      {src:'./images/the [Lost H]orizon/090.jpg',type:'image',tags:['printed medium']},
      
-      {src:'./images/the [Lost H]orizon/0100.jpg',type:'image'},
-      {src:'./images/the [Lost H]orizon/0110.jpg',type:'image'},
-      {src:'./images/the [Lost H]orizon/0120.jpg',type:'image'},
-             {src:'./images/the [Lost H]orizon/0160.jpg',type:'image',label:'light reveals code'},
-      {src:'./images/the [Lost H]orizon/0140.jpg',type:'image'},
-      {src:'./images/the [Lost H]orizon/0150.jpg',type:'image'},
+      {src:'./images/the [Lost H]orizon/0100.jpg',type:'image',tags:['printed medium']},
+      {src:'./images/the [Lost H]orizon/0110.jpg',type:'image',tags:['printed medium']},
+      {src:'./images/the [Lost H]orizon/0120.jpg',type:'image',tags:['printed medium']},
+             {src:'./images/the [Lost H]orizon/0160.jpg',type:'image',label:'light reveals code',tags:['printed medium']},
+      {src:'./images/the [Lost H]orizon/0140.jpg',type:'image',tags:['printed medium']},
+      {src:'./images/the [Lost H]orizon/0150.jpg',type:'image',tags:['printed medium']},
 
     ],
     caption:'A physical dossier and locked desktop simulation investigating how reality is constructed through fragmented evidence. The printed archive conceals the protocol required to enter the digital work, turning reading into a form of access.',
@@ -705,53 +716,59 @@ const ITEMS = [
   },
   {
     title:'pcell.otf', year:'2025', tier:'core', type:'mixed',
-    tags:['typeface','interactive','motion'], treePath:['type design','interactive type'],
+    tags:['typeface','interactive','motion'], galleryFilters:['interactive','motion','printed medium'], treePath:['type design','interactive type'],
     thumb:'./thumbs/optimized/pcell.jpg', animatedThumb:'./thumbs/pcell.gif',
     assets:[
-      {src:'./videos/pcell.mp4',type:'video',label:'Responsive point cloud'},
-      {src:'./images/pcell/010.jpg',type:'image',label:'Typeface specimen'},
-      {src:'./images/pcell/020.jpg',type:'image'},
-      {src:'./images/pcell/030.mp4',type:'video'}
+      {src:'./videos/pcell.mp4',type:'video',label:'Responsive point cloud',tags:['motion','interactive']},
+      {src:'./images/pcell/010.jpg',type:'image',label:'Typeface specimen',tags:['printed medium']},
+      {src:'./images/pcell/020.jpg',type:'image',tags:['printed medium']},
+      {src:'./images/pcell/030.mp4',type:'video',tags:['motion']}
     ],
     caption:'A display typeface built from hexagonal geometry and benzene-ring ambigrams, extended into a responsive 3D point cloud that changes through hand movement.',
     hook:'A visual structure moves from typography into space and interaction.'
   },
   {
     title:'Auto-Obituary', year:'2025', tier:'core', type:'gallery',
-    tags:['printed medium','book'], treePath:['editorial & publishing','artist books'], folderName:'autoO',
+    tags:['printed medium','artist book','editorial design'], galleryFilters:['printed medium','research'], treePath:['editorial & publishing','artist books'], folderName:'autoO',
     images:['010.jpg','020.jpg','030.jpg','040.jpg','050.jpg','060.jpg'], thumb:'./thumbs/optimized/auto-obituary.jpg',
     caption:'An artist publication staging the symbolic death of Boku no Lyric no Boyomi through an accordion-fold book, fourteen song cards, and an archive-like visual system.',
     hook:'Fourteen songs stage a public disappearance.'
   },
   {
     title:'GALA', year:'2025', tier:'core', type:'video',
-    tags:['live','audioreactive','motion'], treePath:['motion & live visuals','vj'], src:'./videos/gala.mp4', thumb:'./thumbs/optimized/gala.jpg', animatedThumb:'./thumbs/gala.gif', hasAudio:true,
+    tags:['audio / live','audio reactive','motion','VJ'], galleryFilters:['motion','audio / live'], treePath:['motion & live visuals','vj'], src:'./videos/gala.mp4', thumb:'./thumbs/optimized/gala.jpg', animatedThumb:'./thumbs/gala.gif', hasAudio:true,
     caption:'A live audio-reactive visual system created and performed for XG’s “GALA” at Volvox Labs. Sound intensity and rhythm continuously reshape the image, with manual intervention during the performance.',
     hook:'Sound and light become a live instrument.'
   },
   {
     title:'devilReturn', year:'2024', tier:'core', type:'gallery',
-    tags:['printed medium','campaign'], treePath:['brand identity & campaigns','campaigns'], folderName:'devilReturn',
+    tags:['printed medium','campaign','poster','mail piece'], galleryFilters:['printed medium','research'], treePath:['brand identity & campaigns','campaigns'], folderName:'devilReturn',
     images:['020.jpg','010.jpg','030.jpg'], thumb:'./thumbs/optimized/devil-return.jpg',
     caption:'A speculative campaign turning Comet P12’s return into a public gathering at Beach 67th Street. Posters and mailed tickets operate as both event artifacts and entry points to the accompanying film.',
     hook:'A returning comet becomes a public gathering.'
   },
   {
     title:'re:', year:'2025', tier:'support', type:'gallery',
-    tags:['printed medium','editorial'], treePath:['editorial & publishing','publications'], folderName:'re',
-    images:['010.jpg','020.jpg','030.jpg','040.mp4'], thumb:'./thumbs/optimized/re.jpg',
+    tags:['printed medium','editorial design','logo motion'], galleryFilters:['printed medium','motion','research'], treePath:['editorial & publishing','publications'], folderName:'re',
+    thumb:'./thumbs/optimized/re.jpg', coverVideo:'./images/re/040.mp4',
+    assets:[
+      {src:'./images/re/040.mp4',type:'video',label:'RE: logo motion',tags:['motion']},
+      {src:'./images/re/010.jpg',type:'image',label:'Editorial system',tags:['printed medium']},
+      {src:'./images/re/020.jpg',type:'image',tags:['printed medium']},
+      {src:'./images/re/030.jpg',type:'image',tags:['printed medium']}
+    ],
     caption:'An editorial platform organized around “RE:” as a method of returning to, reframing, and reconstructing existing narratives.',
     hook:'Reframing becomes an editorial method.'
   },
   {
     title:'jellyfish that live inside my computer', year:'2025', tier:'support', type:'video',
-    tags:['motion','interactive'], treePath:['interactive & experience','responsive systems'], src:'./videos/jellyfish.mp4', thumb:'./thumbs/optimized/jellyfish.jpg', animatedThumb:'./thumbs/jellyfish.gif',
+    tags:['motion','interactive'], galleryFilters:['motion','interactive'], treePath:['interactive & experience','responsive systems'], src:'./videos/jellyfish.mp4', thumb:'./thumbs/optimized/jellyfish.jpg', animatedThumb:'./thumbs/jellyfish.gif',
     caption:'An evolving interactive interface of jellyfish, inspired by Tamagotchi-like companionship.',
     hook:'Small life inside the machine.'
   },
   {
     title:'Music Visual Playground', year:'2025–2026', tier:'support', type:'mixed',
-    tags:['motion','music visual'], treePath:['motion & live visuals','music visuals'], thumb:'./thumbs/optimized/music-visual-playground.jpg', animatedThumb:'./thumbs/zombie.gif',
+    tags:['motion','music visual','audio / live'], galleryFilters:['motion','audio / live'], treePath:['motion & live visuals','music visuals'], thumb:'./thumbs/optimized/music-visual-playground.jpg', animatedThumb:'./thumbs/zombie.gif',
     assets:[
       {src:'./videos/zombie.mp4',type:'video',label:'Zombie(feat. DRIP TARKO) — MilliMax',hasAudio:true},
       {src:'./videos/afternoon.mp4',type:'video',label:'the afternoon we tried suicide — I Broke My Robot',hasAudio:true},
@@ -767,7 +784,7 @@ const ITEMS = [
   },
   {
     title:'52.05718\u00b0 N, 4.40660\u00b0 E', year:'2026', tier:'support', type:'image',
-    tags:['printmaking'], treePath:['image-making','printmaking'], src:'./images/photoetching1.jpg', thumb:'./thumbs/optimized/photoetching.jpg',
+    tags:['printed medium','photo etching','printmaking'], galleryFilters:['printed medium'], treePath:['image-making','printmaking'], src:'./images/photoetching1.jpg', thumb:'./images/photoetching1.jpg',
     caption:'Photo etching on Rives BFK Grey, made from a photograph taken in Den Haag.',
     hook:'Den Haag, held in etched light.'
   }
@@ -976,7 +993,7 @@ document.querySelectorAll('.landing-opt').forEach(a=>{
   });
 });
 document.querySelectorAll('[data-back]').forEach(a=>{
-  a.addEventListener('click',e=>{e.preventDefault();const t=a.dataset.back;showView(t==='prev'?prevView:t);});
+  a.addEventListener('click',e=>{e.preventDefault();const t=a.dataset.back;if(t==='landing')resetLandingVerb();showView(t==='prev'?prevView:t);});
 });
 function openMore(){
   moreLayer.classList.add('is-open');moreLayer.setAttribute('aria-hidden','false');globalVersion.setAttribute('aria-expanded','true');document.body.classList.add('more-open');
@@ -1055,6 +1072,7 @@ const verbCurrent=document.getElementById('verb-current');
 const verbOptions=document.getElementById('verb-options');
 const verbChoices=[...document.querySelectorAll('.verb-choice')];
 const landingStuff=document.getElementById('landing-stuff');
+const landingActionBack=document.getElementById('landing-action-back');
 const landingVisionBranch=document.getElementById('landing-vision-branch');
 const landingVision=document.getElementById('landing-vision');
 const landingObjectPeriod=document.getElementById('landing-object-period');
@@ -1086,6 +1104,7 @@ function resetLandingVerb(){
   landingVerb=null;pendingMakeOptions=false;closeLandingStages();resetMakeChoice();
   verbCurrent.textContent='';verbCurrent.disabled=true;verbCurrent.className='is-awaiting';verbCurrent.setAttribute('aria-label','No verb selected');
   verbOptions.classList.remove('is-collapsed');verbChoices.forEach(option=>option.classList.remove('is-selected'));
+  landingActionBack.hidden=true;
   landingStuff.textContent='stuff';landingStuff.disabled=true;landingStuff.classList.remove('is-ready','is-awaiting');landingStuff.removeAttribute('aria-controls');landingStuff.removeAttribute('aria-expanded');landingStuff.removeAttribute('data-target');
 }
 verbCurrent.addEventListener('click',resetLandingVerb);
@@ -1097,6 +1116,7 @@ verbChoices.forEach(choice=>choice.addEventListener('click',()=>{
   verbCurrent.textContent=completedVerb;verbCurrent.disabled=false;verbCurrent.classList.remove('is-awaiting');verbCurrent.classList.add('has-value');verbCurrent.setAttribute('aria-label',`Selected: ${completedVerb}. Select again to change.`);
   verbChoices.forEach(option=>option.classList.toggle('is-selected',option===choice));
   verbOptions.classList.add('is-collapsed');
+  landingActionBack.hidden=false;
   closeLandingStages();landingStuff.removeAttribute('aria-expanded');resetMakeChoice();
   landingStuff.classList.remove('is-ready','is-awaiting');
   landingStuff.dataset.target=LANDING_VERB_TARGETS[landingVerb];
@@ -1104,6 +1124,7 @@ verbChoices.forEach(choice=>choice.addEventListener('click',()=>{
   completeLandingNoun('stuff');
   sentenceCore.classList.remove('type-in','is-refreshing');void sentenceCore.offsetWidth;sentenceCore.classList.add('is-refreshing');
 }));
+landingActionBack.addEventListener('click',resetLandingVerb);
 landingStuff.addEventListener('click',()=>{
   const target=landingStuff.dataset.target;
   if(target)transitionFromLanding(target);
@@ -1532,7 +1553,7 @@ function bindWorkOpen(element,index,sourceView){
   element.addEventListener('click',event=>{
     event.preventDefault();
     if(!views[sourceView].classList.contains('on'))return;
-    openDetail(index,{x:event.clientX,y:event.clientY});
+    openDetail(index,{x:event.clientX,y:event.clientY},sourceView==='gallery'&&activeGalleryFilter?[activeGalleryFilter]:[]);
   });
 }
 function renderIndex(){
@@ -1604,10 +1625,19 @@ function buildIndex(){
 /* =========================================================
    GALLERY
    ========================================================= */
-let galleryBuilt=false,galleryLoaded=0,activeGalleryFilter='all';
+let galleryBuilt=false,galleryLoaded=0;
+const GALLERY_FILTERS=['interactive','motion','printed medium','audio / live'];
+let activeGalleryFilter=null;
 const GALLERY_BATCH_SIZE=6;
 function filteredGalleryItems(){
-  return ITEMS.map((item,index)=>({item,index})).filter(({item})=>activeGalleryFilter==='all'||(item.tags||[]).includes(activeGalleryFilter));
+  return ITEMS.map((item,index)=>({item,index})).filter(({item})=>!activeGalleryFilter||(item.galleryFilters||[]).includes(activeGalleryFilter));
+}
+function attachAssetLoader(container,media){
+  const loader=document.createElement('span');loader.className='asset-loader';loader.setAttribute('aria-hidden','true');container.appendChild(loader);
+  const markLoaded=()=>container.classList.add('is-loaded');
+  if((media.tagName==='IMG'&&media.complete)||(media.tagName==='VIDEO'&&media.readyState>=2))markLoaded();
+  else media.addEventListener(media.tagName==='VIDEO'?'loadeddata':'load',markLoaded,{once:true});
+  media.addEventListener('error',markLoaded,{once:true});
 }
 function appendGalleryBatch(){
   const wall=document.getElementById('gallery-wall');
@@ -1616,13 +1646,16 @@ function appendGalleryBatch(){
   batch.forEach(({item,index:i})=>{
     const card=document.createElement('a');card.className=`gw-card gw-card--${item.tier||'core'}`;card.href='#';
     const mediaWrap=document.createElement('div');mediaWrap.className='gw-media';
-    /* Load video previews on hover. */
-    if(item.type==='video'){
-      const video=document.createElement('video');video.dataset.src=item.src;video.muted=true;video.loop=true;video.playsInline=true;video.preload='none';video.setAttribute('aria-label',item.title||'Video preview');
-      if(item.thumb)video.poster=item.thumb;
-      card.addEventListener('mouseenter',()=>{if(!video.src){video.src=video.dataset.src;delete video.dataset.src;video.load();}video.play().catch(()=>{});});
-      card.addEventListener('mouseleave',()=>video.pause());
-      mediaWrap.appendChild(video);
+    /* Dedicated motion covers play continuously; regular video previews load on hover. */
+    if(item.type==='video'||item.coverVideo){
+      const video=document.createElement('video');video.muted=true;video.loop=true;video.playsInline=true;video.setAttribute('aria-label',item.title||'Video preview');
+      if(item.coverVideo){video.src=item.coverVideo;video.autoplay=true;video.preload='auto';video.play().catch(()=>{});}
+      else{
+        video.dataset.src=item.src;video.preload='none';if(item.thumb)video.poster=item.thumb;
+        card.addEventListener('mouseenter',()=>{if(!video.src){video.src=video.dataset.src;delete video.dataset.src;video.load();}video.play().catch(()=>{});});
+        card.addEventListener('mouseleave',()=>video.pause());
+      }
+      mediaWrap.appendChild(video);attachAssetLoader(mediaWrap,video);
     }else{
       const image=document.createElement('img');image.loading='lazy';image.decoding='async';image.fetchPriority='low';image.alt=item.title||'';
       image.src=item.thumb || item.src || (item.type==='gallery' ? `./images/${item.folderName}/${(item.images||[])[0]||''}` : '');
@@ -1631,10 +1664,14 @@ function appendGalleryBatch(){
         card.addEventListener('mouseenter',()=>{image.src=item.animatedThumb;});
         card.addEventListener('mouseleave',()=>{image.src=stillSource;});
       }
-      mediaWrap.appendChild(image);
+      mediaWrap.appendChild(image);attachAssetLoader(mediaWrap,image);
     }
     const title=document.createElement('span');title.className='gw-title';title.textContent=workLabel(item.title);
-    const meta=document.createElement('span');meta.className='gw-meta';meta.textContent=item.year||'';
+    const meta=document.createElement('span');meta.className='gw-meta';
+    const year=document.createElement('span');year.className='gw-year';year.textContent=item.year||'';
+    const tags=document.createElement('span');tags.className='gw-tags';
+    (item.tags||[]).forEach(tag=>{const badge=document.createElement('span');badge.className='gw-tag';badge.textContent=interfaceLabel(tag);tags.appendChild(badge);});
+    meta.append(year,tags);
     card.append(mediaWrap,title,meta);bindWorkOpen(card,i,'gallery');wall.appendChild(card);
   });
   galleryLoaded+=batch.length;rewireHoverables();
@@ -1646,12 +1683,16 @@ function renderGallery(){
 }
 function buildGallery(){
   const filters=document.getElementById('gallery-filters');
-  ['all',...new Set(ITEMS.flatMap(item=>item.tags||[]))].forEach(type=>{
-    const button=document.createElement('button');button.type='button';button.className='index-filter gallery-filter';button.textContent=type==='all'?'All work':interfaceLabel(type);
-    button.classList.toggle('is-active',type===activeGalleryFilter);
+  GALLERY_FILTERS.forEach(type=>{
+    const button=document.createElement('button');button.type='button';button.className='index-filter gallery-filter';button.textContent=interfaceLabel(type);
+    button.dataset.filter=type;button.setAttribute('aria-pressed','false');
     button.addEventListener('click',()=>{
-      activeGalleryFilter=type;
-      filters.querySelectorAll('.gallery-filter').forEach(filter=>filter.classList.toggle('is-active',filter===button));
+      activeGalleryFilter=activeGalleryFilter===type?null:type;
+      filters.querySelectorAll('.gallery-filter').forEach(filter=>{
+        const filterType=filter.dataset.filter;
+        const active=filterType===activeGalleryFilter;
+        filter.classList.toggle('is-active',active);filter.setAttribute('aria-pressed',String(active));
+      });
       renderGallery();
     });
     filters.appendChild(button);
@@ -1720,8 +1761,9 @@ function createDetailAsset(source,isVideo,item,label,hasAudio=false){
   const slide=document.createElement('figure');slide.className='detail-slide';
   slide.dataset.hasAudio=String(Boolean(hasAudio));
   let media;
-  if(isVideo){media=document.createElement('video');media.src=source;media.loop=true;media.muted=detailVolume===0;media.volume=detailVolume;media.playsInline=true;media.preload='none';slide._vid=media;slide.appendChild(media);}
+  if(isVideo){media=document.createElement('video');media.src=source;media.loop=true;media.muted=detailVolume===0;media.volume=detailVolume;media.playsInline=true;media.preload='metadata';slide._vid=media;slide.appendChild(media);}
   else{media=document.createElement('img');media.src=source;media.loading='lazy';media.alt=item.title||'';slide.appendChild(media);}
+  attachAssetLoader(slide,media);
   if(label){
     slide.setAttribute('aria-label',label);
     media.addEventListener('pointerenter',event=>{if(event.pointerType==='touch')return;assetCursorLabel.textContent=label;assetCursorLabel.classList.add('is-visible');document.body.classList.add('asset-label-hover');});
@@ -1759,16 +1801,25 @@ function stopDetailMedia(){
   slides.querySelectorAll('video,audio').forEach(media=>{media.pause();media.removeAttribute('src');media.load();});
   slides.innerHTML='';
 }
-function openDetail(i,origin){
+function detailAssets(item){
+  if((item.assets||[]).length)return item.assets;
+  if(item.type==='gallery')return (item.images||[]).map(file=>({src:`./images/${item.folderName}/${file}`,type:/\.(mp4|mov|webm)$/i.test(file)?'video':'image',tags:item.galleryFilters||item.tags||[]}));
+  return [{src:assetSource(item),type:item.type==='video'?'video':'image',hasAudio:item.hasAudio,tags:item.galleryFilters||item.tags||[]}];
+}
+function prioritizedAssets(item,preferredTags){
+  const assets=detailAssets(item);if(!preferredTags.length)return assets;
+  return assets.map((asset,index)=>{
+    const matchRank=preferredTags.findIndex(tag=>(asset.tags||[]).includes(tag));
+    const rank=matchRank<0?preferredTags.length:matchRank;
+    return {asset,index,rank};
+  }).sort((a,b)=>a.rank-b.rank||a.index-b.index).map(entry=>entry.asset);
+}
+function openDetail(i,origin,preferredTags=[]){
   const sourceView=Object.entries(views).find(([,view])=>view.classList.contains('on'))?.[0];
   if(sourceView&&sourceView!=='detail')detailReturnView=sourceView;
   detailCur=i;const item=ITEMS[i],slides=document.getElementById('detail-slides'),scroll=document.getElementById('detail-scroll');
   slides.innerHTML='';
-  if((item.assets||[]).length){
-    item.assets.forEach(asset=>slides.appendChild(createDetailAsset(asset.src,asset.type==='video'||/\.(mp4|mov|webm)$/i.test(asset.src),item,asset.label,asset.hasAudio)));
-  }else if(item.type==='gallery'){
-    (item.images||[]).forEach(file=>slides.appendChild(createDetailAsset(`./images/${item.folderName}/${file}`,/\.(mp4|mov|webm)$/i.test(file),item)));
-  }else slides.appendChild(createDetailAsset(assetSource(item),item.type==='video',item,null,item.hasAudio));
+  prioritizedAssets(item,preferredTags).forEach(asset=>slides.appendChild(createDetailAsset(asset.src,asset.type==='video'||/\.(mp4|mov|webm)$/i.test(asset.src),item,asset.label,asset.hasAudio)));
   document.getElementById('detail-title').textContent=workLabel(item.title);
   document.getElementById('detail-year').textContent=item.year||'';
   document.getElementById('detail-caption').textContent=item.caption||'';
