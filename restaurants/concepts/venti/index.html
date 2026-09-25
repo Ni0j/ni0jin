@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151617">
+  <meta name="description" content="A local design demo for Venti Italian Specialties in Jersey City.">
+  <title>Venti Italian Specialties — Design Demo</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23151617'/%3E%3Ctext x='32' y='47' text-anchor='middle' fill='white' font-family='Georgia,serif' font-size='43'%3E20%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:ital,wght@0,400;0,500;0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://use.typekit.net/cug3wqp.css">
+  <style>
+    :root {
+      color-scheme:light;
+      --ink:#151617;
+      --paper:#f6f6f4;
+      --white:#fff;
+      --gray:#646769;
+      --line:#c8c9c8;
+      --display:'mezzotint-cf', sans-serif;
+      --sans:'Libre Franklin', Arial, sans-serif;
+
+      /* Character styles: one size token per style, even where values currently match. */
+      --cs-01-hero-roman:clamp(2.5rem,5vw,5rem);
+      --cs-02-hero-italic:clamp(2.5rem,5vw,5rem);
+      --cs-03-section:clamp(3rem,4.6vw,5.6rem);
+      --cs-04-section-compact:clamp(1.9rem,4.35vw,5.4rem);
+      --cs-05-feature:clamp(3.35rem,5.2vw,6.5rem);
+      --cs-06-item:clamp(1.55rem,2.3vw,2.55rem);
+      --cs-07-label:.75rem;
+      --cs-08-ui:.8125rem;
+      --cs-09-ui-italic:.8125rem;
+      --cs-10-body:1rem;
+      --cs-11-small:.875rem;
+      --cs-12-emphasis:1.125rem;
+      --cs-13-fact:1rem;
+    }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--ink); background:var(--paper); font:400 var(--cs-10-body)/1.55 var(--sans); }
+    img { display:block; max-width:100%; }
+    a { color:inherit; text-underline-offset:.3em; }
+    a:focus-visible { outline:2px solid currentColor; outline-offset:5px; }
+
+    /* CS-01 · Hero Roman — Mezzotint 400 normal, sentence case. */
+    #hero-title { font:400 var(--cs-01-hero-roman)/.98 var(--display); letter-spacing:-.02em; }
+    /* CS-02 · Hero Italic — Mezzotint 400 italic, sentence case. */
+    #hero-title em { font:400 var(--cs-02-hero-italic)/.98 var(--display); }
+    /* CS-03 · Section Display — Mezzotint 400 normal, sentence case. */
+    .favorites-title h2, .catering h2, .food-story-title { font:400 var(--cs-03-section)/1.02 var(--display); letter-spacing:-.045em; }
+    /* CS-04 · Compact Section — Mezzotint 400 normal; Visit stays on one line. */
+    .visit h2 { font:400 var(--cs-04-section-compact)/1.04 var(--display); letter-spacing:-.045em; }
+    /* CS-05 · Feature Display — Mezzotint 400 normal; mozzarella story. */
+    .moz-copy h2 { font:400 var(--cs-05-feature)/1.05 var(--display); letter-spacing:-.045em; }
+    /* CS-06 · Item Display — Mezzotint 400 normal; menu item names. */
+    .menu-row h3 { font:400 var(--cs-06-item)/1.15 var(--display); letter-spacing:-.03em; }
+    /* CS-07 · Label — Libre Franklin 700, uppercase, tracked. */
+    .utility, .header-note, .eyebrow, .food-story-kicker, .footer-brand { font:700 var(--cs-07-label)/1.4 var(--sans); letter-spacing:.15em; text-transform:uppercase; }
+    /* CS-08 · UI — Libre Franklin 600 normal; nav, buttons, text links. */
+    nav, .order-actions a, .menu-note a, .moz-copy a, .text-action, .visit a, .footer-links { font:600 var(--cs-08-ui)/1.4 var(--sans); }
+    /* CS-09 · UI Italic — Libre Franklin 600 italic; order-link hover/focus. */
+    .order-actions a:hover, .order-actions a:focus-visible { font:italic 600 var(--cs-09-ui-italic)/1.4 var(--sans); }
+    /* CS-10 · Body — Libre Franklin 400 normal; standard reading copy. */
+    .moz-copy p, .catering-copy p, .visit dl { font:400 var(--cs-10-body)/1.6 var(--sans); }
+    /* CS-11 · Small Body — Libre Franklin 400 normal; descriptions and notes. */
+    .hero-aside p, .menu-row p, .menu-note, .visit small { font:400 var(--cs-11-small)/1.55 var(--sans); }
+    /* CS-12 · Emphasis — Libre Franklin 600 normal; street address. */
+    .visit-address { font:600 var(--cs-12-emphasis)/1.55 var(--sans); }
+    /* CS-13 · Fact — Libre Franklin 600 normal; days in the hours list. */
+    .visit dt { font:600 var(--cs-13-fact)/1.6 var(--sans); }
+    .visit small a { font:inherit; }
+
+    .skip { position:absolute; z-index:10; top:-5rem; left:1rem; padding:.7rem 1rem; background:#fff; }
+    .skip:focus { top:1rem; }
+    .wrap { width:min(100% - 5rem, 1380px); margin-inline:auto; }
+    .utility { color:#fff; background:var(--ink); }
+    .utility .wrap { display:flex; justify-content:space-between; gap:1rem; padding:.58rem 0; }
+    header { background:var(--paper); border-bottom:1px solid var(--line); }
+    .header-inner { display:grid; grid-template-columns:1fr auto 1fr; align-items:center; min-height:116px; gap:2rem; }
+    .header-note { line-height:1.6; }
+    .mark { width:92px; height:92px; display:block; overflow:hidden; border-radius:50%; position:relative; background:var(--ink); }
+    .mark img { position:absolute; width:145%; max-width:none; height:auto; top:50%; left:50%; transform:translate(-50%,-50%); filter:grayscale(1) contrast(1.16); }
+    nav { display:flex; justify-content:flex-end; align-items:center; gap:clamp(1rem,2.5vw,2.5rem); letter-spacing:.04em; }
+    nav a { text-decoration:none; white-space:nowrap; }
+    nav a:hover, .text-action:hover { text-decoration:underline; }
+    nav .order-link { border:1px solid var(--ink); padding:.75rem .95rem; }
+    nav .order-link:hover { color:#fff; background:var(--ink); text-decoration:none; }
+    .hero-intro { display:grid; grid-template-columns:minmax(0,1fr) 305px; align-items:end; gap:4rem; padding:3rem 0 2.8rem; }
+    .eyebrow { display:block; color:var(--gray); }
+    h1, h2, h3, p { margin-top:0; }
+    h1 { margin:1.2rem 0 0; }
+    .hero-word { display:block; }
+    .hero-aside { padding-bottom:.6rem; }
+    .hero-aside p { margin-bottom:2rem; }
+    .order-actions { display:flex; flex-direction:column; border-top:1px solid var(--ink); }
+    .order-actions a { display:flex; align-items:center; justify-content:space-between; gap:1rem; padding:.85rem 0; border-bottom:1px solid var(--line); text-decoration:none; }
+
+    .collage-stage { position:relative; padding:1.25rem 0 10rem; background:#e9e9e7; }
+    .food-story { position:sticky; top:1rem; display:grid; grid-template-columns:minmax(0,1.2fr) minmax(250px,.58fr); gap:1.25rem; width:min(100% - 3rem, 1380px); min-height:calc(100vh - 2rem); margin-inline:auto; padding:1.25rem; overflow:hidden; color:#fff; background:var(--ink); border:1px solid #363839; }
+    .food-story + .food-story { top:3rem; margin-top:20vh; }
+    .food-story-copy { position:absolute; z-index:2; left:clamp(1.5rem,4vw,4rem); bottom:clamp(1.5rem,4vw,4rem); max-width:11ch; padding:1rem 1.2rem 1.15rem; color:#fff; background:rgba(21,22,23,.9); }
+    .food-story-title { display:block; margin:.45rem 0 0; }
+    .food-frame { overflow:hidden; background:#777; }
+    .food-frame img { width:100%; height:100%; object-fit:cover; }
+    .food-frame-main { min-height:calc(100vh - 4.5rem); }
+    .food-frame-detail { align-self:center; height:56%; transform:rotate(1.5deg); border:10px solid var(--paper); }
+    .food-story--mozzarella .food-frame-main img { object-position:center 48%; }
+    .food-story--sandwich { grid-template-columns:1fr; }
+    .food-story--sandwich .food-frame-main { grid-column:1; grid-row:1; }
+    .food-story--sandwich .food-frame-main img { object-position:center 43%; }
+
+    .favorites { padding:7rem 0 8rem; }
+    .favorites-title { display:flex; align-items:end; justify-content:space-between; gap:2rem; border-top:1px solid var(--ink); padding:2.5rem 0 2rem; }
+    .favorites-title h2, .moz-copy h2, .catering h2, .visit h2 { margin:0; }
+    .menu-list { border-top:1px solid var(--line); }
+    .menu-row { display:grid; grid-template-columns:minmax(0,1fr) minmax(220px, .75fr); gap:2rem; align-items:start; border-bottom:1px solid var(--line); padding:1.25rem 0 1.4rem; }
+    .menu-row h3 { margin:0; }
+    .menu-row p { color:#414445; margin:0; }
+    .menu-note { display:flex; align-items:start; justify-content:space-between; gap:2rem; padding-top:1.25rem; }
+    .menu-note span { color:var(--gray); }
+    .menu-note a { white-space:nowrap; }
+    .moz { display:grid; grid-template-columns:1fr 1fr; min-height:620px; color:#fff; background:var(--ink); }
+    .moz-copy { padding:clamp(3rem,6vw,7rem); display:flex; flex-direction:column; justify-content:space-between; }
+    .moz-copy .eyebrow { color:#b8bbbc; }
+    .moz-copy h2 { max-width:10ch; margin:2rem 0; }
+    .moz-copy p { max-width:28rem; margin:0 0 1.5rem; }
+    .moz-photo { min-height:620px; }
+    .moz-photo img { width:100%; height:100%; object-fit:cover; object-position:center; }
+    .catering { display:grid; grid-template-columns:1fr 1fr; gap:4rem; padding:8rem 0; }
+    .catering h2 { max-width:12ch; margin:2rem 0 0; }
+    .catering-copy { align-self:end; border-top:1px solid var(--ink); padding-top:1.5rem; max-width:27rem; }
+    .catering-copy p { margin-bottom:1.7rem; }
+    .text-action { display:inline-block; text-decoration:none; border-bottom:1px solid var(--ink); padding-bottom:.25rem; }
+    .visit { color:#fff; background:#242628; padding:6rem 0 4rem; }
+    .visit-grid { display:grid; grid-template-columns:1fr 1fr; gap:4rem; }
+    .visit .eyebrow { color:#b9bbbc; }
+    .visit h2 { margin:1.3rem 0 2rem; white-space:nowrap; }
+    .visit-grid > div:nth-child(2) { border-top:1px solid #8d8f90; padding-top:1.4rem; align-self:end; }
+    .visit dl { display:grid; grid-template-columns:1fr auto; column-gap:1rem; row-gap:.9rem; margin:0 0 1.5rem; }
+    .visit dd { margin:0; text-align:right; }
+    .visit small { display:block; color:#d5d6d6; }
+    footer { color:#fff; background:#242628; border-top:1px solid #5b5d5e; }
+    .footer-inner { display:flex; justify-content:space-between; gap:1.5rem; align-items:center; padding:1.5rem 0; }
+    .footer-links { display:flex; gap:1.3rem; }
+    @media (max-width: 980px) {
+      .header-inner { gap:1rem; }
+      nav { gap:1rem; }
+      .hero-intro { grid-template-columns:1fr 250px; gap:2rem; }
+      .menu-row { display:block; }
+      .menu-row p { margin-top:.6rem; }
+      .food-story { grid-template-columns:minmax(0,1fr) 34%; }
+      .food-story--sandwich { grid-template-columns:1fr; }
+    }
+    @media (max-width: 700px) {
+      .wrap { width:min(100% - 2rem, 1380px); }
+      .utility .wrap { justify-content:center; }
+      .utility span:last-child { display:none; }
+      .header-inner { grid-template-columns:auto 1fr; min-height:0; padding:1rem 0; }
+      .mark { width:65px; height:65px; }
+      .header-note { letter-spacing:.12em; }
+      nav { grid-column:1/-1; justify-content:space-between; gap:.7rem; padding-top:.7rem; border-top:1px solid var(--line); }
+      nav .order-link { padding:.5rem .6rem; }
+      .hero-intro { display:block; padding:2rem 0 1.8rem; }
+      h1 { margin:.7rem 0 1.35rem; }
+      .hero-aside p { margin-bottom:1.2rem; }
+      .order-actions { flex-direction:row; }
+      .order-actions a { flex:1; padding:.75rem 0; margin-right:1rem; }
+      .order-actions a:last-child { margin-right:0; }
+      .collage-stage { padding:1rem 0 4rem; background:var(--paper); }
+      .food-story, .food-story + .food-story { position:relative; top:auto; grid-template-columns:1fr 40%; gap:.75rem; width:calc(100% - 2rem); min-height:0; margin-top:0; padding:.75rem; }
+      .food-story + .food-story { margin-top:1.5rem; }
+      .food-story-copy { position:static; grid-column:1/-1; max-width:none; padding:.4rem .25rem .8rem; background:transparent; }
+      .food-story-title { font-size:2.5rem; }
+      .food-frame-main, .food-story--sandwich .food-frame-main { grid-column:1; grid-row:2; min-height:0; height:72vw; }
+      .food-frame-detail { grid-column:2; grid-row:2; align-self:center; height:44vw; border-width:6px; }
+      .food-story--sandwich .food-frame-main { grid-column:1/-1; }
+      .favorites { padding:5rem 0; }
+      .favorites-title { display:block; padding:2rem 0 1.5rem; }
+      .favorites-title h2 { margin-bottom:1rem; }
+      .menu-row { gap:.6rem; }
+      .menu-note { flex-direction:column; gap:.5rem; }
+      .moz { display:flex; flex-direction:column-reverse; }
+      .moz-photo { min-height:0; height:420px; }
+      .moz-copy { padding:3.5rem 1rem; }
+      .moz-copy h2 { margin:1.5rem 0; }
+      .catering { display:block; padding:5rem 0; }
+      .catering h2 { margin:1.4rem 0 2rem; }
+      .catering-copy { max-width:none; }
+      .visit { padding:4.5rem 0 3rem; }
+      .visit-grid { display:block; }
+      .visit-grid > div:nth-child(2) { margin-top:3rem; }
+      .footer-inner { align-items:start; flex-direction:column; }
+    }
+    @media (max-width: 390px) {
+      nav { flex-wrap:wrap; row-gap:.8rem; }
+      nav .order-link { width:100%; text-align:center; }
+    }
+    @media (prefers-reduced-motion:reduce) {
+      html { scroll-behavior:auto; }
+      .food-story, .food-story + .food-story { position:relative; top:auto; margin-top:1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <aside style="display:flex;justify-content:space-between;gap:1rem;padding:.6rem 1rem;color:#fff;background:#151617;font:600 11px/1.4 'Libre Franklin',Arial,sans-serif;letter-spacing:.06em;text-transform:uppercase"><span>Independent concept by Nio Jin</span><a href="../../work/venti/index.html" style="color:inherit">Read the thinking ↗</a></aside>
+  <div class="utility"><div class="wrap"><span>Italian Specialties · Jersey City</span><span>203 Academy Street · Tuesday–Saturday, 11–8</span></div></div>
+  <header><div class="wrap header-inner">
+    <span class="header-note">Venti<br>Italian Specialties</span>
+    <a class="mark" href="#top" aria-label="Venti Italian Specialties, back to top"><img src="assets/venti-street-icon-source.png" width="910" height="980" alt=""></a>
+    <nav aria-label="Main navigation"><a href="#favorites">The menu</a><a href="#mozzarella">Mozzarella</a><a href="#catering">Catering</a><a href="#visit">Visit</a><a class="order-link" href="#order">Order online ↗</a></nav>
+  </div></header>
+  <main id="main">
+    <section id="top" aria-labelledby="hero-title">
+      <div class="wrap hero-intro"><div><span class="eyebrow">From the Venti counter · Jersey City</span><h1 id="hero-title" aria-label="Fresh mozzarella. Serious sandwiches."><span class="hero-word"><em>Fresh</em></span><span class="hero-word">mozzarella.</span><span class="hero-word"><em>Serious</em></span><span class="hero-word">sandwiches.</span></h1></div><div class="hero-aside"><p>House-made cutlets, daily mozzarella, and generous Italian-American sandwiches.</p><div class="order-actions" id="order"><a href="https://www.ubereats.com/store/venti-italian-specialties/8F6hHbs3TNKGwnczgWmZcg" target="_blank" rel="noopener noreferrer">Uber Eats <span aria-hidden="true">↗</span></a><a href="https://www.grubhub.com/restaurant/venti-italian-specialties-203-academy-st-jersey-city/11068224" target="_blank" rel="noopener noreferrer">Grubhub <span aria-hidden="true">↗</span></a></div></div></div>
+      <div class="collage-stage" aria-label="Venti food highlights">
+        <article class="food-story food-story--mozzarella">
+          <div class="food-story-copy"><span class="food-story-kicker">Made here, daily</span><span class="food-story-title">Fresh mozzarella.</span></div>
+          <div class="food-frame food-frame-main"><img src="assets/venti-meatball.jpg" alt="Melted mozzarella stretching from a hot Venti sandwich" width="1179" height="1470" fetchpriority="high"></div>
+          <div class="food-frame food-frame-detail"><img src="assets/venti-cutlet.jpg" alt="A crisp Venti cutlet sandwich on a seeded roll" width="1179" height="1473" loading="lazy"></div>
+        </article>
+        <article class="food-story food-story--sandwich">
+          <div class="food-story-copy"><span class="food-story-kicker">From the counter</span><span class="food-story-title">Serious sandwiches.</span></div>
+          <div class="food-frame food-frame-main"><img src="assets/venti-sandwich.jpg" alt="A generously filled Venti sandwich on a seeded roll" width="1179" height="1473" loading="lazy"></div>
+        </article>
+      </div>
+    </section>
+    <section class="wrap favorites" id="favorites" aria-labelledby="favorites-title"><div class="favorites-title"><h2 id="favorites-title">What to order.</h2></div><div class="menu-list">
+      <article class="menu-row"><h3>Chicken Parm with Vodka Sauce</h3><p>House-made chicken cutlet, fresh mozzarella, vodka sauce, pecorino Romano, seeded semolina roll.</p></article>
+      <article class="menu-row"><h3>Classic Cutlet</h3><p>Chicken cutlet, fresh mozzarella, roasted peppers, olive oil, balsamic.</p></article>
+      <article class="menu-row"><h3>Spicy Cutlet</h3><p>Chicken cutlet, soppressata, provolone, cherry pepper spread, lettuce, red wine vinegar.</p></article>
+      <article class="menu-row"><h3>Chicken Cutlet Caesar Sandwich</h3><p>Chicken cutlet, Caesar dressing, croutons, romaine, shaved pecorino Romano.</p></article>
+    </div><div class="menu-note"><span>Items and availability may change.</span><a href="https://www.ubereats.com/store/venti-italian-specialties/8F6hHbs3TNKGwnczgWmZcg" target="_blank" rel="noopener noreferrer">Explore the full menu ↗</a></div></section>
+    <section class="moz" id="mozzarella" aria-labelledby="moz-title"><div class="moz-copy"><span class="eyebrow">Made here, daily</span><div><h2 id="moz-title">The mozzarella is made in‑house.</h2><p>Fresh mozzarella is part of the daily rhythm at Venti. It is layered into cutlet sandwiches and melted into chicken parm.</p><a href="https://www.ubereats.com/store/venti-italian-specialties/8F6hHbs3TNKGwnczgWmZcg" target="_blank" rel="noopener noreferrer">Find it on the menu ↗</a></div></div><div class="moz-photo"><img src="assets/venti-meatball.jpg" alt="Melted mozzarella stretching from a hot sandwich" width="1179" height="1470" loading="lazy"></div></section>
+    <section class="wrap catering" id="catering" aria-labelledby="catering-title"><div><span class="eyebrow">Catering</span><h2 id="catering-title">A bigger table? Let’s talk.</h2></div><div class="catering-copy"><p>For office lunches and gatherings, call the deli to ask what Venti can make for your group.</p><a class="text-action" href="tel:+12016857261">Call (201) 685-7261 ↗</a></div></section>
+    <section class="visit" id="visit" aria-labelledby="visit-title"><div class="wrap visit-grid"><div><span class="eyebrow">Visit</span><h2 id="visit-title">Find us in Jersey City.</h2><p class="visit-address">203 Academy Street<br>Jersey City, NJ 07306</p><a href="https://www.google.com/maps/search/?api=1&query=Venti+Italian+Specialties+203+Academy+St+Jersey+City+NJ+07306" target="_blank" rel="noopener noreferrer">Get directions ↗</a></div><div><dl><dt>Tuesday–Saturday</dt><dd>11 am–8 pm</dd><dt>Sunday–Monday</dt><dd>Closed</dd></dl><small>Hours can change. Check <a href="https://www.instagram.com/ventifoodtruck/" target="_blank" rel="noopener noreferrer">Venti’s Instagram</a> before visiting.</small></div></div></section>
+  </main>
+  <footer><div class="wrap footer-inner"><span class="footer-brand">Venti Italian Specialties · Jersey City</span><div class="footer-links"><a href="https://www.ubereats.com/store/venti-italian-specialties/8F6hHbs3TNKGwnczgWmZcg" target="_blank" rel="noopener noreferrer">Uber Eats ↗</a><a href="https://www.grubhub.com/restaurant/venti-italian-specialties-203-academy-st-jersey-city/11068224" target="_blank" rel="noopener noreferrer">Grubhub ↗</a><a href="https://www.instagram.com/ventifoodtruck/" target="_blank" rel="noopener noreferrer">Instagram ↗</a></div></div></footer>
+</body>
+</html>

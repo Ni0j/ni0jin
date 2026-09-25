@@ -184,6 +184,7 @@ body.more-open #landing-video{opacity:.35;}
 #landing-action-back:hover,#landing-action-back:focus-visible{opacity:.52;}
 #landing-action-back[hidden]{display:none;}
 #landing-object{position:relative;display:inline-flex;align-items:baseline;}
+#landing-object[hidden]{display:none;}
 #landing-object-period{margin-left:-.12em;}
 #landing-vision-branch{position:absolute;left:100%;top:0;display:inline-flex;align-items:baseline;gap:.22em;margin-left:.34em;}
 #landing-vision-branch[hidden]{display:none;}
@@ -247,12 +248,12 @@ html.photosensitivity-flashing #landing-stuff.is-awaiting::before{animation-dura
 #landing-bottom.is-scroll-revealed button,#landing-bottom.is-scroll-revealed a,#landing-bottom.is-scroll-revealed [tabindex]{pointer-events:auto;}
 
 /* ============ VISION / IYKYK CONFIRMATION ============ */
-#vision-layer{position:fixed;inset:0;z-index:620;display:grid;place-items:center;padding:1.5rem;visibility:hidden;pointer-events:none;}
-#vision-layer.is-open{visibility:visible;pointer-events:all;}
-#vision-backdrop{position:absolute;inset:0;border:0;background:rgba(11,11,10,0);cursor:none;transition:background .35s ease;}
-#vision-layer.is-open #vision-backdrop{background:rgba(11,11,10,.58);}
-#vision-dialog{position:relative;width:min(29rem,100%);background:var(--bg);color:var(--ink);border:1px solid var(--ink);padding:1.15rem;opacity:0;transform:translateY(.6rem) scale(.98);transition:opacity .3s ease,transform .45s cubic-bezier(.16,1,.3,1);}
-#vision-layer.is-open #vision-dialog{opacity:1;transform:translateY(0) scale(1);}
+#vision-layer,#sezn-layer{position:fixed;inset:0;z-index:620;display:grid;place-items:center;padding:1.5rem;visibility:hidden;pointer-events:none;}
+#vision-layer.is-open,#sezn-layer.is-open{visibility:visible;pointer-events:all;}
+#vision-backdrop,#sezn-backdrop{position:absolute;inset:0;border:0;background:rgba(11,11,10,0);cursor:none;transition:background .35s ease;}
+#vision-layer.is-open #vision-backdrop,#sezn-layer.is-open #sezn-backdrop{background:rgba(11,11,10,.58);}
+#vision-dialog,#sezn-dialog{position:relative;width:min(29rem,100%);background:var(--bg);color:var(--ink);border:1px solid var(--ink);padding:1.15rem;opacity:0;transform:translateY(.6rem) scale(.98);transition:opacity .3s ease,transform .45s cubic-bezier(.16,1,.3,1);}
+#vision-layer.is-open #vision-dialog,#sezn-layer.is-open #sezn-dialog{opacity:1;transform:translateY(0) scale(1);}
 .vision-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:.8rem;border-bottom:1px solid var(--ink);}
 .vision-title,.vision-close{font:inherit;font-size:var(--type-primary);letter-spacing:.02em;}
 .vision-close{appearance:none;border:0;background:transparent;color:inherit;cursor:none;padding:.15rem 0;}
@@ -262,6 +263,10 @@ html.photosensitivity-flashing #landing-stuff.is-awaiting::before{animation-dura
 .vision-action.primary{background:var(--accent);}
 .vision-action:hover,.vision-action:focus-visible{background:var(--ink);color:var(--bg);}
 .vision-action.primary:hover,.vision-action.primary:focus-visible{color:var(--accent);}
+#sezn-dialog label{display:block;margin:clamp(2rem,6vh,3.25rem) 0 .6rem;font-size:var(--type-support);}
+#sezn-password{display:block;width:100%;border:0;border-bottom:1px solid var(--ink);border-radius:0;padding:.45rem 0;background:transparent;color:var(--ink);font:inherit;font-size:var(--type-primary);outline:none;cursor:text;}
+#sezn-password:focus{border-bottom-width:2px;}
+#sezn-error{min-height:1.6em;margin:.6rem 0 1.5rem;font-size:var(--type-support);line-height:1.6;}
 
 /* floating idle indicator — visible only while the panel is closed */
 #landing-indicator{
@@ -363,7 +368,7 @@ html.photosensitivity-flashing #landing-stuff.is-awaiting::before{animation-dura
 .gw-tag{display:inline-block;border:1px solid var(--line);padding:.18rem .32rem;line-height:1;white-space:nowrap;}
 .gw-card:hover .gw-title{background:var(--ink);color:var(--bg);padding:0 .12em;}
 .asset-loader{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink);font-size:var(--type-support);pointer-events:none;}
-.asset-loader::before{content:'▚▜███▞▝';white-space:pre;animation:verbGlyphs 1.2s steps(1,end) infinite;}
+.asset-loader::before{content:'Loading…';}
 .gw-media.is-loaded .asset-loader,.detail-slide.is-loaded .asset-loader{display:none;}
 @media (max-width:760px){
   #gallery-wall{grid-template-columns:repeat(2,minmax(0,1fr));gap:25px 12px;}
@@ -565,7 +570,7 @@ body.asset-label-hover #cur{opacity:0;}
           <span id="verb-picker">
             <button id="verb-current" class="is-awaiting" type="button" aria-live="polite" aria-label="No verb selected" disabled></button>
           </span>
-          <span id="landing-object">
+          <span id="landing-object" hidden>
             <button id="landing-stuff" class="sentence-word" type="button" disabled>stuff</button>
             <span id="landing-vision-branch" hidden><span aria-hidden="true">/</span><button id="landing-vision" class="sentence-word" type="button" aria-label="vision">vision</button></span><span id="landing-object-period" aria-hidden="true">.</span>
           </span>
@@ -576,6 +581,7 @@ body.asset-label-hover #cur{opacity:0;}
         <button class="verb-choice" type="button" data-verb="make">a. make</button>
         <button class="verb-choice" type="button" data-verb="frame">b. frame</button>
         <button class="verb-choice" type="button" data-verb="trace">c. trace</button>
+        <button class="verb-choice" type="button" data-verb="run">d. run</button>
       </div>
       <div id="landing-secondary">
         <section id="landing-profile" aria-label="About Nio Jin" hidden>
@@ -608,6 +614,17 @@ body.asset-label-hover #cur{opacity:0;}
     <p class="vision-copy" id="vision-copy">This is an IYKYK service. Only three commissions are accepted each week. Continue only if help is genuinely needed.</p>
     <div class="vision-actions"><button class="vision-action" id="vision-no" type="button">No</button><button class="vision-action primary" id="vision-yes" type="button">Yes</button></div>
   </section>
+</div>
+
+<div id="sezn-layer" aria-hidden="true">
+  <button id="sezn-backdrop" type="button" aria-label="Close sēzn password window"></button>
+  <form id="sezn-dialog" role="dialog" aria-modal="true" aria-labelledby="sezn-title" aria-describedby="sezn-error">
+    <header class="vision-head"><h2 class="vision-title" id="sezn-title">Enter sēzn</h2><button class="vision-close" id="sezn-close" type="button" aria-label="Back"><svg class="back-arrow-icon" viewBox="0 0 22 12" aria-hidden="true"><path d="M6 1 1 6l5 5M1 6h20"/></svg></button></header>
+    <label for="sezn-password">Password</label>
+    <input id="sezn-password" type="password" inputmode="numeric" autocomplete="current-password" maxlength="4">
+    <p id="sezn-error" role="status" aria-live="polite"></p>
+    <button class="vision-action primary" type="submit">Enter</button>
+  </form>
 </div>
 
 <!-- ============ SONG / IMMERSIVE ============ -->
@@ -1072,6 +1089,7 @@ const verbCurrent=document.getElementById('verb-current');
 const verbOptions=document.getElementById('verb-options');
 const verbChoices=[...document.querySelectorAll('.verb-choice')];
 const landingStuff=document.getElementById('landing-stuff');
+const landingObject=document.getElementById('landing-object');
 const landingActionBack=document.getElementById('landing-action-back');
 const landingVisionBranch=document.getElementById('landing-vision-branch');
 const landingVision=document.getElementById('landing-vision');
@@ -1105,7 +1123,7 @@ function resetLandingVerb(){
   verbCurrent.textContent='';verbCurrent.disabled=true;verbCurrent.className='is-awaiting';verbCurrent.setAttribute('aria-label','No verb selected');
   verbOptions.classList.remove('is-collapsed');verbChoices.forEach(option=>option.classList.remove('is-selected'));
   landingActionBack.hidden=true;
-  landingStuff.textContent='stuff';landingStuff.disabled=true;landingStuff.classList.remove('is-ready','is-awaiting');landingStuff.removeAttribute('aria-controls');landingStuff.removeAttribute('aria-expanded');landingStuff.removeAttribute('data-target');
+  landingObject.hidden=true;landingStuff.textContent='stuff';landingStuff.disabled=true;landingStuff.classList.remove('is-ready','is-awaiting');landingStuff.removeAttribute('aria-controls');landingStuff.removeAttribute('aria-expanded');landingStuff.removeAttribute('data-target');
 }
 verbCurrent.addEventListener('click',resetLandingVerb);
 sentenceCore.addEventListener('animationend',event=>{if(event.animationName==='sentenceRefresh')sentenceCore.classList.remove('is-refreshing');});
@@ -1119,13 +1137,15 @@ verbChoices.forEach(choice=>choice.addEventListener('click',()=>{
   landingActionBack.hidden=false;
   closeLandingStages();landingStuff.removeAttribute('aria-expanded');resetMakeChoice();
   landingStuff.classList.remove('is-ready','is-awaiting');
-  landingStuff.dataset.target=LANDING_VERB_TARGETS[landingVerb];
-  landingStuff.setAttribute('aria-label',`Enter ${landingVerb}`);
-  completeLandingNoun('stuff');
+  landingStuff.dataset.target=LANDING_VERB_TARGETS[landingVerb]||'';
+  landingStuff.setAttribute('aria-label',landingVerb==='run'?'Enter sēzn':`Enter ${landingVerb}`);
+  landingObject.hidden=false;
+  completeLandingNoun(landingVerb==='run'?'sēzn':'stuff');
   sentenceCore.classList.remove('type-in','is-refreshing');void sentenceCore.offsetWidth;sentenceCore.classList.add('is-refreshing');
 }));
 landingActionBack.addEventListener('click',resetLandingVerb);
 landingStuff.addEventListener('click',()=>{
+  if(landingVerb==='run'){openSezn();return;}
   const target=landingStuff.dataset.target;
   if(target)transitionFromLanding(target);
 });
@@ -1274,6 +1294,39 @@ landingScrollReady=true;chooseLandingVisualEffect();rebuildLandingScrollField();
 /* Add the future divination website URL here when it is ready. */
 const DIVINATION_URL='';
 const VISION_NOTICE='This is an IYKYK service. Only three commissions are accepted each week. Continue only if help is genuinely needed.';
+const SEZN_PASSWORD_HASH='c356d8945226f7bf825a2f41dce3d8bf26e05c0f61afe42d3b9cd221469e72c2';
+const seznLayer=document.getElementById('sezn-layer');
+const seznDialog=document.getElementById('sezn-dialog');
+const seznPassword=document.getElementById('sezn-password');
+const seznError=document.getElementById('sezn-error');
+function openSezn(){
+  seznPassword.value='';seznError.textContent='';
+  seznLayer.classList.add('is-open');seznLayer.setAttribute('aria-hidden','false');
+  requestAnimationFrame(()=>seznPassword.focus());
+}
+function closeSezn(){
+  seznLayer.classList.remove('is-open');seznLayer.setAttribute('aria-hidden','true');
+  seznPassword.value='';seznError.textContent='';landingStuff.focus();
+}
+document.getElementById('sezn-close').addEventListener('click',closeSezn);
+document.getElementById('sezn-backdrop').addEventListener('click',closeSezn);
+seznPassword.addEventListener('input',()=>{seznError.textContent='';});
+seznDialog.addEventListener('submit',async event=>{
+  event.preventDefault();
+  const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(seznPassword.value));
+  const hash=Array.from(new Uint8Array(digest),byte=>byte.toString(16).padStart(2,'0')).join('');
+  if(hash===SEZN_PASSWORD_HASH){window.location.href='./restaurants/index.html';return;}
+  seznError.textContent='Incorrect password. Try again.';
+  seznPassword.value='';seznPassword.focus();
+});
+document.addEventListener('keydown',event=>{
+  if(!seznLayer.classList.contains('is-open'))return;
+  if(event.key==='Escape'){closeSezn();return;}
+  if(event.key!=='Tab')return;
+  const controls=[document.getElementById('sezn-close'),seznPassword,seznDialog.querySelector('[type="submit"]')];
+  if(event.shiftKey&&document.activeElement===controls[0]){event.preventDefault();controls[2].focus();}
+  else if(!event.shiftKey&&document.activeElement===controls[2]){event.preventDefault();controls[0].focus();}
+});
 const visionLayer=document.getElementById('vision-layer');
 const visionCopy=document.getElementById('vision-copy');
 const visionYes=document.getElementById('vision-yes');
@@ -1635,7 +1688,7 @@ function filteredGalleryItems(){
 function attachAssetLoader(container,media){
   const loader=document.createElement('span');loader.className='asset-loader';loader.setAttribute('aria-hidden','true');container.appendChild(loader);
   const markLoaded=()=>container.classList.add('is-loaded');
-  if((media.tagName==='IMG'&&media.complete)||(media.tagName==='VIDEO'&&media.readyState>=2))markLoaded();
+  if((media.tagName==='IMG'&&media.complete)||(media.tagName==='VIDEO'&&(media.poster||media.readyState>=2)))markLoaded();
   else media.addEventListener(media.tagName==='VIDEO'?'loadeddata':'load',markLoaded,{once:true});
   media.addEventListener('error',markLoaded,{once:true});
 }
