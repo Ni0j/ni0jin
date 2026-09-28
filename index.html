@@ -207,17 +207,15 @@ body.more-open #landing-video{opacity:.35;}
 .destination-unavailable{color:var(--ink);text-decoration:none;cursor:default;}
 #build-wip-note{display:none;position:absolute;left:50%;top:calc(50% + 5.5rem);transform:translateX(-50%);color:#777;font-size:var(--type-primary);white-space:nowrap;}
 #landing-conversation:has(.destination-list[data-for="build"]:not([hidden])) #build-wip-note{display:block;}
-#build-brief{position:absolute;left:50%;bottom:clamp(1.5rem,4vw,3rem);width:min(40rem,90vw);transform:translateX(-50%);margin:0;color:var(--ink);font-size:var(--type-primary);line-height:1.35;text-align:center;}
-#build-brief[hidden]{display:none;}
 #destination-glitch{position:relative;display:block;isolation:isolate;min-width:7ch;font-family:monospace;font-size:var(--type-primary);letter-spacing:-.08em;white-space:nowrap;}
 #destination-glitch[hidden]{display:none;}
 #destination-glitch::before{content:'▚▜███▞▝';animation:destinationGlyphs 1.25s steps(1,end) infinite;}
 @keyframes destinationGlyphs{0%,29%{content:'▚▜███▞▝';}30%,61%{content:'▞██▚▚█▜';}62%,100%{content:'██▝▚▞██';}}
 @media(prefers-reduced-motion:reduce){#destination-glitch::before{animation:none;}}
 @media(max-width:700px){#verb-options,.destination-list{grid-auto-rows:44px;gap:.25rem;}#verb-options .verb-choice{min-height:44px;padding:.15rem .2rem;}.destination-list button,.destination-list a,.destination-unavailable{display:flex;align-items:center;min-height:44px;font-size:.875rem;}}
-@media(max-width:700px){#build-brief{bottom:calc(1.5rem + env(safe-area-inset-bottom));}#build-wip-note{font-size:.875rem;}}
+@media(max-width:700px){#build-wip-note{font-size:.875rem;}}
 
-/* ============ SĒZN ENTRY ============ */
+/* ============ PASSWORD ENTRY ============ */
 #sezn-layer{position:fixed;inset:0;z-index:620;display:grid;place-items:center;padding:1.5rem;visibility:hidden;pointer-events:none;}
 #sezn-layer.is-open{visibility:visible;pointer-events:all;}
 #sezn-backdrop{position:absolute;inset:0;border:0;background:rgba(11,11,10,0);cursor:none;transition:background .35s ease;}
@@ -547,8 +545,8 @@ body.asset-label-hover #cur{opacity:0;}
           <button type="button" data-work="Music Visual Playground">music visuals</button>
         </div>
         <div class="destination-list" data-for="build" hidden>
-          <a href="https://ni0j.github.io/prenopost/" target="_blank" rel="noopener noreferrer" data-brief="Rejection: now reusable." aria-label="pre:no:post, work in progress"><span class="build-link-title">pre:no:post*</span></a>
-          <a href="https://ni0j.github.io/beforegram/" target="_blank" rel="noopener noreferrer" data-brief="“I want to experience my future Instagram account from an audience’s perspective before I actually launch it.”" aria-label="beforegram, work in progress"><span class="build-link-title">beforegram*</span></a>
+          <a href="https://ni0j.github.io/prenopost/" data-access="prenopost" aria-label="pre:no:post, work in progress"><span class="build-link-title">pre:no:post*</span></a>
+          <a href="https://ni0j.github.io/beforegram/" data-access="beforegram" aria-label="beforegram, work in progress"><span class="build-link-title">beforegram*</span></a>
           <span class="destination-unavailable">ascii field</span>
         </div>
         <div class="destination-list" data-for="run" hidden>
@@ -556,7 +554,6 @@ body.asset-label-hover #cur{opacity:0;}
         </div>
       </div>
       <p id="build-wip-note">* work in progress</p>
-      <p id="build-brief" aria-live="polite" hidden></p>
     </div>
   </div>
   <div id="landing-scroll-track">
@@ -565,7 +562,7 @@ body.asset-label-hover #cur{opacity:0;}
 </section>
 
 <div id="sezn-layer" aria-hidden="true">
-  <button id="sezn-backdrop" type="button" aria-label="Close sēzn password window"></button>
+  <button id="sezn-backdrop" type="button" aria-label="Close password window"></button>
   <form id="sezn-dialog" role="dialog" aria-modal="true" aria-labelledby="sezn-title" aria-describedby="sezn-error">
     <header class="vision-head"><h2 class="vision-title" id="sezn-title">Enter sēzn</h2><button class="vision-close" id="sezn-close" type="button" aria-label="Back"><svg class="back-arrow-icon" viewBox="0 0 22 12" aria-hidden="true"><path d="M6 1 1 6l5 5M1 6h20"/></svg></button></header>
     <label for="sezn-password">Password</label>
@@ -1049,27 +1046,17 @@ landingHoverZone.addEventListener('pointerup',event=>{if(event.pointerType==='mo
 const verbChoices=[...document.querySelectorAll('#verb-options .verb-choice')];
 const destinationLists=[...document.querySelectorAll('.destination-list')];
 const destinationGlitch=document.getElementById('destination-glitch');
-const buildBrief=document.getElementById('build-brief');
 const buildLinks=[...document.querySelectorAll('.destination-list[data-for="build"] a')];
-function showBuildBrief(link){buildBrief.hidden=!link;buildBrief.textContent=link?.dataset.brief||'';}
-buildLinks.forEach(link=>{
-  link.addEventListener('mouseenter',()=>showBuildBrief(link));
-  link.addEventListener('focus',()=>showBuildBrief(link));
-  link.addEventListener('mouseleave',()=>showBuildBrief());
-  link.addEventListener('blur',()=>showBuildBrief());
-});
 function resetLandingVerb(){
   verbChoices.forEach(choice=>{choice.classList.remove('is-selected');choice.setAttribute('aria-pressed','false');});
   destinationLists.forEach(list=>list.hidden=true);
   destinationGlitch.hidden=false;
-  buildBrief.hidden=true;
 }
 verbChoices.forEach(choice=>choice.addEventListener('click',()=>{
   const selected=choice.dataset.verb;
   verbChoices.forEach(option=>{const active=option===choice;option.classList.toggle('is-selected',active);option.setAttribute('aria-pressed',String(active));});
   destinationLists.forEach(list=>list.hidden=list.dataset.for!==selected);
   destinationGlitch.hidden=true;
-  showBuildBrief();
 }));
 document.addEventListener('click',event=>{
   if(!views.landing.classList.contains('on')||!landingScrollComplete)return;
@@ -1091,7 +1078,6 @@ document.querySelector('[data-work="Music Visual Playground"]').addEventListener
   const index=ITEMS.findIndex(item=>item.title==='Music Visual Playground');
   openDetail(index);
 });
-document.getElementById('sezn-trigger').addEventListener('click',openSezn);
 
 /* LANDING SCROLL — build the existing glitch language progressively from the
    scroll position, then let the light field cover it before revealing the
@@ -1228,34 +1214,47 @@ landingScrollTrack.addEventListener('scroll',updateLandingScroll,{passive:true})
 window.addEventListener('resize',()=>{rebuildLandingScrollField();updateLandingScroll();});
 landingScrollReady=true;landingVisualEffect=lastLandingVisualEffect();rebuildLandingScrollField();updateLandingScroll();scheduleLandingIdleHint();
 
-const SEZN_PASSWORD_HASH='c356d8945226f7bf825a2f41dce3d8bf26e05c0f61afe42d3b9cd221469e72c2';
+const ACCESS_GATES={
+  sezn:{title:'Enter sēzn',hash:'c356d8945226f7bf825a2f41dce3d8bf26e05c0f61afe42d3b9cd221469e72c2',url:'./restaurants/index.html'},
+  prenopost:{title:'Enter pre:no:post',hash:'f14ee8b437638cf5ae6968abeae148c8fbef00e2709cb8d2361611541c4f249f',url:'https://ni0j.github.io/prenopost/'},
+  beforegram:{title:'Enter beforegram',hash:'f0c92b89fb4cf8932accd3812aaa58e71a60eea63b14a9241ee096b754164b86',url:'https://ni0j.github.io/beforegram/'}
+};
 const seznLayer=document.getElementById('sezn-layer');
 const seznDialog=document.getElementById('sezn-dialog');
+const seznTitle=document.getElementById('sezn-title');
 const seznPassword=document.getElementById('sezn-password');
 const seznError=document.getElementById('sezn-error');
-function openSezn(){
+let activeAccess=ACCESS_GATES.sezn,accessTrigger=document.getElementById('sezn-trigger');
+function openAccessGate(key,trigger){
+  activeAccess=ACCESS_GATES[key];accessTrigger=trigger;
+  seznTitle.textContent=activeAccess.title;
+  seznPassword.inputMode=key==='sezn'?'numeric':'text';
+  seznPassword.maxLength=key==='sezn'?4:64;
+  seznPassword.autocomplete=key==='sezn'?'current-password':'off';
   seznPassword.value='';seznError.textContent='';
   seznLayer.classList.add('is-open');seznLayer.setAttribute('aria-hidden','false');
   requestAnimationFrame(()=>seznPassword.focus());
 }
-function closeSezn(){
+function closeAccessGate(){
   seznLayer.classList.remove('is-open');seznLayer.setAttribute('aria-hidden','true');
-  seznPassword.value='';seznError.textContent='';document.getElementById('sezn-trigger').focus();
+  seznPassword.value='';seznError.textContent='';accessTrigger.focus();
 }
-document.getElementById('sezn-close').addEventListener('click',closeSezn);
-document.getElementById('sezn-backdrop').addEventListener('click',closeSezn);
+accessTrigger.addEventListener('click',event=>openAccessGate('sezn',event.currentTarget));
+buildLinks.forEach(link=>link.addEventListener('click',event=>{event.preventDefault();openAccessGate(link.dataset.access,link);}));
+document.getElementById('sezn-close').addEventListener('click',closeAccessGate);
+document.getElementById('sezn-backdrop').addEventListener('click',closeAccessGate);
 seznPassword.addEventListener('input',()=>{seznError.textContent='';});
 seznDialog.addEventListener('submit',async event=>{
   event.preventDefault();
   const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(seznPassword.value));
   const hash=Array.from(new Uint8Array(digest),byte=>byte.toString(16).padStart(2,'0')).join('');
-  if(hash===SEZN_PASSWORD_HASH){window.location.href='./restaurants/index.html';return;}
+  if(hash===activeAccess.hash){window.location.href=activeAccess.url;return;}
   seznError.textContent='Incorrect password. Try again.';
   seznPassword.value='';seznPassword.focus();
 });
 document.addEventListener('keydown',event=>{
   if(!seznLayer.classList.contains('is-open'))return;
-  if(event.key==='Escape'){closeSezn();return;}
+  if(event.key==='Escape'){closeAccessGate();return;}
   if(event.key!=='Tab')return;
   const controls=[document.getElementById('sezn-close'),seznPassword,seznDialog.querySelector('[type="submit"]')];
   if(event.shiftKey&&document.activeElement===controls[0]){event.preventDefault();controls[2].focus();}
