@@ -199,6 +199,7 @@ body.more-open #landing-video{opacity:.35;}
 .destination-list{display:grid;width:min(100%,8rem);grid-auto-rows:2rem;align-items:center;justify-items:start;gap:.5rem;perspective:320px;}
 .destination-list[hidden]{display:none;}
 .destination-list button,.destination-list a,.destination-unavailable{display:block;width:fit-content;padding:.1rem .2rem;color:var(--ink);background:transparent;border:0;font:inherit;font-size:var(--type-primary);text-decoration:underline;text-underline-offset:.16em;text-decoration-thickness:1px;white-space:nowrap;cursor:none;backface-visibility:hidden;}
+.destination-list[data-for="build"] > *{display:flex;height:100%;align-items:center;}
 .destination-list > :first-child:not(:only-child){transform:rotateX(-38deg) translateZ(-8px);opacity:.9;}
 .destination-list > :nth-child(2):not(:last-child){transform:translateZ(20px);}
 .destination-list > :last-child:not(:only-child){transform:rotateX(38deg) translateZ(-8px);opacity:.9;}
@@ -420,6 +421,56 @@ body.asset-label-hover #cur{opacity:0;}
 .more-cta,.map-choice,.map-open,.store-action,.more-section-body,.idx-hook,#store-intro p,.store-description,#detail-caption,.more-overline,.more-section-title,.more-foot,#landing-indicator .indicator-label,.map-kicker,.map-memory,#map-instructions,.idx-year,.idx-cat,.gw-meta,.store-price,.store-meta,.store-placeholder,.store-specs,#detail-year,#detail-sound,#detail-scroll-hint{font-size:var(--type-support);letter-spacing:normal;}
 .more-section-body a{font-size:var(--type-support);letter-spacing:normal;}
 
+/* ============ ASK EVERYTHING ============ */
+#ask-trigger{position:fixed;right:calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-right));bottom:calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-bottom));z-index:420;display:grid;grid-template-columns:auto 2.25rem;align-items:center;gap:1.2rem;min-width:13.75rem;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:.48rem .55rem .48rem 1.15rem;background:#0b0b0a;color:#f2f2f2;box-shadow:0 .9rem 2.8rem rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.12);font:700 .7rem/1 var(--font);letter-spacing:.055em;text-align:left;text-transform:uppercase;cursor:none;transition:transform var(--t-fast),box-shadow var(--t-fast),background var(--t-fast),color var(--t-fast);}
+#ask-trigger:hover,#ask-trigger:focus-visible{background:var(--accent);color:#0b0b0a;box-shadow:0 1.1rem 3.4rem rgba(0,0,0,.3),0 0 0 1px var(--accent);}
+#ask-trigger:active{transform:translateY(1px) scale(.98);}
+.ask-trigger-copy{display:grid;gap:.24rem;white-space:nowrap;}
+.ask-trigger-title{display:block;}
+.ask-trigger-meta{display:block;padding-left:.93rem;font-size:.55rem;font-weight:400;letter-spacing:.04em;opacity:.74;}
+.ask-trigger-icon{display:grid;width:2.25rem;height:2.25rem;place-items:center;border-radius:50%;background:var(--accent);color:#0b0b0a;font-size:1rem;line-height:1;transition:background var(--t-fast),color var(--t-fast),transform var(--t-fast);}
+#ask-trigger:hover .ask-trigger-icon,#ask-trigger:focus-visible .ask-trigger-icon{background:#0b0b0a;color:var(--accent);transform:rotate(-18deg);}
+.ask-trigger-status{display:inline-block;width:.38rem;height:.38rem;margin-right:.55rem;border-radius:50%;background:var(--accent);box-shadow:0 0 .7rem var(--accent);vertical-align:.08em;animation:askStatus 1.8s ease-in-out infinite;}
+@keyframes askStatus{0%,100%{opacity:.45;}50%{opacity:1;}}
+
+#ask-layer{position:fixed;inset:0;z-index:900;visibility:hidden;overflow:hidden;background:var(--bg);color:var(--ink);opacity:0;pointer-events:none;clip-path:circle(0 at calc(100% - 7rem) calc(100% - 4rem));transition:clip-path .85s cubic-bezier(.77,0,.18,1),opacity .2s ease,visibility 0s .85s;}
+#ask-layer.is-open{visibility:visible;opacity:1;pointer-events:all;clip-path:circle(150% at calc(100% - 7rem) calc(100% - 4rem));transition:clip-path .85s cubic-bezier(.77,0,.18,1),opacity .2s ease,visibility 0s;}
+#ask-scroll{height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;}
+#ask-scroll::-webkit-scrollbar{display:none;}
+.ask-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:calc(1.25rem + env(safe-area-inset-top)) calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-right)) 1rem calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-left));background:rgba(242,242,242,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
+.ask-product-label{display:flex;align-items:center;gap:.6rem;font-size:var(--type-support);letter-spacing:.04em;text-transform:uppercase;}
+.ask-product-label::before{content:'';width:.45rem;height:.45rem;background:var(--accent);border:1px solid var(--ink);}
+#ask-close{appearance:none;border:0;background:transparent;color:inherit;padding:.15rem .12rem;font:inherit;font-size:var(--type-primary);cursor:none;}
+#ask-close:hover,#ask-close:focus-visible{background:var(--ink);color:var(--bg);}
+.ask-editorial{width:min(100%,110rem);margin:0 auto;padding:clamp(3rem,8vw,8rem) clamp(1.2rem,4vw,4rem) clamp(6rem,14vw,12rem);}
+.ask-copy{font-size:clamp(2.5rem,6.15vw,7rem);font-weight:700;line-height:.95;letter-spacing:-.055em;text-align:center;text-wrap:pretty;}
+.ask-copy .ask-block{display:block;margin-bottom:.62em;}
+.ask-copy .ask-block:last-child{margin-bottom:0;}
+.ask-emoji{display:inline-grid;place-items:center;width:1.05em;height:1.05em;margin:0 .06em;border:1px solid currentColor;background:var(--accent);font-size:.72em;line-height:1;vertical-align:.08em;box-shadow:.12em .12em 0 var(--ink);transform:rotate(var(--emoji-turn,0deg));transition:transform var(--t-fast),box-shadow var(--t-fast);}
+.ask-emoji:nth-of-type(2n){--emoji-turn:5deg;}
+.ask-emoji:nth-of-type(3n){--emoji-turn:-6deg;}
+.ask-emphasis{background:var(--ink);color:var(--bg);padding:0 .08em;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+.ask-nowrap{white-space:nowrap;}
+.ask-one{display:inline-block;padding:0 .1em;border:1px solid currentColor;background:var(--accent);box-shadow:.08em .08em 0 var(--ink);line-height:.9;white-space:nowrap;transform:rotate(-3deg);}
+.ask-one-alt{transform:rotate(3deg);}
+.ask-email{display:inline-block;color:inherit;text-decoration:none;}
+.ask-email .ask-emoji{--emoji-turn:-7deg;}
+.ask-email:hover .ask-emoji,.ask-email:focus-visible .ask-emoji{box-shadow:.18em .18em 0 var(--ink);transform:translateY(-.08em) rotate(var(--emoji-turn,0deg));}
+.ask-email:active .ask-emoji{transform:translateY(.04em) rotate(var(--emoji-turn,0deg));}
+body.ask-open #ask-trigger{opacity:0;pointer-events:none;}
+
+@media(max-width:700px){
+  #ask-trigger{right:calc(1rem + env(safe-area-inset-right));bottom:calc(1rem + env(safe-area-inset-bottom));grid-template-columns:auto 2rem;gap:.7rem;min-width:0;padding:.45rem .42rem .45rem .9rem;font-size:.625rem;}
+  .ask-trigger-meta{font-size:.5rem;}
+  .ask-trigger-icon{width:2rem;height:2rem;}
+  .ask-head{padding-left:calc(1rem + env(safe-area-inset-left));padding-right:calc(1rem + env(safe-area-inset-right));}
+  .ask-editorial{padding-top:2.5rem;padding-left:1rem;padding-right:1rem;}
+  .ask-copy{font-size:clamp(2.15rem,11.4vw,4rem);line-height:.98;letter-spacing:-.052em;}
+  .ask-copy .ask-block{margin-bottom:.8em;}
+}
+@media(prefers-reduced-motion:reduce){#ask-layer,#ask-layer.is-open{clip-path:none;transition:opacity .01ms linear,visibility 0s;}#ask-trigger,.ask-trigger-icon{transition:none;}.ask-trigger-status{animation:none;opacity:1;}}
+@media(prefers-reduced-transparency:reduce){.ask-head{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none;}}
+
 #load{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000;transition:opacity .5s;}
 #load.off{opacity:0;pointer-events:none;}
 .ld{width:4px;height:4px;background:var(--ink);animation:sq 1.2s ease-in-out infinite;}
@@ -512,6 +563,34 @@ body.asset-label-hover #cur{opacity:0;}
     <footer class="more-foot"><span>© 2026 Nio Jin.</span></footer>
   </aside>
 </div>
+
+<button id="ask-trigger" type="button" aria-controls="ask-layer" aria-expanded="false">
+  <span class="ask-trigger-copy">
+    <span class="ask-trigger-title"><span class="ask-trigger-status" aria-hidden="true"></span>Ask everything</span>
+    <span class="ask-trigger-meta">Know me in 3 min</span>
+  </span>
+  <span class="ask-trigger-icon" aria-hidden="true">+</span>
+</button>
+<section id="ask-layer" role="dialog" aria-modal="true" aria-labelledby="ask-title" aria-hidden="true">
+  <div id="ask-scroll">
+    <header class="ask-head">
+      <p class="ask-product-label">Nio intelligence</p>
+      <button id="ask-close" type="button">Close</button>
+    </header>
+    <article class="ask-editorial">
+      <h1 id="ask-title" class="sr-only">About Nio Jin</h1>
+      <p class="ask-copy">
+        <span class="ask-block">I’m a Communication Design graduate from Parsons, but I’ve never really thought of myself as a designer in one specific field.</span>
+        <span class="ask-block">I’ve moved between visual design, interaction, motion, creative technology, perception, economics, religious studies, cognitive science, and whatever else happened to be useful for the problem in front of me.</span>
+        <span class="ask-block">I tend to notice small things that <span class="ask-nowrap ask-emphasis">feel off.</span> When something bothers me, I want to figure out why—and if I can, make something that might actually solve it.</span>
+        <span class="ask-block"><span class="ask-emphasis">Design is one of the tools I use to do that.</span> I might make information clearer, build an interaction, or just build the thing itself. I use whatever tools the problem calls for. <span class="ask-emphasis">The tool is rarely the point.</span></span>
+        <span class="ask-block">So if you’re looking for someone who fits perfectly into <span class="ask-one">one</span> specific field, with <span class="ask-one ask-one-alt">one</span> job title and <span class="ask-one">one</span> predictable skill set, I might not be the person you’re looking for.</span>
+        <span class="ask-block">But if you’re looking for a human being who is curious about what you’re building, notices things, asks questions, connects unrelated ideas, and wants to figure out what could be made better—</span>
+        <span class="ask-block">then maybe <span class="ask-emphasis">we should talk.</span> <a class="ask-email" href="mailto:niojin.noi@gmail.com?subject=Project%20inquiry" aria-label="Email Nio Jin"><span class="ask-emoji" aria-hidden="true">💬</span></a></span>
+      </p>
+    </article>
+  </div>
+</section>
 
 <!-- ============ LANDING ============ -->
 <section id="view-landing" class="view on">
@@ -814,6 +893,10 @@ const views={landing:document.getElementById('view-landing'),song:document.getEl
 const STORE_ACCESS_ENABLED=false;
 const globalVersion=document.getElementById('global-version');
 const moreLayer=document.getElementById('more-layer');
+const askTrigger=document.getElementById('ask-trigger');
+const askLayer=document.getElementById('ask-layer');
+const askClose=document.getElementById('ask-close');
+const askScroll=document.getElementById('ask-scroll');
 const workModeNav=document.getElementById('work-mode-nav');
 let prevView='landing';
 let landingScrollReady=false,landingScrollComplete=false;
@@ -983,15 +1066,33 @@ function openMore(){
 function closeMore(){
   if(!moreLayer)return;moreLayer.classList.remove('is-open');moreLayer.setAttribute('aria-hidden','true');globalVersion.setAttribute('aria-expanded','false');document.body.classList.remove('more-open');
 }
+function openAsk(){
+  closeMore();
+  askScroll.scrollTop=0;
+  askLayer.classList.add('is-open');askLayer.setAttribute('aria-hidden','false');askTrigger.setAttribute('aria-expanded','true');document.body.classList.add('ask-open');
+  requestAnimationFrame(()=>askClose.focus());
+}
+function closeAsk(){
+  if(!askLayer.classList.contains('is-open'))return;
+  askLayer.classList.remove('is-open');askLayer.setAttribute('aria-hidden','true');askTrigger.setAttribute('aria-expanded','false');document.body.classList.remove('ask-open');
+  askTrigger.focus();
+}
 globalVersion.addEventListener('click',openMore);
 document.getElementById('more-close').addEventListener('click',closeMore);
 document.getElementById('more-backdrop').addEventListener('click',closeMore);
+askTrigger.addEventListener('click',openAsk);
+askClose.addEventListener('click',closeAsk);
 document.querySelectorAll('.more-nav-link').forEach(link=>link.addEventListener('click',()=>{
   const target=link.dataset.target;
   closeMore();
   transitionFromLanding(target);
 }));
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&moreLayer.classList.contains('is-open')){closeMore();globalVersion.focus();}});
+document.addEventListener('keydown',event=>{
+  if(!askLayer.classList.contains('is-open'))return;
+  if(event.key==='Escape'){closeAsk();return;}
+  if(event.key==='Tab'){event.preventDefault();askClose.focus();}
+});
 showView('landing');
 
 /* LANDING MENU */
