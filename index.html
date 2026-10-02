@@ -44,15 +44,25 @@ html.site-warning-pending body>:not(#photosensitivity-gate):not(script){visibili
 .photosensitivity-actions button:hover,.photosensitivity-actions button:focus-visible{background:#f2f2f2;color:#000;}
 
 /* ============ CUSTOM CURSOR ============ */
-#cur{position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;}
+#cur{position:fixed;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:transform .22s cubic-bezier(.16,1,.3,1);}
 #cur-h{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);height:1px;width:13px;background:#fff;transition:width .18s,opacity .18s;}
 #cur-v{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:1px;height:13px;background:#fff;transition:height .18s,opacity .18s;}
 #cur.pressed #cur-h{width:22px;} #cur.pressed #cur-v{height:22px;}
 #cur.hover #cur-h{width:9px;opacity:.5;} #cur.hover #cur-v{height:9px;opacity:.5;}
-#cur-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-90deg);width:28px;height:28px;pointer-events:none;overflow:visible;}
+#cur-ring{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-90deg);width:28px;height:28px;pointer-events:none;overflow:visible;transition:transform .22s cubic-bezier(.16,1,.3,1);}
 #cur-ring circle{fill:none;stroke:#fff;stroke-width:1;stroke-linecap:round;r:12;cx:14;cy:14;stroke-dasharray:75.4;stroke-dashoffset:75.4;opacity:0;transition:stroke-dashoffset .52s cubic-bezier(.4,0,.2,1),opacity .2s;}
 #cur.hover #cur-ring circle{stroke-dashoffset:0;opacity:1;}
 #cur.ring-out #cur-ring circle{stroke-dashoffset:-75.4;opacity:0;transition:stroke-dashoffset .42s cubic-bezier(.4,0,.2,1),opacity .3s .15s;}
+body.cursor-read #cur-h{width:30px;}
+body.cursor-read #cur-v{height:5px;}
+body.cursor-read #cur-ring{transform:translate(-50%,-50%) rotate(-90deg) scale(1.55,.68);}
+body.cursor-open #cur{transform:translate(-50%,-50%) rotate(45deg) scale(1.08);}
+body.cursor-open #cur-ring{transform:translate(-50%,-50%) rotate(-90deg) scale(1.18);}
+body.cursor-close #cur{transform:translate(-50%,-50%) rotate(45deg) scale(.78);}
+body.cursor-close #cur-ring{transform:translate(-50%,-50%) rotate(-90deg) scale(.78);}
+body.cursor-contact #cur-h{width:34px;}
+body.cursor-contact #cur-v{height:3px;}
+body.cursor-contact #cur-ring{transform:translate(-50%,-50%) rotate(-90deg) scale(1.28,.7);}
 .trail{position:fixed;pointer-events:none;z-index:9998;background:#fff;transform:translate(-50%,-50%);mix-blend-mode:difference;image-rendering:pixelated;will-change:left,top,opacity;}
 
 /* ============ SHARED VIEW SHELL ============ */
@@ -336,6 +346,7 @@ body.more-open #landing-video{opacity:.35;}
 .gw-tags{display:flex;gap:.3rem;flex-wrap:wrap;min-width:0;margin-top:.3rem;}
 .gw-tag{display:inline-block;border:1px solid var(--line);padding:.18rem .32rem;line-height:1;white-space:nowrap;}
 .gw-card:hover .gw-title{background:var(--ink);color:var(--bg);padding:0 .12em;}
+.gw-card.is-context-match .gw-title,.gw-card.is-context-match:hover .gw-title{background:var(--accent);color:var(--ink);padding:0 .12em;}
 .asset-loader{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink);font-size:var(--type-support);pointer-events:none;}
 .asset-loader::before{content:'Loading…';}
 .gw-media.is-loaded .asset-loader,.detail-slide.is-loaded .asset-loader{display:none;}
@@ -422,13 +433,17 @@ body.asset-label-hover #cur{opacity:0;}
 .more-section-body a{font-size:var(--type-support);letter-spacing:normal;}
 
 /* ============ ASK EVERYTHING ============ */
-#ask-trigger{position:fixed;right:calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-right));bottom:calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-bottom));z-index:420;display:grid;grid-template-columns:auto 2.25rem;align-items:center;gap:1.2rem;min-width:13.75rem;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:.48rem .55rem .48rem 1.15rem;background:#0b0b0a;color:#f2f2f2;box-shadow:0 .9rem 2.8rem rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.12);font:700 .7rem/1 var(--font);letter-spacing:.055em;text-align:left;text-transform:uppercase;cursor:none;transition:transform var(--t-fast),box-shadow var(--t-fast),background var(--t-fast),color var(--t-fast);}
+#ask-trigger{position:fixed;right:calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-right));bottom:calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-bottom));z-index:420;display:grid;grid-template-columns:auto 2.25rem;align-items:center;gap:1.2rem;min-width:13.75rem;border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:.48rem .55rem .48rem 1.15rem;background:#0b0b0a;color:#f2f2f2;box-shadow:0 .9rem 2.8rem rgba(0,0,0,.22),inset 0 1px rgba(255,255,255,.12);font:700 .7rem/1 var(--font);letter-spacing:.055em;text-align:left;text-transform:uppercase;cursor:none;opacity:1;visibility:visible;transform:translateY(0) scale(1);transition:transform .64s cubic-bezier(.16,1,.3,1),box-shadow var(--t-fast),background var(--t-fast),color var(--t-fast),opacity .24s ease,visibility 0s;}
 #ask-trigger:hover,#ask-trigger:focus-visible{background:var(--accent);color:#0b0b0a;box-shadow:0 1.1rem 3.4rem rgba(0,0,0,.3),0 0 0 1px var(--accent);}
 #ask-trigger:active{transform:translateY(1px) scale(.98);}
-.ask-trigger-copy{display:grid;gap:.24rem;white-space:nowrap;}
+#ask-trigger.is-intro-hidden{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(1.5rem) scale(.96);}
+#ask-trigger.is-timeout-hidden{opacity:0;visibility:hidden;pointer-events:none;transform:translateY(calc(100% + 2rem)) scale(.96);transition:transform .42s cubic-bezier(.4,0,.2,1),opacity .24s ease,visibility 0s .42s;}
+.ask-trigger-copy{display:grid;gap:.24rem;white-space:nowrap;opacity:1;transform:translateX(0);transition:opacity .28s ease .1s,transform .54s cubic-bezier(.16,1,.3,1) .08s;}
+#ask-trigger.is-intro-hidden .ask-trigger-copy{opacity:0;transform:translateX(.55rem);transition-delay:0s;}
 .ask-trigger-title{display:block;}
 .ask-trigger-meta{display:block;padding-left:.93rem;font-size:.55rem;font-weight:400;letter-spacing:.04em;opacity:.74;}
-.ask-trigger-icon{display:grid;width:2.25rem;height:2.25rem;place-items:center;border-radius:50%;background:var(--accent);color:#0b0b0a;font-size:1rem;line-height:1;transition:background var(--t-fast),color var(--t-fast),transform var(--t-fast);}
+.ask-trigger-icon{display:grid;width:2.25rem;height:2.25rem;place-items:center;border-radius:50%;background:var(--accent);color:#0b0b0a;font-size:1rem;line-height:1;transform:rotate(0) scale(1);transition:background var(--t-fast),color var(--t-fast),transform .58s cubic-bezier(.16,1,.3,1) .06s;}
+#ask-trigger.is-intro-hidden .ask-trigger-icon{transform:rotate(-38deg) scale(.72);transition-delay:0s;}
 #ask-trigger:hover .ask-trigger-icon,#ask-trigger:focus-visible .ask-trigger-icon{background:#0b0b0a;color:var(--accent);transform:rotate(-18deg);}
 .ask-trigger-status{display:inline-block;width:.38rem;height:.38rem;margin-right:.55rem;border-radius:50%;background:var(--accent);box-shadow:0 0 .7rem var(--accent);vertical-align:.08em;animation:askStatus 1.8s ease-in-out infinite;}
 @keyframes askStatus{0%,100%{opacity:.45;}50%{opacity:1;}}
@@ -438,25 +453,77 @@ body.asset-label-hover #cur{opacity:0;}
 #ask-scroll{height:100%;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none;}
 #ask-scroll::-webkit-scrollbar{display:none;}
 .ask-head{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:calc(1.25rem + env(safe-area-inset-top)) calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-right)) 1rem calc(clamp(1.5rem,4vw,3rem) + env(safe-area-inset-left));background:rgba(242,242,242,.92);border-bottom:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
-.ask-product-label{display:flex;align-items:center;gap:.6rem;font-size:var(--type-support);letter-spacing:.04em;text-transform:uppercase;}
-.ask-product-label::before{content:'';width:.45rem;height:.45rem;background:var(--accent);border:1px solid var(--ink);}
+.ask-product-label{font-size:var(--type-support);letter-spacing:.04em;text-transform:uppercase;}
 #ask-close{appearance:none;border:0;background:transparent;color:inherit;padding:.15rem .12rem;font:inherit;font-size:var(--type-primary);cursor:none;}
 #ask-close:hover,#ask-close:focus-visible{background:var(--ink);color:var(--bg);}
-.ask-editorial{width:min(100%,110rem);margin:0 auto;padding:clamp(3rem,8vw,8rem) clamp(1.2rem,4vw,4rem) clamp(6rem,14vw,12rem);}
-.ask-copy{font-size:clamp(2.5rem,6.15vw,7rem);font-weight:700;line-height:.95;letter-spacing:-.055em;text-align:center;text-wrap:pretty;}
-.ask-copy .ask-block{display:block;margin-bottom:.62em;}
+.ask-chat{display:grid;min-height:calc(100dvh - 4.4rem);place-items:center;padding:clamp(2rem,6vw,5rem) clamp(1rem,4vw,3rem);transition:opacity .22s ease,transform .45s cubic-bezier(.16,1,.3,1);}
+.ask-chat-inner{width:min(100%,86rem);}
+.ask-form{display:grid;grid-template-columns:minmax(0,1fr) 3.5rem;align-items:center;gap:.75rem;border:2px solid var(--ink);border-radius:999px;padding:.65rem;background:#fafafa;box-shadow:0 1.3rem 3.2rem rgba(37,37,38,.1);}
+#ask-input{min-width:0;border:0;background:transparent;color:var(--ink);padding:1rem 1.35rem;font:inherit;font-size:clamp(1rem,1.55vw,1.45rem);line-height:1.3;outline:0;}
+#ask-input::placeholder{color:#656a77;opacity:1;}
+.ask-send{appearance:none;display:grid;width:3.5rem;height:3.5rem;place-items:center;align-self:center;border:0;border-radius:50%;padding:0 0 .08em;background:var(--ink);color:var(--bg);font:400 1.65rem/1 var(--font);cursor:none;transition:background var(--t-fast),color var(--t-fast),transform var(--t-fast);}
+.ask-send:hover,.ask-send:focus-visible{background:var(--accent);color:var(--ink);transform:scale(1.04);}
+.ask-send:active{transform:translateY(1px) scale(.98);}
+.ask-transcript{display:none;width:min(100%,76rem);min-height:calc(100dvh - 4.4rem);margin:0 auto;padding:clamp(5rem,11vw,9rem) clamp(1rem,4vw,3rem) clamp(8rem,14vw,11rem);}
+.ask-user-message{width:max-content;max-width:72%;margin-left:auto;border-radius:999px;padding:1rem 1.35rem;background:#e9eaed;color:var(--ink);font-size:var(--type-primary);line-height:1.35;overflow-wrap:anywhere;}
+.ask-read{display:none;}
+.ask-agent-row{display:block;max-width:52rem;margin-top:clamp(4rem,9vw,7rem);}
+.ask-agent-mark{display:none;}
+.ask-agent-bubble{min-height:3rem;padding:0;color:var(--ink);font-size:var(--type-primary);line-height:1.55;}
+.ask-loading{display:flex;align-items:center;gap:.3rem;height:1.45rem;}
+.ask-loading span{width:.34rem;height:.34rem;border-radius:50%;background:var(--ink);animation:askThinking .9s ease-in-out infinite;}
+.ask-loading span:nth-child(2){animation-delay:.14s;}.ask-loading span:nth-child(3){animation-delay:.28s;}
+@keyframes askThinking{0%,100%{opacity:.3;transform:translateY(0);}50%{opacity:1;transform:translateY(-.2rem);}}
+.ask-answer{display:none;white-space:pre-wrap;}
+.ask-conversation.is-typing .ask-loading{display:none;}
+.ask-conversation.is-typing .ask-answer{display:block;}
+.ask-answer::after{content:'';display:inline-block;width:.36em;height:1em;margin-left:.12em;background:var(--ink);vertical-align:-.12em;animation:askCaret .7s steps(1,end) infinite;}
+.ask-conversation.is-answered .ask-answer::after{display:none;}
+.ask-scroll-cue{appearance:none;display:grid;width:4rem;height:4rem;place-items:center;margin:clamp(6rem,16vh,9rem) auto 0;border:0;padding:0;background:transparent;color:var(--ink);cursor:none;opacity:0;visibility:hidden;transform:translateY(-.25rem);transition:opacity .45s cubic-bezier(.32,.72,0,1),visibility 0s .45s,transform .55s cubic-bezier(.32,.72,0,1);}
+.ask-conversation.is-answered .ask-scroll-cue{visibility:visible;opacity:.72;transform:translateY(0);transition-delay:0s;}
+.ask-scroll-cue:hover,.ask-scroll-cue:focus-visible{opacity:1;transform:translateY(.2rem);}
+.ask-scroll-signal{position:relative;display:block;width:1.5rem;height:3.5rem;overflow:hidden;-webkit-mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 82%,transparent);mask-image:linear-gradient(to bottom,transparent,#000 18%,#000 82%,transparent);}
+.ask-scroll-signal::before{content:'';position:absolute;top:.15rem;bottom:.15rem;left:50%;width:1px;background:linear-gradient(to bottom,transparent,currentColor 22%,currentColor 78%,transparent);opacity:.26;transform:translateX(-50%);}
+.ask-scroll-signal::after{content:'';position:absolute;bottom:.2rem;left:50%;width:.36rem;height:.36rem;border:1px solid currentColor;border-radius:50%;opacity:.18;transform:translate(-50%,-50%) scale(.45);animation:askSignalReceive 2.15s cubic-bezier(.32,.72,0,1) infinite;}
+.ask-scroll-signal span{position:absolute;top:0;left:50%;width:1px;height:.62rem;border-radius:999px;background:currentColor;opacity:0;box-shadow:0 0 .65rem rgba(37,37,38,.42);transform:translate(-50%,-.7rem) scaleY(.65);animation:askSignalFlow 2.15s cubic-bezier(.32,.72,0,1) infinite;}
+.ask-scroll-signal span:nth-child(2){animation-delay:.7s;}
+.ask-scroll-signal span:nth-child(3){animation-delay:1.4s;}
+.ask-conversation.is-revealed .ask-chat{position:fixed;right:0;bottom:0;left:0;z-index:4;min-height:0;padding:1rem clamp(1rem,4vw,3rem) calc(1rem + env(safe-area-inset-bottom));background:var(--bg);box-shadow:0 -1.2rem 3rem rgba(242,242,242,.96);}
+.ask-conversation.is-revealed.has-statement-started .ask-chat{opacity:0;transform:translateY(calc(100% + 2rem));pointer-events:none;}
+.ask-conversation.is-revealed .ask-transcript{display:block;}
+@keyframes askCaret{0%,48%{opacity:1;}49%,100%{opacity:0;}}
+@keyframes askSignalFlow{0%{opacity:0;transform:translate(-50%,-.7rem) scaleY(.65);}18%{opacity:.9;}72%{opacity:.5;}100%{opacity:0;transform:translate(-50%,3.2rem) scaleY(.2);}}
+@keyframes askSignalReceive{0%,76%{opacity:.12;transform:translate(-50%,-50%) scale(.45);}90%{opacity:.38;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(1.55);}}
+.ask-editorial{display:none;width:min(100%,110rem);margin:0 auto;padding:clamp(5rem,11vw,10rem) clamp(1.2rem,4vw,4rem) clamp(14rem,18vw,17rem);}
+.ask-conversation.is-answered .ask-editorial{display:block;}
+.ask-copy{font-size:clamp(2.5rem,6.15vw,7rem);letter-spacing:-.055em;text-align:center;text-wrap:pretty;}
+.ask-copy .ask-block{display:block;margin-bottom:.62em;opacity:1;transition:opacity .22s ease;}
 .ask-copy .ask-block:last-child{margin-bottom:0;}
+.ask-copy.has-reading-focus .ask-block{opacity:.66;}
+.ask-copy.has-reading-focus .ask-block.is-current{opacity:1;}
 .ask-emoji{display:inline-grid;place-items:center;width:1.05em;height:1.05em;margin:0 .06em;border:1px solid currentColor;background:var(--accent);font-size:.72em;line-height:1;vertical-align:.08em;box-shadow:.12em .12em 0 var(--ink);transform:rotate(var(--emoji-turn,0deg));transition:transform var(--t-fast),box-shadow var(--t-fast);}
 .ask-emoji:nth-of-type(2n){--emoji-turn:5deg;}
 .ask-emoji:nth-of-type(3n){--emoji-turn:-6deg;}
-.ask-emphasis{background:var(--ink);color:var(--bg);padding:0 .08em;box-decoration-break:clone;-webkit-box-decoration-break:clone;}
+.ask-rabbit:hover,.ask-rabbit:active{transform:translateY(.12em) rotate(var(--emoji-turn,0deg));}
+.ask-wrench:hover,.ask-wrench:active{transform:rotate(12deg);}
+.ask-emphasis{background:var(--ink);color:var(--bg);padding:0 .08em;box-decoration-break:clone;-webkit-box-decoration-break:clone;clip-path:inset(0 100% 0 0);transition:clip-path .32s cubic-bezier(.16,1,.3,1);}
+.ask-emphasis.is-revealed{clip-path:inset(0);}
 .ask-nowrap{white-space:nowrap;}
-.ask-one{display:inline-block;padding:0 .1em;border:1px solid currentColor;background:var(--accent);box-shadow:.08em .08em 0 var(--ink);line-height:.9;white-space:nowrap;transform:rotate(-3deg);}
-.ask-one-alt{transform:rotate(3deg);}
+.ask-small{display:inline-block;font-size:.56em;line-height:1;letter-spacing:-.015em;vertical-align:baseline;transition:font-size .34s cubic-bezier(.2,1.35,.35,1),letter-spacing .34s cubic-bezier(.2,1.35,.35,1);}
+.ask-small:hover,.ask-small:active{font-size:1em;letter-spacing:-.055em;}
+.ask-one{--ask-turn:-3deg;display:inline-block;padding:0 .1em;border:1px solid currentColor;background:var(--accent);box-shadow:.08em .08em 0 var(--ink);line-height:.9;white-space:nowrap;opacity:0;transform:translateY(.16em) rotate(var(--ask-turn)) scale(.9);transition:opacity .18s ease,transform .28s cubic-bezier(.16,1,.3,1);}
+.ask-one-alt{--ask-turn:3deg;}
+.ask-never{--ask-turn:4deg;}
+.ask-one.is-revealed{opacity:1;transform:translateY(0) rotate(var(--ask-turn)) scale(1);}
 .ask-email{display:inline-block;color:inherit;text-decoration:none;}
+.ask-email-phrase{display:inline;}
 .ask-email .ask-emoji{--emoji-turn:-7deg;}
 .ask-email:hover .ask-emoji,.ask-email:focus-visible .ask-emoji{box-shadow:.18em .18em 0 var(--ink);transform:translateY(-.08em) rotate(var(--emoji-turn,0deg));}
 .ask-email:active .ask-emoji{transform:translateY(.04em) rotate(var(--emoji-turn,0deg));}
+.ask-heart{--ask-turn:-4deg;display:block;width:max-content;margin:.28em auto 0;padding:.02em .14em;border:1px solid currentColor;background:var(--accent);box-shadow:.1em .1em 0 var(--ink);font-size:.55em;line-height:.9;letter-spacing:-.02em;opacity:0;transform:translateY(.18em) rotate(var(--ask-turn)) scale(.9);transition:opacity .18s ease,transform .28s cubic-bezier(.16,1,.3,1);}
+.ask-heart.is-revealed{opacity:1;transform:translateY(0) rotate(var(--ask-turn)) scale(1);}
+.ask-heart:hover,.ask-heart:active{animation:askHeartBeat .44s cubic-bezier(.16,1,.3,1);}
+@keyframes askHeartBeat{0%,100%{transform:rotate(var(--ask-turn)) scale(1);}35%{transform:rotate(var(--ask-turn)) scale(1.14);}62%{transform:rotate(var(--ask-turn)) scale(1);}82%{transform:rotate(var(--ask-turn)) scale(1.08);}}
 body.ask-open #ask-trigger{opacity:0;pointer-events:none;}
 
 @media(max-width:700px){
@@ -464,11 +531,19 @@ body.ask-open #ask-trigger{opacity:0;pointer-events:none;}
   .ask-trigger-meta{font-size:.5rem;}
   .ask-trigger-icon{width:2rem;height:2rem;}
   .ask-head{padding-left:calc(1rem + env(safe-area-inset-left));padding-right:calc(1rem + env(safe-area-inset-right));}
-  .ask-editorial{padding-top:2.5rem;padding-left:1rem;padding-right:1rem;}
+  .ask-chat{min-height:calc(100dvh - 4rem);padding:2rem 1rem;}
+  .ask-form{grid-template-columns:minmax(0,1fr) 3rem;padding:.5rem;}
+  #ask-input{padding:.8rem .65rem;font-size:1rem;}
+  .ask-send{width:3rem;height:3rem;font-size:1.35rem;}
+  .ask-conversation.is-revealed .ask-chat{padding:.7rem 1rem calc(.7rem + env(safe-area-inset-bottom));}
+  .ask-transcript{min-height:calc(100dvh - 4rem);padding-top:4.5rem;}
+  .ask-user-message{max-width:88%;}
+  .ask-agent-row{margin-top:4rem;}
+  .ask-editorial{padding-top:5rem;padding-right:1rem;padding-bottom:10rem;padding-left:1rem;}
   .ask-copy{font-size:clamp(2.15rem,11.4vw,4rem);line-height:.98;letter-spacing:-.052em;}
   .ask-copy .ask-block{margin-bottom:.8em;}
 }
-@media(prefers-reduced-motion:reduce){#ask-layer,#ask-layer.is-open{clip-path:none;transition:opacity .01ms linear,visibility 0s;}#ask-trigger,.ask-trigger-icon{transition:none;}.ask-trigger-status{animation:none;opacity:1;}}
+@media(prefers-reduced-motion:reduce){#ask-layer,#ask-layer.is-open{clip-path:none;transition:opacity .01ms linear,visibility 0s;}#ask-trigger,.ask-trigger-copy,.ask-trigger-icon,.ask-chat,.ask-transcript,.ask-editorial{transition:none;}.ask-trigger-status,.ask-loading span,.ask-answer::after,.ask-scroll-signal::after,.ask-scroll-signal span,.ask-heart:hover,.ask-heart:active{animation:none;}.ask-trigger-status{opacity:1;}.ask-scroll-signal::after{opacity:.25;transform:translate(-50%,-50%) scale(.7);}.ask-scroll-signal span{display:none;}.ask-scroll-signal span:first-child{display:block;top:50%;opacity:.72;transform:translate(-50%,-50%);}.ask-emphasis{clip-path:none;}.ask-one,.ask-heart{opacity:1;}}
 @media(prefers-reduced-transparency:reduce){.ask-head{background:var(--bg);backdrop-filter:none;-webkit-backdrop-filter:none;}}
 
 #load{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000;transition:opacity .5s;}
@@ -545,6 +620,7 @@ body.ask-open #ask-trigger{opacity:0;pointer-events:none;}
               <div class="more-section-body">Perception, experience, and friction.
 <br>(the medium is whatever works)</div>
             </section>
+            <section class="more-section"><h4 class="more-section-title"></h4><div class="more-section-body"><button id="more-ask" type="button" aria-controls="ask-layer">Get to know me in 1 min</button></div></section>
         </div>
       
       <div class="more-directory">
@@ -564,31 +640,53 @@ body.ask-open #ask-trigger{opacity:0;pointer-events:none;}
   </aside>
 </div>
 
-<button id="ask-trigger" type="button" aria-controls="ask-layer" aria-expanded="false">
+<button id="ask-trigger" class="is-intro-hidden" type="button" aria-controls="ask-layer" aria-expanded="false" aria-hidden="true" disabled>
   <span class="ask-trigger-copy">
     <span class="ask-trigger-title"><span class="ask-trigger-status" aria-hidden="true"></span>Ask everything</span>
-    <span class="ask-trigger-meta">Know me in 3 min</span>
+    <span class="ask-trigger-meta">Get to know me in 1 min</span>
   </span>
   <span class="ask-trigger-icon" aria-hidden="true">+</span>
 </button>
 <section id="ask-layer" role="dialog" aria-modal="true" aria-labelledby="ask-title" aria-hidden="true">
   <div id="ask-scroll">
     <header class="ask-head">
-      <p class="ask-product-label">Nio intelligence</p>
+      <p class="ask-product-label">Ask me anything</p>
       <button id="ask-close" type="button">Close</button>
     </header>
-    <article class="ask-editorial">
-      <h1 id="ask-title" class="sr-only">About Nio Jin</h1>
-      <p class="ask-copy">
-        <span class="ask-block">I’m a Communication Design graduate from Parsons, but I’ve never really thought of myself as a designer in one specific field.</span>
-        <span class="ask-block">I’ve moved between visual design, interaction, motion, creative technology, perception, economics, religious studies, cognitive science, and whatever else happened to be useful for the problem in front of me.</span>
-        <span class="ask-block">I tend to notice small things that <span class="ask-nowrap ask-emphasis">feel off.</span> When something bothers me, I want to figure out why—and if I can, make something that might actually solve it.</span>
-        <span class="ask-block"><span class="ask-emphasis">Design is one of the tools I use to do that.</span> I might make information clearer, build an interaction, or just build the thing itself. I use whatever tools the problem calls for. <span class="ask-emphasis">The tool is rarely the point.</span></span>
-        <span class="ask-block">So if you’re looking for someone who fits perfectly into <span class="ask-one">one</span> specific field, with <span class="ask-one ask-one-alt">one</span> job title and <span class="ask-one">one</span> predictable skill set, I might not be the person you’re looking for.</span>
-        <span class="ask-block">But if you’re looking for a human being who is curious about what you’re building, notices things, asks questions, connects unrelated ideas, and wants to figure out what could be made better—</span>
-        <span class="ask-block">then maybe <span class="ask-emphasis">we should talk.</span> <a class="ask-email" href="mailto:niojin.noi@gmail.com?subject=Project%20inquiry" aria-label="Email Nio Jin"><span class="ask-emoji" aria-hidden="true">💬</span></a></span>
-      </p>
-    </article>
+    <div class="ask-conversation">
+      <section class="ask-chat" aria-labelledby="ask-title">
+        <div class="ask-chat-inner">
+          <h1 id="ask-title" class="sr-only">Ask me anything</h1>
+          <form class="ask-form" id="ask-form">
+            <label class="sr-only" for="ask-input">Ask me anything</label>
+            <input id="ask-input" name="question" type="text" autocomplete="off" maxlength="280" placeholder="Try “Tell me about yourself”">
+            <button class="ask-send" type="submit" aria-label="Send question">+</button>
+          </form>
+        </div>
+      </section>
+      <div class="ask-transcript" aria-live="polite" aria-hidden="true">
+        <p class="ask-user-message"></p>
+        <p class="ask-read">read</p>
+        <div class="ask-agent-row">
+          <span class="ask-agent-mark" aria-hidden="true">N</span>
+          <div class="ask-agent-bubble">
+            <span class="ask-loading" aria-label="Thinking"><span></span><span></span><span></span></span>
+            <span class="ask-answer" aria-hidden="true"></span>
+            <span class="ask-answer-sr sr-only"></span>
+          </div>
+        </div>
+        <button class="ask-scroll-cue" type="button" aria-label="Continue to statement"><span class="ask-scroll-signal" aria-hidden="true"><span></span><span></span><span></span></span></button>
+      </div>
+      <article class="ask-editorial" aria-label="About Nio Jin" aria-hidden="true">
+        <p class="ask-copy">
+          <span class="ask-block">I’m a Communication Design graduate from Parsons, but I’ve <span class="ask-one ask-never">never</span> really been good at <span class="ask-emphasis">staying in my lane.</span></span>
+          <span class="ask-block">My work spans visual design, interaction, motion, creative technology, perception, economics, cognitive science, religious studies, and honestly, whatever rabbit hole I need to fall into to understand the thing in front of me. <span class="ask-emoji ask-rabbit" aria-hidden="true">🐇</span></span>
+          <span class="ask-block"><span class="ask-small">Small things</span> that <span class="ask-nowrap ask-emphasis">feel off</span> tend to bother me more than they probably should. Sometimes there’s a practical problem, so I build something to <span class="ask-one">fix it</span> <span class="ask-emoji ask-wrench" aria-hidden="true">🔧</span>. Other times it’s a strange human pattern or a cultural absurdity that bothers me enough that I have to <span class="ask-one ask-one-alt">say something</span> about it.</span>
+          <span class="ask-block">Design is <span class="ask-emphasis">one of my tools.</span> Code, research, prototyping, and whatever else gets the job done are others. Anyways, the medium is just a way to get there.</span>
+          <span class="ask-block">I don’t always fit neatly into a normal job title. If there’s something I could be useful for, I’m always <a class="ask-email ask-email-phrase" href="mailto:niojin.noi@gmail.com?subject=Project%20inquiry" aria-label="Email Nio Jin"><span class="ask-emphasis">open to talking</span> <span class="ask-emoji" aria-hidden="true">💬</span></a>, whether you’re looking to hire, collaborate, build something, or just happen to have something interesting going on. I love learning from people who think very differently from me. <span class="ask-heart" aria-label="with love">&lt;3</span></span>
+        </p>
+      </article>
+    </div>
   </div>
 </section>
 
@@ -868,10 +966,18 @@ const SHOP_ITEMS = [
    CURSOR
    ========================================================= */
 const curEl=document.getElementById('cur');
+const CURSOR_MODE_CLASSES=['cursor-read','cursor-open','cursor-close','cursor-contact'];
 let ringOutTimer=null;
 function curHoverIn(){clearTimeout(ringOutTimer);curEl.classList.remove('ring-out');curEl.classList.add('hover');}
 function curHoverOut(){curEl.classList.remove('hover');curEl.classList.add('ring-out');ringOutTimer=setTimeout(()=>curEl.classList.remove('ring-out'),500);}
-function wireHover(el){if(el.dataset.cursorWired)return;el.dataset.cursorWired='true';el.addEventListener('mouseenter',curHoverIn);el.addEventListener('mouseleave',curHoverOut);}
+function setCursorMode(mode=''){document.body.classList.remove(...CURSOR_MODE_CLASSES);if(mode)document.body.classList.add(`cursor-${mode}`);}
+function cursorModeFor(el){
+  if(el.matches('#ask-close,.more-close,.vision-close,#detail-close,[data-back]'))return'close';
+  if(el.matches('a[href^="mailto:"],.more-cta'))return'contact';
+  if(el.matches('.idx-row,.gw-card,.tree-work,.map-open,.profile-map-node,.store-action,[data-work],[data-access],#detail-trace,a[target="_blank"]'))return'open';
+  return'';
+}
+function wireHover(el){if(el.dataset.cursorWired)return;el.dataset.cursorWired='true';const mode=cursorModeFor(el);el.addEventListener('mouseenter',()=>{curHoverIn();setCursorMode(mode);});el.addEventListener('mouseleave',()=>{curHoverOut();setCursorMode();});}
 
 const TRAIL_MAX=16,trail=[],BIT_SIZES=[2,2,2,2,4,4];
 for(let i=0;i<TRAIL_MAX;i++){const d=document.createElement('div');d.className='trail';d.style.opacity='0';d.style.width='2px';d.style.height='2px';document.body.appendChild(d);trail.push({el:d});}
@@ -894,9 +1000,20 @@ const STORE_ACCESS_ENABLED=false;
 const globalVersion=document.getElementById('global-version');
 const moreLayer=document.getElementById('more-layer');
 const askTrigger=document.getElementById('ask-trigger');
+const moreAsk=document.getElementById('more-ask');
 const askLayer=document.getElementById('ask-layer');
 const askClose=document.getElementById('ask-close');
 const askScroll=document.getElementById('ask-scroll');
+const askConversation=askLayer.querySelector('.ask-conversation');
+const askForm=document.getElementById('ask-form');
+const askInput=document.getElementById('ask-input');
+const askUserMessage=askLayer.querySelector('.ask-user-message');
+const askAnswer=askLayer.querySelector('.ask-answer');
+const askAnswerSr=askLayer.querySelector('.ask-answer-sr');
+const askScrollCue=askLayer.querySelector('.ask-scroll-cue');
+const askEditorial=askLayer.querySelector('.ask-editorial');
+const askCopy=askLayer.querySelector('.ask-copy');
+const askBlocks=[...askCopy.querySelectorAll('.ask-block')];
 const workModeNav=document.getElementById('work-mode-nav');
 let prevView='landing';
 let landingScrollReady=false,landingScrollComplete=false;
@@ -1066,22 +1183,123 @@ function openMore(){
 function closeMore(){
   if(!moreLayer)return;moreLayer.classList.remove('is-open');moreLayer.setAttribute('aria-hidden','true');globalVersion.setAttribute('aria-expanded','false');document.body.classList.remove('more-open');
 }
-function openAsk(){
+let askMotionReady=false,askCursorReady=false,askCursorReadyTimer=null,askReplyTimers=[];
+const ASK_REPLY="sorry, tricked you.\nthis is not an embedded AI assistant.";
+function setAskFocus(block){askBlocks.forEach(item=>item.classList.toggle('is-current',item===block));}
+function initAskMotion(){
+  if(askMotionReady)return;
+  askMotionReady=true;askCopy.classList.add('has-reading-focus');setAskFocus(askBlocks[0]);
+  const revealItems=[...askCopy.querySelectorAll('.ask-emphasis,.ask-one,.ask-heart')];
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window)){revealItems.forEach(item=>item.classList.add('is-revealed'));return;}
+  const activeBlocks=new Set();
+  const focusObserver=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>entry.isIntersecting?activeBlocks.add(entry.target):activeBlocks.delete(entry.target));
+    if(!activeBlocks.size)return;
+    const center=askScroll.getBoundingClientRect().top+askScroll.clientHeight/2;
+    const current=[...activeBlocks].sort((a,b)=>Math.abs((a.getBoundingClientRect().top+a.getBoundingClientRect().bottom)/2-center)-Math.abs((b.getBoundingClientRect().top+b.getBoundingClientRect().bottom)/2-center))[0];
+    setAskFocus(current);
+  },{root:askScroll,rootMargin:'-42% 0px -42% 0px',threshold:0});
+  askBlocks.forEach(block=>focusObserver.observe(block));
+  const revealObserver=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{if(!entry.isIntersecting)return;entry.target.querySelectorAll('.ask-emphasis,.ask-one,.ask-heart').forEach(item=>item.classList.add('is-revealed'));revealObserver.unobserve(entry.target);});
+  },{root:askScroll,rootMargin:'0px 0px -10% 0px',threshold:.15});
+  askBlocks.forEach(block=>revealObserver.observe(block));
+}
+function stopAskCursorReading(){setCursorMode();}
+askEditorial.addEventListener('pointermove',event=>{
+  if(!askCursorReady||event.pointerType==='touch'||!window.matchMedia('(hover:hover) and (pointer:fine)').matches)return;
+  if(!event.target.closest('a,button'))setCursorMode('read');
+});
+askEditorial.addEventListener('pointerleave',stopAskCursorReading);
+let askTriggerRevealTimer=null,askTriggerTimeout=null,askTriggerUsed=false,askReturnFocus=askTrigger;
+function revealAskTrigger(){
+  if(askTriggerUsed)return;
+  askTrigger.classList.remove('is-intro-hidden');askTrigger.removeAttribute('aria-hidden');askTrigger.disabled=false;
+  askTriggerTimeout=setTimeout(dismissAskTrigger,30000);
+}
+function dismissAskTrigger(){
+  if(askTriggerUsed||askLayer.classList.contains('is-open'))return;
+  askTrigger.classList.add('is-timeout-hidden');askTrigger.setAttribute('aria-hidden','true');askTrigger.disabled=true;
+}
+function clearAskReplyTimers(){askReplyTimers.forEach(timer=>{clearTimeout(timer);clearInterval(timer);});askReplyTimers=[];}
+function resetAskConversation(){
+  clearAskReplyTimers();
+  askConversation.classList.remove('is-revealed','is-typing','is-answered','has-statement-started');
+  askUserMessage.textContent='';
+  askAnswer.textContent='';
+  askAnswerSr.textContent='';
+  askLayer.querySelector('.ask-transcript').setAttribute('aria-hidden','true');
+  askEditorial.setAttribute('aria-hidden','true');
+  askForm.reset();
+  askInput.placeholder='Try “Tell me about yourself”';
+}
+function updateAskComposerVisibility(){
+  if(!askConversation.classList.contains('is-answered')){askConversation.classList.remove('has-statement-started');return;}
+  askConversation.classList.toggle('has-statement-started',askBlocks[0].getBoundingClientRect().top<=askScroll.getBoundingClientRect().top+1);
+}
+function recordAskPrompt(prompt){
+  const entry={prompt,timestamp:new Date().toISOString()};
+  try{
+    const key='nio-ask-prompts';
+    const saved=JSON.parse(localStorage.getItem(key)||'[]');
+    localStorage.setItem(key,JSON.stringify([...saved,entry].slice(-30)));
+  }catch{}
+  window.dispatchEvent(new CustomEvent('nio:ask-submitted',{detail:entry}));
+  if(Array.isArray(window.dataLayer))window.dataLayer.push({event:'ask_submitted',ask_prompt:prompt});
+}
+function submitAskPrompt(prompt){
+  const question=prompt.trim()||'Tell me about yourself';
+  recordAskPrompt(question);
+  askUserMessage.textContent=question;
+  askInput.value='';askInput.placeholder='Ask anything...';
+  askLayer.querySelector('.ask-transcript').setAttribute('aria-hidden','false');
+  askConversation.classList.add('is-revealed');
+  askScroll.scrollTop=0;
+  askClose.focus();
+  const finishReply=()=>{
+    askConversation.classList.add('is-answered');
+    askAnswerSr.textContent=ASK_REPLY;
+    askEditorial.setAttribute('aria-hidden','false');
+    initAskMotion();setAskFocus(askBlocks[0]);
+  };
+  const startTyping=()=>{
+    askConversation.classList.add('is-typing');
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){askAnswer.textContent=ASK_REPLY;finishReply();return;}
+    let index=0;
+    const typingTimer=setInterval(()=>{
+      index+=1;askAnswer.textContent=ASK_REPLY.slice(0,index);
+      if(index>=ASK_REPLY.length){clearInterval(typingTimer);finishReply();}
+    },24);
+    askReplyTimers.push(typingTimer);
+  };
+  const loadingTimer=setTimeout(startTyping,900);askReplyTimers.push(loadingTimer);
+}
+function openAsk(returnFocus=askTrigger){
   closeMore();
+  askTriggerUsed=true;clearTimeout(askTriggerRevealTimer);clearTimeout(askTriggerTimeout);askReturnFocus=returnFocus;
+  askCursorReady=false;clearTimeout(askCursorReadyTimer);stopAskCursorReading();
+  resetAskConversation();
   askScroll.scrollTop=0;
   askLayer.classList.add('is-open');askLayer.setAttribute('aria-hidden','false');askTrigger.setAttribute('aria-expanded','true');document.body.classList.add('ask-open');
-  requestAnimationFrame(()=>askClose.focus());
+  askCursorReadyTimer=setTimeout(()=>{askCursorReady=true;},900);
+  requestAnimationFrame(()=>askInput.focus());
 }
 function closeAsk(){
   if(!askLayer.classList.contains('is-open'))return;
+  askCursorReady=false;clearTimeout(askCursorReadyTimer);clearAskReplyTimers();
+  stopAskCursorReading();
   askLayer.classList.remove('is-open');askLayer.setAttribute('aria-hidden','true');askTrigger.setAttribute('aria-expanded','false');document.body.classList.remove('ask-open');
-  askTrigger.focus();
+  if(askReturnFocus&&!askReturnFocus.disabled)askReturnFocus.focus();
 }
 globalVersion.addEventListener('click',openMore);
 document.getElementById('more-close').addEventListener('click',closeMore);
 document.getElementById('more-backdrop').addEventListener('click',closeMore);
-askTrigger.addEventListener('click',openAsk);
+askTrigger.addEventListener('click',()=>openAsk(askTrigger));
+moreAsk.addEventListener('click',()=>openAsk(globalVersion));
 askClose.addEventListener('click',closeAsk);
+askForm.addEventListener('submit',event=>{event.preventDefault();submitAskPrompt(askInput.value);});
+askScrollCue.addEventListener('click',()=>askEditorial.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}));
+askScroll.addEventListener('scroll',updateAskComposerVisibility,{passive:true});
 document.querySelectorAll('.more-nav-link').forEach(link=>link.addEventListener('click',()=>{
   const target=link.dataset.target;
   closeMore();
@@ -1091,7 +1309,13 @@ document.addEventListener('keydown',event=>{if(event.key==='Escape'&&moreLayer.c
 document.addEventListener('keydown',event=>{
   if(!askLayer.classList.contains('is-open'))return;
   if(event.key==='Escape'){closeAsk();return;}
-  if(event.key==='Tab'){event.preventDefault();askClose.focus();}
+  if(event.key==='Tab'){
+    const focusable=[...askLayer.querySelectorAll('button:not([disabled]),input:not([disabled]),a[href]')].filter(item=>item.offsetParent!==null);
+    if(!focusable.length)return;
+    const first=focusable[0],last=focusable[focusable.length-1];
+    if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+  }
 });
 showView('landing');
 
@@ -1630,7 +1854,7 @@ const INTERFACE_LABELS={audioreactive:'Audio reactive',vj:'VJ'};
 function interfaceLabel(t){return t?(INTERFACE_LABELS[t.toLowerCase()]||t.charAt(0).toUpperCase()+t.slice(1)):'';}
 function workLabel(t){return '∷ '+(t||'');}
 function alphabeticalItems(){
-  return ITEMS.map((item,index)=>({item,index})).filter(({item})=>!activeGalleryFilter||(item.galleryFilters||[]).includes(activeGalleryFilter)).sort((a,b)=>{
+  return ITEMS.map((item,index)=>({item,index})).sort((a,b)=>{
     const byName=(a.item.title||'').localeCompare(b.item.title||'',undefined,{sensitivity:'base',numeric:true});
     return byName||(a.item.tags||[]).join(' ').localeCompare((b.item.tags||[]).join(' '),undefined,{sensitivity:'base'});
   });
@@ -1727,8 +1951,8 @@ let galleryBuilt=false,galleryLoaded=0;
 const GALLERY_FILTERS=['interactive','motion','printed medium','audio / live'];
 let activeGalleryFilter=null;
 const GALLERY_BATCH_SIZE=6;
-function filteredGalleryItems(){
-  return ITEMS.map((item,index)=>({item,index})).filter(({item})=>!activeGalleryFilter||(item.galleryFilters||[]).includes(activeGalleryFilter));
+function galleryItems(){
+  return ITEMS.map((item,index)=>({item,index}));
 }
 function attachAssetLoader(container,media){
   const loader=document.createElement('span');loader.className='asset-loader';loader.setAttribute('aria-hidden','true');container.appendChild(loader);
@@ -1739,10 +1963,11 @@ function attachAssetLoader(container,media){
 }
 function appendGalleryBatch(){
   const wall=document.getElementById('gallery-wall');
-  const selection=filteredGalleryItems();
+  const selection=galleryItems();
   const batch=selection.slice(galleryLoaded,galleryLoaded+GALLERY_BATCH_SIZE);
   batch.forEach(({item,index:i})=>{
     const card=document.createElement('a');card.className=`gw-card gw-card--${item.tier||'core'}`;card.href='#';
+    card.classList.toggle('is-context-match',Boolean(activeGalleryFilter&&(item.galleryFilters||[]).includes(activeGalleryFilter)));
     const mediaWrap=document.createElement('div');mediaWrap.className='gw-media';
     /* Dedicated motion covers play continuously; regular video previews load on hover. */
     if(item.type==='video'||item.coverVideo){
@@ -1800,7 +2025,7 @@ function buildGallery(){
   renderGallery();
   galleryScroll.addEventListener('scroll',()=>{
     const nearEnd=galleryScroll.scrollTop+galleryScroll.clientHeight>=galleryScroll.scrollHeight-240;
-    if(nearEnd&&galleryLoaded<filteredGalleryItems().length)appendGalleryBatch();
+    if(nearEnd&&galleryLoaded<galleryItems().length)appendGalleryBatch();
   },{passive:true});
   galleryBuilt=true; rewireHoverables();
 }
@@ -1954,6 +2179,7 @@ document.addEventListener('keydown',wakeDetailControls);
    ========================================================= */
 rewireHoverables();
 setTimeout(()=>document.getElementById('load').classList.add('off'),400);
+askTriggerRevealTimer=setTimeout(revealAskTrigger,4000);
 </script>
 </body>
 </html>
