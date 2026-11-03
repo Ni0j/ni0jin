@@ -2180,6 +2180,12 @@ document.addEventListener('keydown',wakeDetailControls);
 rewireHoverables();
 setTimeout(()=>document.getElementById('load').classList.add('off'),400);
 askTriggerRevealTimer=setTimeout(revealAskTrigger,4000);
+/* Stable entry from the business portfolio exhibition link. */
+if(new URLSearchParams(location.search).get('work')==='photoetching'){
+  const workIndex=ITEMS.findIndex(item=>(item.tags||[]).includes('photo etching'));
+  if(workIndex>=0)openDetail(workIndex);
+}
+
 </script>
 </body>
 </html>
