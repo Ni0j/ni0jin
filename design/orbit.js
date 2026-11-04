@@ -7,7 +7,7 @@
     let entries=[],cards=[],phase=0,target=0,velocity=0,raf=0,last=0,running=false,visible=true,hover=-1;
     let px=0,py=0,mx=0,my=0,clock=0,lastInput=0,timer=0,selectedIndex=-1,suspended=false,auto=automatic,touchY=null,movedTouch=false;
     const horizon=document.createElement('canvas'),ground=horizon.getContext('2d');
-    let lineColor='#80b8c2';
+    let lineColor='#888888';
     let groundSize='',perspective=1100;
     if(horizon){horizon.className='orbit-horizon';horizon.setAttribute('aria-hidden','true');}
     const mod=(v,n)=>(v%n+n)%n,current=()=>entries[mod(Math.round(phase),entries.length)];
@@ -176,7 +176,7 @@
         running=true;suspended=false;selectedIndex=-1;hover=-1;velocity=0;lastInput=performance.now();draw(.016);wake();
       },
       move,activate,current,
-      setColor(color){lineColor=color||'#80b8c2';stage.style.setProperty('--node-color',lineColor);},
+      setColor(color){lineColor=color||'#888888';stage.style.setProperty('--node-color',lineColor);},
       setAuto(value){auto=value;target=Math.round(target);lastInput=performance.now();wake();},get automatic(){return auto;},
       suspend(value){suspended=value;if(value){cancelAnimationFrame(raf);raf=0;pauseVideos();cards.forEach(c=>c.previewing=false);}else{lastInput=performance.now();wake();}},
       setIndexMode(value){this.suspend(value);},
@@ -187,7 +187,7 @@
   let carry=null,origin=null,transitionId=0,transitions=[],portal=null,concealed=null;
   function clearTransition(){transitionId++;transitions.forEach(a=>a?.cancel());transitions=[];portal?.remove();portal=null;if(concealed)concealed.style.visibility='';concealed=null;}
   function frontSurface(){return [...document.querySelectorAll('#projectOrbitStage .orbit-art')].find(el=>el.getAttribute('aria-label')?.endsWith('— examine'))||$('frame').querySelector('.single-media-node,img,video');}
-  function remember(entry,rect){const el=document.querySelector('#orbitStage .orbit-art[aria-current="true"]');const img=el?.querySelector('img');return {el,rect:el?.getBoundingClientRect()||rect,src:img?.currentSrc||img?.src||entry?.preview||entry?.src,label:el?.querySelector('.node-header')?.textContent||entry?.label,color:window.projectNodeColor?.(entry?.project)||'#80b8c2'};}
+  function remember(entry,rect){const el=document.querySelector('#orbitStage .orbit-art[aria-current="true"]');const img=el?.querySelector('img');return {el,rect:el?.getBoundingClientRect()||rect,src:img?.currentSrc||img?.src||entry?.preview||entry?.src,label:el?.querySelector('.node-header')?.textContent||entry?.label,color:window.projectNodeColor?.(entry?.project)||'#888888'};}
   function makePortal(info,target){
     if(!info?.src||!target?.width||!info.rect?.width)return null;
     const node=document.createElement('div');node.className='node-portal';node.setAttribute('aria-hidden','true');node.style.setProperty('--node-color',info.color);

@@ -282,4 +282,10 @@
   normalizeIndex();renderIndex();renderFrame(selected,mediaIndex);updateLinks();
   if(inlineMotion)installInlineMotion();
   if(layout==='c'&&params.has('project')){const initialMedia=mediaIndex;commit(selected);mediaIndex=initialMedia;normalizeIndex();renderProjectOrbit();if(projectStage.hidden)renderFrame(selected,mediaIndex);updateLinks();}
+  window.addEventListener('portfolio:palette',()=>{
+    const color=window.projectNodeColor?.(selected.id)||'#888888';
+    viewer.style.setProperty('--node-color',color);projectOrbit.setColor(color);
+    document.querySelectorAll('.single-media-node').forEach(el=>el.style.setProperty('--node-color',color));
+    document.querySelectorAll('.project-row [data-project]').forEach(el=>el.style.setProperty('--node-color',window.projectNodeColor(el.dataset.project)));
+  });
 })();

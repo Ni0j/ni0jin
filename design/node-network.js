@@ -1,7 +1,8 @@
 /* Real project/media nodes form a small, navigable rendering network. */
 (() => {
-  const colors=['#91b678','#bd94cf','#d9b66d','#80b8c2','#d48e88','#8fa5da','#b3bf78','#cf9e7b','#86b9a1'];
-  window.projectNodeColor=id=>colors[window.PROJECTS.filter(p=>p.featured!==false).findIndex(p=>p.id===id)]||colors[0];
+  const projectColors=['#91b678','#bd94cf','#d9b66d','#80b8c2','#d48e88','#8fa5da','#b3bf78','#cf9e7b','#86b9a1'];
+  const colorFor=i=>document.documentElement.dataset.palette==='color'?projectColors[i]||'#888888':'#888888';
+  window.projectNodeColor=id=>colorFor(window.PROJECTS.filter(p=>p.featured!==false).findIndex(p=>p.id===id));
   const reduced=matchMedia('(prefers-reduced-motion: reduce)');
   const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
   function letterPoints(count){
@@ -46,7 +47,7 @@
     function build(entries){
       const ids=new Set(entries.map(e=>e.project));stage.replaceChildren(canvas);
       nodes=allEntries.filter(e=>ids.has(e.project)).map(entry=>{
-        const el=document.createElement('button');el.className='orbit-art network-node is-positioned';el.type='button';el.style.setProperty('--node-color',colors[entry.group]);el.dataset.nodeProject=entry.project;
+        const el=document.createElement('button');el.className='orbit-art network-node is-positioned';el.type='button';el.style.setProperty('--node-color',colorFor(entry.group));el.dataset.nodeProject=entry.project;
         el.classList.toggle('is-project-node',entry.parent);el.setAttribute('aria-label',(entry.parent?'Open project: ':'Open asset: ')+all[entry.group].title+' — '+entry.label);
         const header=document.createElement('span');header.className='node-header';header.textContent=entry.parent?all[entry.group].title:String(entry.media+1).padStart(2,'0')+' / '+(entry.type==='video'?'Video':'Image');
         const img=document.createElement('img');img.src=entry.preview;img.alt='';img.draggable=false;img.decoding='async';img.addEventListener('error',()=>{el.classList.add('preview-error');header.textContent='Preview unavailable';});
@@ -93,13 +94,13 @@
         if(node.entry.parent)continue;
         const parent=nodes.find(n=>n.entry.parent&&n.entry.project===node.entry.project);if(!parent)continue;
         const hot=focus===node.entry.project;
-        ctx.globalAlpha=focus?(hot?.85:.12):(document.documentElement.dataset.theme==='dark'?.42:.72);ctx.strokeStyle=colors[node.entry.group];ctx.lineWidth=hot?1:.8;
+        ctx.globalAlpha=focus?(hot?.85:.12):(document.documentElement.dataset.theme==='dark'?.42:.72);ctx.strokeStyle=colorFor(node.entry.group);ctx.lineWidth=hot?1:.8;
         const ax=parent.drawX+parent.drawW/2,ay=parent.drawY,bx=node.drawX-node.drawW/2,by=node.drawY;
         const reach=Math.max(24*scale,Math.abs(bx-ax)*.40);
         ctx.beginPath();ctx.moveTo(ax,ay);ctx.bezierCurveTo(ax+reach,ay,bx-reach,by,bx,by);ctx.stroke();
         if(!reduced.matches){const t=(time*.14+Math.abs(node.entry.seed))%1,u=1-t;
           const x=u*u*u*ax+3*u*u*t*(ax+reach)+3*u*t*t*(bx-reach)+t*t*t*bx,y=u*u*u*ay+3*u*u*t*ay+3*u*t*t*by+t*t*t*by;
-          ctx.fillStyle=colors[node.entry.group];ctx.beginPath();ctx.arc(x,y,Math.max(.7,scale*.9),0,Math.PI*2);ctx.fill();}
+          ctx.fillStyle=colorFor(node.entry.group);ctx.beginPath();ctx.arc(x,y,Math.max(.7,scale*.9),0,Math.PI*2);ctx.fill();}
       }
       ctx.globalAlpha=1;
     }
@@ -124,6 +125,7 @@
     stage.addEventListener('pointerup',release);stage.addEventListener('pointercancel',release);stage.addEventListener('lostpointercapture',()=>{drag=null;pinch=null;pointers.clear();});
     stage.addEventListener('pointerleave',()=>{mouse={x:0,y:0};if(!pointers.size)hovered=null;wake();});
     stage.addEventListener('keydown',e=>{if(e.target!==stage)return;if(e.key.startsWith('Arrow')){e.preventDefault();move(e.key==='ArrowRight'||e.key==='ArrowDown'?1:-1);}if(e.key==='Enter'&&selected){e.preventDefault();onActivate?.(selected);}if(e.key==='0'){zoomTarget=1;zoomAnchor=null;pan.x=pan.y=0;wake();}});
+    window.addEventListener('portfolio:palette',()=>{nodes.forEach(n=>n.el.style.setProperty('--node-color',colorFor(n.entry.group)));draw(.016);wake();});
     new ResizeObserver(()=>{draw(.016);wake();}).observe(stage);
     new IntersectionObserver(es=>{visible=es[0].isIntersecting;if(visible)wake();else{cancelAnimationFrame(raf);raf=0;stopPreview();}}).observe(stage);
     document.addEventListener('visibilitychange',()=>{if(document.hidden){cancelAnimationFrame(raf);raf=0;stopPreview();}else wake();});
