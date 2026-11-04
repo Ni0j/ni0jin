@@ -2,8 +2,8 @@
 window.PUBLIC_UPDATES={
   experience:[
     {role:'Art Director & Visual Designer',organization:'Game studio',dates:'Sep 2026–present',description:'Currently developing a game for a fashion brand.'},
-    {role:'Independent Builder & Designer · freelance',organization:'Self-employed',dates:'Aug 2026–present',description:'Researching and building software products from early concepts to working prototypes, alongside web design and real-time visuals.'},
-    {role:'Contract Brand & Visual Designer',organization:'Amplift.AI',dates:'Jun–Jul 2026',description:'Developed the visual identity and motion language for a communication product, working directly with the founder from concept through execution.'},
+    {role:'Independent Builder & Designer · Freelance',organization:'Self-employed',dates:'Aug 2026–present',description:'Researching and building software products from early concepts to working prototypes, alongside web design and real-time visuals.'},
+    {role:'Contract Brand & Visual Designer',organization:'Amplift.AI',dates:'Jun–Jul 2026',description:'Developed the visual identity and motion language for a digital product, working directly with the founder from concept through execution.'},
     {role:'Code Tutor',organization:'Parsons School of Design · The New School',dates:'Feb 2025–May 2026',description:'Guided students through interactive web and creative coding projects, connecting visual decisions with HTML, CSS and JavaScript.'}
   ],
   research:'At the NSSR Perception Lab, I collaborate with professors and PhD researchers on visual perception research and experimental development (Jul 2026–present).',

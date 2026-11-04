@@ -1,4 +1,4 @@
-// Continuous Orbit: adjacent color works and adjacent monochrome works. One mount treatment for all homepage covers.
+/* Portfolio copy and media. */
 window.PROJECTS = [
   {
     "id": "devil-return",
@@ -6,7 +6,7 @@ window.PROJECTS = [
     "number": "01",
     "category": "type print",
     "year": "2024",
-    "description": "A campaign concept for Comet P12’s return at Beach 67th Street, connecting posters, mailed tickets and a film through one visual identity.",
+    "description": "A campaign concept imagining Comet P12’s return as a public gathering at Beach 67th Street. Posters, mailed tickets and a film share one visual identity.",
     "meta": "type / print",
     "cover": "assets/images--devilReturn--020.jpg",
     "media": [
@@ -40,7 +40,8 @@ window.PROJECTS = [
     "coverHeight": 1208,
     "scope": "Campaign · posters · film",
     "featured": true,
-    "orbitOrder": 0
+    "orbitOrder": 0,
+    "subtitle": "Campaign, posters, film, 2024"
   },
   {
     "id": "echoes",
@@ -48,14 +49,14 @@ window.PROJECTS = [
     "number": "02",
     "category": "print web",
     "year": "2024",
-    "description": "A publication and mobile website connecting NYC manhole covers with protective Fulu talismans and ancient Chinese strange stories.",
+    "description": "A publication and mobile website linking NYC manhole covers to protective Fulu talismans and ancient Chinese strange stories.",
     "meta": "publication / mobile website",
     "cover": "assets/echoes/mobile-mockup-1.jpg",
     "media": [
       {
         "src": "assets/echoes/publication-7.jpg",
         "type": "image",
-        "label": "Publication design · presentation page 7",
+        "label": "Publication design",
         "original": "design/assets/echoes/publication-7-original.png",
         "width": 1800,
         "height": 1515
@@ -63,7 +64,7 @@ window.PROJECTS = [
       {
         "src": "assets/echoes/publication-5.jpg",
         "type": "image",
-        "label": "Publication design · presentation page 5",
+        "label": "Publication design",
         "original": "design/assets/echoes/publication-5-original.png",
         "width": 1800,
         "height": 1515
@@ -71,7 +72,7 @@ window.PROJECTS = [
       {
         "src": "assets/echoes/publication-6.jpg",
         "type": "image",
-        "label": "Publication design · presentation page 6",
+        "label": "Publication design",
         "original": "design/assets/echoes/publication-6-original.png",
         "width": 1800,
         "height": 1515
@@ -79,7 +80,7 @@ window.PROJECTS = [
       {
         "src": "assets/echoes/mobile-mockup-1.jpg",
         "type": "image",
-        "label": "Mobile website mockup 1",
+        "label": "Mobile website mockups",
         "original": "design/assets/echoes/mobile-mockup-1-original.jpg",
         "width": 2000,
         "height": 1121
@@ -87,7 +88,7 @@ window.PROJECTS = [
       {
         "src": "assets/echoes/mobile-mockup-2.jpg",
         "type": "image",
-        "label": "Mobile website mockup 2",
+        "label": "Mobile website mockups",
         "original": "design/assets/echoes/mobile-mockup-2-original.jpg",
         "width": 2000,
         "height": 1121
@@ -100,7 +101,8 @@ window.PROJECTS = [
     "sourcePdf": "assets/echoes/Week4_Presentation.pdf",
     "scope": "Publication · mobile website",
     "featured": true,
-    "orbitOrder": 1
+    "orbitOrder": 1,
+    "subtitle": "Publication, mobile website, 2024"
   },
   {
     "id": "re",
@@ -108,7 +110,7 @@ window.PROJECTS = [
     "number": "03",
     "category": "print motion",
     "year": "2025",
-    "description": "An editorial platform organized around “RE:” as a method of returning to, reframing, and reconstructing existing narratives.",
+    "description": "An editorial platform built on \"RE:\" as a method of returning to, reframing and reconstructing existing narratives.",
     "meta": "print / motion",
     "cover": "assets/images--re--010.jpg",
     "media": [
@@ -121,7 +123,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--re--010.jpg",
         "type": "image",
-        "label": "Editorial system",
+        "label": "Editorial",
         "original": "images/re/010.jpg",
         "width": 1800,
         "height": 1146
@@ -148,7 +150,8 @@ window.PROJECTS = [
     "coverHeight": 1146,
     "scope": "Editorial identity · print · motion",
     "featured": true,
-    "orbitOrder": 2
+    "orbitOrder": 2,
+    "subtitle": "Editorial identity, print, motion, 2025"
   },
   {
     "id": "pcell",
@@ -156,7 +159,7 @@ window.PROJECTS = [
     "number": "04",
     "category": "type",
     "year": "2025",
-    "description": "A display typeface built from hexagonal geometry and benzene-ring ambigrams, extended into a responsive 3D point cloud that changes through hand movement.",
+    "description": "A display typeface inspired by benzene-ring ambigrams, extended into a 3D point cloud that responds to hand movement.",
     "meta": "type",
     "cover": "assets/images--pcell--010.jpg",
     "media": [
@@ -194,7 +197,8 @@ window.PROJECTS = [
     "coverHeight": 1800,
     "scope": "Typeface · hand-responsive interaction",
     "featured": true,
-    "orbitOrder": 5
+    "orbitOrder": 5,
+    "subtitle": "Typeface, hand-responsive interaction, 2025"
   },
   {
     "id": "music",
@@ -202,7 +206,7 @@ window.PROJECTS = [
     "number": "05",
     "category": "music",
     "year": "2025–2026",
-    "description": "Visuals for music releases, social campaigns and live shows—bringing a track’s mood and energy onto screens. Includes a live performance study using XG’s “GALA” at Volvox Labs.",
+    "description": "Visuals for releases, social campaigns and live shows that put a track's mood and energy on screen. Includes a live VJ performance, with all visuals operated by hand in real time to XG's “GALA”.",
     "meta": "music / live visuals",
     "cover": "assets/covers/tru.jpg",
     "media": [
@@ -215,7 +219,7 @@ window.PROJECTS = [
       {
         "src": "../prototype/assets/video/zombie.mp4",
         "type": "video",
-        "label": "Zombie(feat. DRIP TARKO) — MilliMax",
+        "label": "Zombie (feat. DRIP TARKO) — MilliMax",
         "original": "videos/zombie.mp4"
       },
       {
@@ -239,13 +243,13 @@ window.PROJECTS = [
       {
         "src": "../videos/alone.mp4",
         "type": "video",
-        "label": "I’ll be alone — I Broke My Robot",
+        "label": "I'll be alone — I Broke My Robot",
         "original": "videos/alone.mp4"
       },
       {
         "src": "../videos/klepto.mp4",
         "type": "video",
-        "label": "Klepto(ft. Lexie Liu) — Sophie Powers",
+        "label": "Klepto (ft. Lexie Liu) — Sophie Powers",
         "original": "videos/klepto.mp4"
       },
       {
@@ -267,7 +271,8 @@ window.PROJECTS = [
     "inquiry": "mailto:niojin.noi@gmail.com?subject=Live%20Music%20Visual%20Perception",
     "scope": "Music promotion · live visuals",
     "featured": true,
-    "orbitOrder": 6
+    "orbitOrder": 6,
+    "subtitle": "Music promotion, live visuals, 2025–2026"
   },
   {
     "id": "lost-horizon",
@@ -275,14 +280,14 @@ window.PROJECTS = [
     "number": "06",
     "category": "web",
     "year": "2024",
-    "description": "A physical dossier and interactive desktop simulation about how fragmented evidence constructs reality. Clues in the printed archive unlock the digital experience.",
+    "description": "A printed dossier and an interactive desktop simulation about how fragmented evidence constructs reality. Clues in the printed archive unlock the digital experience.",
     "meta": "web",
     "cover": "assets/covers/lost-horizon-title.jpg",
     "media": [
       {
         "src": "../videos/theLostH.mp4",
         "type": "video",
-        "label": "Locked desktop simulation and ASCII camera",
+        "label": "Desktop simulation and ASCII camera",
         "original": "videos/theLostH.mp4"
       },
       {
@@ -411,7 +416,8 @@ window.PROJECTS = [
     "coverHeight": 1440,
     "scope": "Publication · interactive website",
     "featured": true,
-    "orbitOrder": 7
+    "orbitOrder": 7,
+    "subtitle": "Publication, interactive website, 2024"
   },
   {
     "id": "the-one",
@@ -419,7 +425,7 @@ window.PROJECTS = [
     "number": "07",
     "category": "print motion",
     "year": "2026",
-    "description": "An installation and publication exploring belief after religious authority recedes. The installation responds to participants; the book translates it into image, ink and transcript.",
+    "description": "An installation and book about belief after religious authority recedes. The installation responds to participants; the book translates it into image, ink and transcript.",
     "meta": "print / motion",
     "cover": "assets/images--theOne--030.jpg",
     "media": [
@@ -459,7 +465,8 @@ window.PROJECTS = [
     "coverHeight": 1200,
     "scope": "Publication · sound installation",
     "featured": true,
-    "orbitOrder": 3
+    "orbitOrder": 3,
+    "subtitle": "Publication, sound installation, 2026"
   },
   {
     "id": "jellyfish",
@@ -467,7 +474,7 @@ window.PROJECTS = [
     "number": "08",
     "category": "motion",
     "year": "2025",
-    "description": "An evolving interactive interface of jellyfish, inspired by Tamagotchi-like companionship.",
+    "description": "An evolving interface of jellyfish, inspired by Tamagotchi-like companionship.",
     "meta": "motion",
     "cover": "assets/thumbs--optimized--jellyfish.jpg",
     "media": [
@@ -483,7 +490,8 @@ window.PROJECTS = [
     "coverHeight": 1200,
     "scope": "Interactive prototype",
     "featured": true,
-    "orbitOrder": 4
+    "orbitOrder": 4,
+    "subtitle": "Interactive prototype, 2025"
   },
   {
     "id": "prototypes",
@@ -491,7 +499,7 @@ window.PROJECTS = [
     "number": "09",
     "category": "web motion",
     "year": "2026",
-    "description": "Web projects in development: pre:no:post, a public collection of rejection messages, and asc11, a browser-based visual processing tool.",
+    "description": "Web projects in development.",
     "meta": "in development",
     "cover": "assets/prototypes/prenopost.jpg",
     "originalCover": "design/assets/prototypes/prenopost.jpg",
@@ -499,8 +507,8 @@ window.PROJECTS = [
       {
         "src": "assets/prototypes/prenopost.mp4",
         "type": "video",
-        "label": "Pre:no:post · WIP",
-        "description": "An interactive collection of rejection emails and messages, with similar words clustering to reveal recurring language.",
+        "label": "Pre:no:post (in progress)",
+        "description": "An interactive collection of rejection emails and messages, where similar words cluster to reveal recurring language.",
         "poster": "assets/prototypes/prenopost.jpg",
         "original": "prenopost.MP4",
         "width": 1350,
@@ -509,7 +517,7 @@ window.PROJECTS = [
       {
         "src": "assets/prototypes/asc11.mp4",
         "type": "video",
-        "label": "Asc11 · WIP",
+        "label": "Asc11 (in progress)",
         "description": "A browser-based visual processing tool.",
         "poster": "assets/prototypes/asc11.jpg",
         "original": "asc11.MOV",
@@ -519,7 +527,8 @@ window.PROJECTS = [
     ],
     "scope": "Web development · visual tools",
     "featured": true,
-    "orbitOrder": 8
+    "orbitOrder": 8,
+    "subtitle": "Web development, visual tools, 2026"
   },
   {
     "id": "auto-obituary",

@@ -87,7 +87,7 @@
   }
   function renderDetails(){
     $('selectedTitle').textContent=selected.title;
-    $('selectedMeta').textContent=(selected.scope||selected.meta)+(selected.year?' / '+selected.year:'');
+    $('selectedMeta').textContent=selected.subtitle||((selected.scope||selected.meta)+(selected.year?' / '+selected.year:''));
     renderDescription();$('selectedMeta').hidden=selected.id==='music';
     $('musicQuickBooking')?.remove();if(selected.id==='music'){const quick=document.createElement('button');quick.id='musicQuickBooking';quick.textContent='Book a project';quick.addEventListener('click',()=>window.openBooking?.(quick));$('backToOverview').before(quick);}
     $('projectWebsite')?.remove();details.querySelectorAll('.project-context').forEach(node=>node.remove());

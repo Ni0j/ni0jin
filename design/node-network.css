@@ -180,3 +180,7 @@ body[data-layout=c] .site-header .identity h1{font-weight:400}
 #paletteToggle:active .palette-icon circle:nth-child(2){transform:translate(1px,-1px)}
 #paletteToggle:active .palette-icon circle:nth-child(3){transform:translate(0,1px)}
 @media(prefers-reduced-motion:reduce){#appearanceControls button,#appearanceControls svg *{transition:none!important}}
+
+.booking-prices{margin:24px 0;font:400 14px/22px "ABC Areal",sans-serif}.booking-prices>div{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:12px 0;border-top:1px solid color-mix(in srgb,var(--ink) 20%,transparent)}.booking-prices dt,.booking-prices dd{margin:0}.booking-prices dd{text-align:right}.booking-prices dd span{font-size:12px;line-height:18px;color:var(--muted)}
+
+.booking-live .booking-rate-note{font-size:12px;line-height:19px;color:var(--muted);margin-bottom:20px}
