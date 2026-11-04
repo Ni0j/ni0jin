@@ -9,9 +9,9 @@ body.node-home #entryMotion{height:100dvh;margin:0}
 body.node-home #orbitStage.network-stage{position:fixed;inset:0;width:100vw;height:100dvh!important;min-height:0;max-height:none;margin:0;perspective:none;isolation:isolate;overflow:clip;touch-action:none;background-color:var(--paper);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:32px 32px;outline-offset:-2px}
 .network-wires{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
 #orbitStage .network-node{left:0;top:0;position:absolute;border:1px solid var(--node-color);background:var(--node-surface);border-radius:2px;padding:0;transform-origin:center;overflow:visible;box-shadow:1px 3px 7px rgba(0,0,0,.18);will-change:transform;transition:opacity 200ms;backface-visibility:hidden}
-#orbitStage .network-node img{width:100%;height:calc(100% - 12px);object-fit:contain;display:block;pointer-events:none;outline:0}
-#orbitStage .network-node .node-live{position:absolute;left:0;top:12px;width:100%;height:calc(100% - 12px);object-fit:contain;pointer-events:none;background:var(--node-surface)}
-.node-header{display:block;width:100%;height:12px;background:var(--node-color);color:#121919;font-size:8px;line-height:12px;text-align:left;padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
+#orbitStage .network-node img{width:100%;height:calc(100% - 12px * var(--node-scale,1));object-fit:contain;display:block;pointer-events:none;outline:0}
+#orbitStage .network-node .node-live{position:absolute;left:0;top:calc(12px * var(--node-scale,1));width:100%;height:calc(100% - 12px * var(--node-scale,1));object-fit:contain;pointer-events:none;background:var(--node-surface)}
+.node-header{display:block;width:100%;height:calc(12px * var(--node-scale,1));background:var(--node-color);color:#121919;font-size:calc(8px * var(--node-scale,1));line-height:calc(12px * var(--node-scale,1));text-align:left;padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;pointer-events:none}
 .is-project-node .node-header{font-weight:500}
 .node-port{position:absolute;width:4px;height:7px;background:var(--node-color);top:calc(50% - 3px);pointer-events:none}
 .node-input{left:-4px}.node-output{right:-4px}

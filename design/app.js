@@ -28,9 +28,10 @@
     else projectOrbit.stop();
   }
   function updateLinks(){
-    const query=new URLSearchParams({project:selected.id,media:String(mediaIndex),filter});
+    const query=new URLSearchParams();
+    if($('projectDialog').open){query.set('project',selected.id);if(mediaIndex>0)query.set('media',String(mediaIndex));}
     if(params.get('home')==='orbit')query.set('home','orbit');
-    history.replaceState(null,'',location.pathname+'?'+query+location.hash);
+    history.replaceState(null,'',location.pathname+(query.size?'?'+query:'')+location.hash);
     document.querySelectorAll('[data-variant]').forEach(a=>{
       a.href=a.dataset.variant+'.html?'+query;
       if(a.dataset.variant===layout)a.setAttribute('aria-current','page');
@@ -114,7 +115,7 @@
     if(layout==='c'&&open){
       $('projects').classList.remove('expanded');const toggle=document.querySelector('.index-toggle');if(toggle){toggle.textContent='index';toggle.setAttribute('aria-expanded','false');}document.querySelector('#orbitStage')?.removeAttribute('inert');window.artMotion.setIndexMode?.(false);
       if(!$('projectDialog').open){$('projectDialog').showModal();document.body.style.overflow='hidden';}
-      renderProjectOrbit();$('backToOverview').focus({preventScroll:true});requestAnimationFrame(()=>window.artMotion.enter?.());
+      renderProjectOrbit();updateLinks();$('backToOverview').focus({preventScroll:true});requestAnimationFrame(()=>window.artMotion.enter?.());
     }
     $('status').textContent='Selected '+p.title+'.';
   }
@@ -179,7 +180,7 @@
   async function closeProject(){
     if(closingProject)return;closingProject=true;
     projectOrbit.stop();await window.artMotion.leave?.();
-    pauseWithin(viewer);$('projectDialog').close();document.body.style.overflow='';closingProject=false;
+    pauseWithin(viewer);$('projectDialog').close();document.body.style.overflow='';closingProject=false;updateLinks();
     if(inlineMotion&&layout==='c')showEntry(false);
     (lastProjectTrigger?.isConnected&&lastProjectTrigger.getClientRects().length?lastProjectTrigger:document.querySelector('.orbit-art[aria-current=true]')||gallery.querySelector(`[data-project="${selected.id}"]`))?.focus({preventScroll:true});
   }
@@ -274,4 +275,5 @@
   document.addEventListener('visibilitychange',()=>{if(document.hidden)document.querySelectorAll('video').forEach(v=>v.pause());});
   normalizeIndex();renderIndex();renderFrame(selected,mediaIndex);updateLinks();
   if(inlineMotion)installInlineMotion();
+  if(layout==='c'&&params.has('project')){const initialMedia=mediaIndex;commit(selected);mediaIndex=initialMedia;normalizeIndex();renderProjectOrbit();if(projectStage.hidden)renderFrame(selected,mediaIndex);updateLinks();}
 })();

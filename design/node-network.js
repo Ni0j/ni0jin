@@ -52,7 +52,7 @@
         const img=document.createElement('img');img.src=entry.preview;img.alt='';img.draggable=false;img.decoding='async';img.addEventListener('error',()=>{el.classList.add('preview-error');header.textContent='Preview unavailable';});
         const input=document.createElement('span');input.className='node-port node-input';const output=document.createElement('span');output.className='node-port node-output';
         el.append(header,img,input,output);stage.append(el);
-        const node={entry,el,x:(entry.point.x-.5)*260,y:(entry.point.y-.5)*150,vx:0,vy:0,drawX:0,drawY:0,drawW:0,drawH:0};
+        const node={entry,el,img,hdRequested:false,x:(entry.point.x-.5)*260,y:(entry.point.y-.5)*150,vx:0,vy:0,drawX:0,drawY:0,drawW:0,drawH:0};
         el.addEventListener('pointerenter',e=>{if(e.pointerType==='mouse'){hovered=entry;choose(entry);preview(node);wake();}});
         el.addEventListener('pointerleave',()=>{hovered=null;stopPreview();wake();});
         el.addEventListener('focus',()=>{hovered=entry;choose(entry);preview(node);wake();});
@@ -82,8 +82,11 @@
         const emphasis=hovered?.key===entry.key?1.40:1;
         const nw=(entry.parent?84:66)*scale*emphasis,nh=(entry.parent?66:52)*scale*emphasis;
         node.drawX=w/2+node.x*scale+pan.x;node.drawY=h/2+node.y*scale+pan.y;node.drawW=nw;node.drawH=nh;
-        node.el.style.width=(entry.parent?84:66)+'px';node.el.style.height=(entry.parent?66:52)+'px';
-        node.el.style.transform=`translate3d(${node.drawX}px,${node.drawY}px,0) translate(-50%,-50%) scale(${scale*emphasis}) rotate(${reduced.matches?0:clamp(node.vx*.006,-6,6)}deg)`;
+        node.el.style.width=nw+'px';node.el.style.height=nh+'px';node.el.style.setProperty('--node-scale',scale*emphasis);
+        if(!node.hdRequested&&Math.max(nw,nh)*dpr>280&&node.drawX+nw/2>0&&node.drawX-nw/2<w&&node.drawY+nh/2>0&&node.drawY-nh/2<h){
+          node.hdRequested=true;const hd=new Image();hd.decoding='async';hd.onload=()=>{node.img.src=hd.src;};hd.src=entry.preview.replace('/nodes/','/nodes-hd/');
+        }
+        node.el.style.transform=`translate3d(${node.drawX}px,${node.drawY}px,0) translate(-50%,-50%) rotate(${reduced.matches?0:clamp(node.vx*.006,-6,6)}deg)`;
         node.el.style.opacity=focus&&focus!==entry.project?'.30':'1';node.el.style.zIndex=hovered?.key===entry.key?'100':String(entry.parent?30:10);
       }
       for(const node of nodes){
