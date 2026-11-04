@@ -6,10 +6,9 @@
   let open=false,animation=null;
   for(const item of window.PUBLIC_UPDATES.experience){
     const entry=el('article',null,'experience-entry');
-    entry.append(el('h3',item.role),el('p',item.organization),el('p',item.dates,'experience-date'),el('p',item.description,'experience-description'));
+    entry.append(el('h3',item.role),el('p',item.organization),el('p',item.dates,'experience-date'));if(item.organization==='Game studio'||item.organization==='Amplift.AI')entry.append(el('p',item.description,'experience-description'));
     $('experienceContent').append(entry);
   }
-  $('experienceContent').append(el('p',window.PUBLIC_UPDATES.research,'research'));
   for(const event of window.PUBLIC_UPDATES.events){
     const row=el('article',null,'now-entry'),link=el('a',event.title);link.href=event.url;link.target='_blank';link.rel='noopener';
     row.append(link,el('p',event.dates+' · '+event.location,'now-date'));

@@ -25,7 +25,7 @@
     function preview(node){if(node.entry.type!=='video'||reduced.matches)return;live.poster=node.entry.preview;const src=encodeURI(node.entry.src);if(live.getAttribute('src')!==src)live.src=src;node.el.append(live);live.play().catch(()=>{});}
     const controls=document.createElement('div');controls.className='network-tools';
     function control(text,action){const b=document.createElement('button');b.textContent=text;b.type='button';b.addEventListener('click',action);controls.append(b);return b;}
-    control('reset size',()=>{zoomTarget=1;zoomAnchor=null;pan.x=pan.y=0;bendV+=.3;wake();});
+    control('Reset view',()=>{zoomTarget=1;zoomAnchor=null;pan.x=pan.y=0;bendV+=.3;wake();});
     stage.after(controls);
     let nodes=[],works=[],selected=null,hovered=null,running=false,suspended=false,visible=true,raf=0,last=0,time=0;
     let zoom=1,zoomTarget=1,zoomAnchor=null,bend=0,bendV=0,mouse={x:0,y:0},pan={x:0,y:0},size='',drag=null,dragged=false,pinch=null;
@@ -48,7 +48,7 @@
       nodes=allEntries.filter(e=>ids.has(e.project)).map(entry=>{
         const el=document.createElement('button');el.className='orbit-art network-node is-positioned';el.type='button';el.style.setProperty('--node-color',colors[entry.group]);el.dataset.nodeProject=entry.project;
         el.classList.toggle('is-project-node',entry.parent);el.setAttribute('aria-label',(entry.parent?'Open project: ':'Open asset: ')+all[entry.group].title+' — '+entry.label);
-        const header=document.createElement('span');header.className='node-header';header.textContent=entry.parent?all[entry.group].title:String(entry.media+1).padStart(2,'0')+' / '+(entry.type==='video'?'video':'image');
+        const header=document.createElement('span');header.className='node-header';header.textContent=entry.parent?all[entry.group].title:String(entry.media+1).padStart(2,'0')+' / '+(entry.type==='video'?'Video':'Image');
         const img=document.createElement('img');img.src=entry.preview;img.alt='';img.draggable=false;img.decoding='async';img.addEventListener('error',()=>{el.classList.add('preview-error');header.textContent='Preview unavailable';});
         const input=document.createElement('span');input.className='node-port node-input';const output=document.createElement('span');output.className='node-port node-output';
         el.append(header,img,input,output);stage.append(el);

@@ -14,7 +14,7 @@
   function updateInk(){const hex=(getComputedStyle(document.documentElement).getPropertyValue('--ink').trim()||'#22231f').replace('#','');ink=[0,2,4].map(i=>parseInt(hex.slice(i,i+2),16)).join(',');wake();}
   window.addEventListener('portfolio:theme',updateInk);updateInk();
   function resize(){const d=Math.min(2,devicePixelRatio||1);canvas.width=innerWidth*d;canvas.height=innerHeight*d;canvas.style.width=innerWidth+'px';canvas.style.height=innerHeight+'px';ctx.setTransform(d,0,0,d,0,0);geometryDirty=true;}
-  function topSurface(){const top=document.querySelector('#lightbox[open]')||document.querySelector('#projectDialog[open]')||document.body;if(canvas.parentNode!==top)top.append(canvas);geometryDirty=true;}
+  function topSurface(){const top=document.querySelector('#bookingDialog[open]')||document.querySelector('#lightbox[open]')||document.querySelector('#projectDialog[open]')||document.body;if(canvas.parentNode!==top)top.append(canvas);geometryDirty=true;}
   function reset(){const wasEnabled=enabled;enabled=fine.matches&&!reduced.matches&&userEnabled;document.body.classList.toggle('field-cursor',enabled&&active&&!native);canvas.hidden=!enabled;if(!enabled&&wasEnabled){ctx.clearRect(0,0,innerWidth,innerHeight);waves=[];document.querySelectorAll('.field-letter').forEach(el=>{el.style.transform='';const g=el._letterState;if(g)g.x=g.y=g.vx=g.vy=0;});}else if(enabled)wake();}
   function sample(x,y,t=performance.now()){
     if(!enabled)return {x:0,y:0,kick:0};let dx=0,dy=0,kick=0;
@@ -27,7 +27,7 @@
   const selector='h1,h2,button:not(.orbit-art),a,#nowContent h3,#nowContent p,#studyLabel,#studyContext,#projectMediaLabel,#selectedMeta,#selectedDescription,.idle-top span,.idle-bottom span,.dialog-top>span,.entry-motion>p.muted,#mediaCount,.project-context,summary,footer p';
   function decorate(){
     for(const root of document.querySelectorAll(selector)){
-      if(root.closest('[data-letter-run],.orbit-art'))continue;
+      if(root.closest('[data-letter-run],.orbit-art,#bookingDialog'))continue;
       const individual=root.matches('button,a,h1,h2,h3');
       if(individual&&(!root.hasAttribute('aria-label')||root.dataset.letterAutoLabel)){root.setAttribute('aria-label',root.textContent);root.dataset.letterAutoLabel='true';}
       const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),texts=[];

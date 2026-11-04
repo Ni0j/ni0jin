@@ -2,18 +2,18 @@
 window.PROJECTS = [
   {
     "id": "devil-return",
-    "title": "devilReturn",
+    "title": "DevilReturn",
     "number": "01",
     "category": "type print",
     "year": "2024",
-    "description": "A speculative campaign turning Comet P12’s return into a public gathering at Beach 67th Street. Posters and mailed tickets operate as both event artifacts and entry points to the accompanying film.",
+    "description": "A campaign concept for Comet P12’s return at Beach 67th Street, connecting posters, mailed tickets and a film through one visual identity.",
     "meta": "type / print",
     "cover": "assets/images--devilReturn--020.jpg",
     "media": [
       {
         "src": "assets/images--devilReturn--020.jpg",
         "type": "image",
-        "label": "devilReturn",
+        "label": "DevilReturn",
         "original": "images/devilReturn/020.jpg",
         "width": 1800,
         "height": 1208
@@ -21,7 +21,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--devilReturn--010.jpg",
         "type": "image",
-        "label": "devilReturn",
+        "label": "DevilReturn",
         "original": "images/devilReturn/010.jpg",
         "width": 1800,
         "height": 1200
@@ -29,7 +29,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--devilReturn--030.jpg",
         "type": "image",
-        "label": "devilReturn",
+        "label": "DevilReturn",
         "original": "images/devilReturn/030.jpg",
         "width": 1800,
         "height": 1200
@@ -38,7 +38,7 @@ window.PROJECTS = [
     "originalCover": "images/devilReturn/020.jpg",
     "coverWidth": 1800,
     "coverHeight": 1208,
-    "scope": "Speculative campaign · posters · film",
+    "scope": "Campaign · posters · film",
     "featured": true,
     "orbitOrder": 0
   },
@@ -104,7 +104,7 @@ window.PROJECTS = [
   },
   {
     "id": "re",
-    "title": "re:",
+    "title": "Re:",
     "number": "03",
     "category": "print motion",
     "year": "2025",
@@ -129,7 +129,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--re--020.jpg",
         "type": "image",
-        "label": "re:",
+        "label": "Re:",
         "original": "images/re/020.jpg",
         "width": 1800,
         "height": 1146
@@ -137,7 +137,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--re--030.jpg",
         "type": "image",
-        "label": "re:",
+        "label": "Re:",
         "original": "images/re/030.jpg",
         "width": 1800,
         "height": 1146
@@ -152,7 +152,7 @@ window.PROJECTS = [
   },
   {
     "id": "pcell",
-    "title": "pcell.otf",
+    "title": "Pcell.otf",
     "number": "04",
     "category": "type",
     "year": "2025",
@@ -177,7 +177,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--pcell--020.jpg",
         "type": "image",
-        "label": "pcell.otf",
+        "label": "Pcell.otf",
         "original": "images/pcell/020.jpg",
         "width": 1800,
         "height": 1273
@@ -185,7 +185,7 @@ window.PROJECTS = [
       {
         "src": "../images/pcell/030.mp4",
         "type": "video",
-        "label": "pcell.otf",
+        "label": "Pcell.otf",
         "original": "images/pcell/030.mp4"
       }
     ],
@@ -198,11 +198,11 @@ window.PROJECTS = [
   },
   {
     "id": "music",
-    "title": "Live Music Visual Perception",
+    "title": "Music visuals",
     "number": "05",
     "category": "music",
     "year": "2025–2026",
-    "description": "Live and audio-reactive visuals translating music into responsive images. Includes a performance study using XG’s “GALA” at Volvox Labs.",
+    "description": "Visuals for music releases, social campaigns and live shows—bringing a track’s mood and energy onto screens. Includes a live performance study using XG’s “GALA” at Volvox Labs.",
     "meta": "music / live visuals",
     "cover": "assets/covers/tru.jpg",
     "media": [
@@ -221,7 +221,7 @@ window.PROJECTS = [
       {
         "src": "../videos/afternoon.mp4",
         "type": "video",
-        "label": "the afternoon we tried suicide — I Broke My Robot",
+        "label": "The afternoon we tried suicide — I Broke My Robot",
         "original": "videos/afternoon.mp4"
       },
       {
@@ -233,7 +233,7 @@ window.PROJECTS = [
       {
         "src": "../videos/tru.mp4",
         "type": "video",
-        "label": "tru — CRO",
+        "label": "Tru — CRO",
         "original": "videos/tru.mp4"
       },
       {
@@ -245,7 +245,7 @@ window.PROJECTS = [
       {
         "src": "../videos/klepto.mp4",
         "type": "video",
-        "label": "klepto(ft. Lexie Liu) — Sophie Powers",
+        "label": "Klepto(ft. Lexie Liu) — Sophie Powers",
         "original": "videos/klepto.mp4"
       },
       {
@@ -257,7 +257,7 @@ window.PROJECTS = [
       {
         "src": "../videos/pu(ff).mp4",
         "type": "video",
-        "label": "pu(ff) — som(nio)",
+        "label": "Pu(ff) — som(nio)",
         "original": "videos/pu(ff).mp4"
       }
     ],
@@ -265,13 +265,13 @@ window.PROJECTS = [
     "coverWidth": 1280,
     "coverHeight": 720,
     "inquiry": "mailto:niojin.noi@gmail.com?subject=Live%20Music%20Visual%20Perception",
-    "scope": "Live visuals · audio-reactive systems",
+    "scope": "Music promotion · live visuals",
     "featured": true,
     "orbitOrder": 6
   },
   {
     "id": "lost-horizon",
-    "title": "the [Lost H]orizon",
+    "title": "The [Lost H]orizon",
     "number": "06",
     "category": "web",
     "year": "2024",
@@ -296,7 +296,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--020.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/020.jpg",
         "width": 1800,
         "height": 1200
@@ -304,7 +304,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--030.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/030.jpg",
         "width": 1800,
         "height": 1200
@@ -312,7 +312,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--040.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/040.jpg",
         "width": 1800,
         "height": 1200
@@ -320,7 +320,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--050.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/050.jpg",
         "width": 1800,
         "height": 1200
@@ -328,7 +328,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--060.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/060.jpg",
         "width": 1800,
         "height": 1200
@@ -336,7 +336,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--070.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/070.jpg",
         "width": 1800,
         "height": 1200
@@ -344,7 +344,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--080.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/080.jpg",
         "width": 1800,
         "height": 1200
@@ -352,7 +352,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--090.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/090.jpg",
         "width": 1800,
         "height": 1200
@@ -360,7 +360,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--0100.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/0100.jpg",
         "width": 1800,
         "height": 1200
@@ -368,7 +368,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--0110.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/0110.jpg",
         "width": 1800,
         "height": 1200
@@ -376,7 +376,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--0120.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/0120.jpg",
         "width": 1800,
         "height": 1200
@@ -384,7 +384,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--0140.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/0140.jpg",
         "width": 1800,
         "height": 1200
@@ -392,7 +392,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--the_Lost_Horizon--0150.jpg",
         "type": "image",
-        "label": "the [Lost H]orizon",
+        "label": "The [Lost H]orizon",
         "original": "images/the [Lost H]orizon/0150.jpg",
         "width": 1800,
         "height": 1200
@@ -415,18 +415,18 @@ window.PROJECTS = [
   },
   {
     "id": "the-one",
-    "title": "the One",
+    "title": "The One",
     "number": "07",
     "category": "print motion",
     "year": "2026",
-    "description": "An audio-driven installation and publication examining belief after religious authority recedes. The installation responds to participants; the book translates it into image, ink and transcript.",
+    "description": "An installation and publication exploring belief after religious authority recedes. The installation responds to participants; the book translates it into image, ink and transcript.",
     "meta": "print / motion",
     "cover": "assets/images--theOne--030.jpg",
     "media": [
       {
         "src": "../videos/theOne.mp4",
         "type": "video",
-        "label": "Audio-driven projection",
+        "label": "Sound and light installation",
         "original": "videos/theOne.mp4"
       },
       {
@@ -440,7 +440,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--theOne--020.jpg",
         "type": "image",
-        "label": "the One",
+        "label": "The One",
         "original": "images/theOne/020.jpg",
         "width": 1800,
         "height": 1800
@@ -448,7 +448,7 @@ window.PROJECTS = [
       {
         "src": "assets/images--theOne--030.jpg",
         "type": "image",
-        "label": "the One",
+        "label": "The One",
         "original": "images/theOne/030.jpg",
         "width": 1800,
         "height": 1200
@@ -457,13 +457,13 @@ window.PROJECTS = [
     "originalCover": "images/theOne/030.jpg",
     "coverWidth": 1800,
     "coverHeight": 1200,
-    "scope": "Publication · audio-driven installation",
+    "scope": "Publication · sound installation",
     "featured": true,
     "orbitOrder": 3
   },
   {
     "id": "jellyfish",
-    "title": "jellyfish that live inside my computer",
+    "title": "Jellyfish that live inside my computer",
     "number": "08",
     "category": "motion",
     "year": "2025",
@@ -474,7 +474,7 @@ window.PROJECTS = [
       {
         "src": "../videos/jellyfish.mp4",
         "type": "video",
-        "label": "jellyfish that live inside my computer",
+        "label": "Jellyfish that live inside my computer",
         "original": "videos/jellyfish.mp4"
       }
     ],
@@ -499,7 +499,7 @@ window.PROJECTS = [
       {
         "src": "assets/prototypes/prenopost.mp4",
         "type": "video",
-        "label": "pre:no:post · WIP",
+        "label": "Pre:no:post · WIP",
         "description": "An interactive collection of rejection emails and messages, with similar words clustering to reveal recurring language.",
         "poster": "assets/prototypes/prenopost.jpg",
         "original": "prenopost.MP4",
@@ -509,7 +509,7 @@ window.PROJECTS = [
       {
         "src": "assets/prototypes/asc11.mp4",
         "type": "video",
-        "label": "asc11 · WIP",
+        "label": "Asc11 · WIP",
         "description": "A browser-based visual processing tool.",
         "poster": "assets/prototypes/asc11.jpg",
         "original": "asc11.MOV",
@@ -591,7 +591,7 @@ window.PROJECTS = [
     "number": "07",
     "category": "music",
     "year": "2025",
-    "description": "A live audio-reactive visual system created and performed for XG’s “GALA” at Volvox Labs. Sound intensity and rhythm continuously reshape the image, with manual intervention during the performance.",
+    "description": "A live visual performance study using XG’s “GALA” at Volvox Labs, pairing sound and moving images to build an immersive atmosphere.",
     "meta": "music",
     "cover": "assets/thumbs--optimized--gala.jpg",
     "media": [
