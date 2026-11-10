@@ -1,0 +1,65 @@
+/* One brief overture: existing nodes unfold into the actual nio network. */
+.network-intro .network-node img{animation:node-image-arrive 1000ms cubic-bezier(.16,1,.3,1) both}
+.network-intro .node-header{animation:node-label-arrive 1050ms both}
+@keyframes node-image-arrive{0%,15%{clip-path:inset(48%);filter:grayscale(1)}65%{clip-path:inset(0%);filter:grayscale(1)}100%{clip-path:inset(0%);filter:grayscale(0)}}
+@keyframes node-label-arrive{0%,35%{opacity:0}100%{opacity:1}}
+.node-portal{transform-origin:0 0;will-change:transform;pointer-events:none}
+.node-stack-layer{box-shadow:0 8px 18px -10px #0007}
+/* The supplementary layer is optional to read, never required to navigate. */
+@media(hover:hover) and (pointer:fine){
+  .project-row .category{opacity:0;clip-path:inset(0 100% 0 0);transition:opacity 240ms,clip-path 320ms cubic-bezier(.16,1,.3,1)}
+  .project-row:hover .category,.project-row:focus-within .category{opacity:1;clip-path:inset(0)}
+  #nowContent .entry-reveal{display:grid;grid-template-rows:0fr;opacity:0;transition:grid-template-rows 300ms cubic-bezier(.16,1,.3,1),opacity 220ms}
+  #nowContent .entry-reveal-inner{min-height:0;overflow:hidden}
+  #nowContent .experience-entry{position:relative}
+  #nowContent .experience-entry::after{content:'+';position:absolute;top:0;right:0;color:var(--muted);font-size:12px}
+  #nowContent .experience-entry:hover>.entry-reveal,#nowContent .experience-entry:focus-within>.entry-reveal{grid-template-rows:1fr;opacity:1}
+  #nowContent .experience-entry:hover::after,#nowContent .experience-entry:focus-within::after{content:'−'}
+
+}
+@property --line-progress{syntax:'<percentage>';inherits:false;initial-value:0%}
+.motion-link{--line-progress:0%;background-image:linear-gradient(currentColor,currentColor);background-repeat:no-repeat;background-position:var(--line-origin,0%) 100%;background-size:var(--line-progress) 1px;text-decoration:none!important}
+.motion-link>[data-letter-run],.motion-link:hover>[data-letter-run]{border-bottom:0!important}
+.motion-link:focus-visible{--line-progress:100%}
+.about-contact a.motion-link,.experience-resume a.motion-link,.now-entry>a.motion-link{padding-bottom:2px}
+@media(hover:none),(pointer:coarse){.motion-link{--line-progress:100%}}
+@media(prefers-reduced-motion:reduce){
+  .network-intro .network-node img,.network-intro .node-header{animation:none}
+  .experience-date,.project-row .category{opacity:1;filter:none;clip-path:none;transition:none}
+  .experience-entry::after{display:none}
+  .motion-link{--line-progress:100%}
+}
+
+.motion-link:focus-visible{background-size:100% 1px!important}
+
+.appearances summary{list-style:none}
+.appearances summary::-webkit-details-marker{display:none}
+.appearances summary::marker{content:""}
+
+/* All textual controls share a single rule; artwork and icon controls do not. */
+a>[data-letter-run],button>[data-letter-run],.project-row .title>[data-letter-run]{border-bottom:0!important}
+.project-row button .title,.art-open .title{text-decoration:none!important}
+.motion-link{display:inline-block}
+.filters button[aria-pressed=true],.motion-link[aria-expanded=true]{background-size:100% 1px}
+.experience-date{opacity:1;clip-path:none}
+/* Each icon rehearses its own function, without border choreography. */
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  #themeToggle:hover .theme-disc,#themeToggle:focus-visible .theme-disc{animation:disc-preview 700ms ease-in-out both}
+  #themeToggle:hover .theme-rays,#themeToggle:focus-visible .theme-rays{animation:rays-preview 700ms ease-in-out both}
+  #themeToggle:hover .theme-half,#themeToggle:focus-visible .theme-half{animation:half-preview 700ms ease-in-out both}
+  #paletteToggle:hover .palette-icon circle,#paletteToggle:focus-visible .palette-icon circle{animation:palette-preview 720ms ease-in-out both}
+  #paletteToggle:hover .palette-icon circle:nth-child(2),#paletteToggle:focus-visible .palette-icon circle:nth-child(2){animation-delay:65ms;--preview-color:#d48e88}
+  #paletteToggle:hover .palette-icon circle:nth-child(3),#paletteToggle:focus-visible .palette-icon circle:nth-child(3){animation-delay:130ms;--preview-color:#80b8c2}
+}
+@keyframes disc-preview{50%{fill:var(--theme-preview,var(--ink))}}
+#themeToggle[data-mode=dark]{--theme-preview:var(--paper)}
+@keyframes rays-preview{50%{opacity:1;transform:rotate(15deg) scale(1)}}
+@keyframes half-preview{50%{opacity:0}}
+@keyframes palette-preview{0%,100%{transform:translate(0,0)}45%{fill:var(--preview-color,#91b678);transform:translateY(-2px)}}
+@media(prefers-reduced-motion:reduce){#nowContent .entry-reveal{display:block;opacity:1}#nowContent .entry-reveal-inner{overflow:visible}#nowContent .experience-entry::after{display:none}}
+
+#nowContent .experience-entry>h3{padding-right:18px}
+#nowContent .experience-entry>p{color:var(--muted)}
+#nowContent .entry-reveal-inner>.experience-date,#nowContent .entry-reveal-inner>.now-date{font-size:12px;color:var(--muted);margin-top:12px}
+#nowContent .now-entry>.motion-link{padding-right:18px}
+#nowContent .now-entry .now-work{margin-top:8px}

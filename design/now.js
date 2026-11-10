@@ -6,19 +6,21 @@
   let open=false,animation=null;
   for(const item of window.PUBLIC_UPDATES.experience){
     const entry=el('article',null,'experience-entry');
-    entry.append(el('h3',item.role),el('p',item.organization),el('p',item.dates,'experience-date'));if(item.organization==='Game studio'||item.organization==='Amplift.AI')entry.append(el('p',item.description,'experience-description'));
+    entry.tabIndex=0;
+    entry.append(el('h3',item.role),el('p',item.organization));
+    if(item.description){const reveal=el('div',null,'entry-reveal'),inner=el('div',null,'entry-reveal-inner');inner.append(el('p',item.dates,'experience-date'),el('p',item.description,'experience-description'));reveal.append(inner);entry.append(reveal);}
     $('experienceContent').append(entry);
   }
   for(const event of window.PUBLIC_UPDATES.events){
-    const row=el('article',null,'now-entry'),link=el('a',event.title);link.href=event.url;link.target='_blank';link.rel='noopener';
-    row.append(link,el('p',event.dates+' · '+event.location,'now-date'));
+    const row=el('article',null,'now-entry experience-entry'),link=el('a',event.title);row.tabIndex=0;link.href=event.url;link.target='_blank';link.rel='noopener';
+    const reveal=el('div',null,'entry-reveal'),inner=el('div',null,'entry-reveal-inner');inner.append(el('p',event.dates+' · '+event.location,'now-date'));reveal.append(inner);row.append(link,reveal);
     const work=window.PROJECTS.find(p=>p.id===event.project);
-    if(event.personalUrl){const a=el('a',work?.title||'52.05718° N, 4.40660° E','now-work');a.href=event.personalUrl;row.append(a);}
+    if(event.personalUrl){const a=el('a',work?.title||'52.05718° N, 4.40660° E','now-work');a.href=event.personalUrl;inner.append(a);}
     else if(work){const button=el('button',work.title,'now-work');button.addEventListener('click',()=>{setOpen(false);document.dispatchEvent(new CustomEvent('portfolio:open-project',{detail:{id:work.id,trigger:button}}));});row.append(button);}
     if(event.images?.length){const grid=el('div',null,'now-photo-grid');
       for(const photo of event.images){const button=el('button',null,'event-photo');button.setAttribute('aria-label',photo.alt);const img=el('img');img.src=photo.preview||photo.src;img.alt='';img.width=600;img.height=600;img.loading='lazy';button.append(img);
         button.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('portfolio:open-image',{detail:{src:photo.src,alt:photo.alt,title:event.title,trigger:button}})));grid.append(button);}
-      row.append(grid);
+      inner.append(grid);
     }
     $('appearancesContent').append(row);
   }

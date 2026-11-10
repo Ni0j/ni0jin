@@ -2,6 +2,8 @@
 window.PROJECTS = [
   {
     "id": "devil-return",
+    "businessGroup": "identity",
+    "outcome": "A comet’s return → a campaign",
     "title": "DevilReturn",
     "number": "01",
     "category": "type print",
@@ -45,6 +47,8 @@ window.PROJECTS = [
   },
   {
     "id": "echoes",
+    "businessGroup": "experience",
+    "outcome": "Manhole covers → linked stories",
     "title": "Echoes of the Past",
     "number": "02",
     "category": "print web",
@@ -106,6 +110,8 @@ window.PROJECTS = [
   },
   {
     "id": "re",
+    "businessGroup": "identity",
+    "outcome": "Reframing → an editorial identity",
     "title": "Re:",
     "number": "03",
     "category": "print motion",
@@ -155,6 +161,8 @@ window.PROJECTS = [
   },
   {
     "id": "pcell",
+    "businessGroup": "tools",
+    "outcome": "Letterforms → a responsive system",
     "title": "Pcell.otf",
     "number": "04",
     "category": "type",
@@ -202,6 +210,8 @@ window.PROJECTS = [
   },
   {
     "id": "music",
+    "businessGroup": "music",
+    "outcome": "A track’s energy → live visuals",
     "title": "Music visuals",
     "number": "05",
     "category": "music",
@@ -276,6 +286,8 @@ window.PROJECTS = [
   },
   {
     "id": "lost-horizon",
+    "businessGroup": "experience",
+    "outcome": "Printed clues → a digital world",
     "title": "The [Lost H]orizon",
     "number": "06",
     "category": "web",
@@ -421,6 +433,8 @@ window.PROJECTS = [
   },
   {
     "id": "the-one",
+    "businessGroup": "experience",
+    "outcome": "Belief → a participatory installation",
     "title": "The One",
     "number": "07",
     "category": "print motion",
@@ -470,6 +484,8 @@ window.PROJECTS = [
   },
   {
     "id": "jellyfish",
+    "businessGroup": "experience",
+    "outcome": "Digital creatures → companionship",
     "title": "Jellyfish that live inside my computer",
     "number": "08",
     "category": "motion",
@@ -495,6 +511,8 @@ window.PROJECTS = [
   },
   {
     "id": "prototypes",
+    "businessGroup": "tools",
+    "outcome": "Everyday inputs → interactive tools",
     "title": "Build in public",
     "number": "09",
     "category": "web motion",

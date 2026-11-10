@@ -1,13 +1,13 @@
 /* Author-confirmed public updates only. Empty recent/photo lists stay out of the UI. */
 window.PUBLIC_UPDATES={
   experience:[
-    {role:'Art Director & Visual Designer',organization:'Game studio',dates:'Sep 2026–present',description:'Currently developing a game for a fashion brand.'},
-    {role:'Independent Builder & Designer · Freelance',organization:'Self-employed',dates:'Aug 2026–present',description:'Researching and building software products from early concepts to working prototypes, alongside web design and real-time visuals.'},
-    {role:'Contract Brand & Visual Designer',organization:'Amplift.AI',dates:'Jun–Jul 2026',description:'Developed the visual identity and motion language for a digital product, working directly with the founder from concept through execution.'},
-    {role:'Code Tutor',organization:'Parsons School of Design · The New School',dates:'Feb 2025–May 2026',description:'Guided students through interactive web and creative coding projects, connecting visual decisions with HTML, CSS and JavaScript.'}
+    {role:'Art Director & Visual Designer',organization:'Game Studio (Stealth)',dates:'Sep 2026–present',description:'Leading art direction for a game developed for a fashion brand, shaping its visual language across research, world-building, characters, environments and UI/UX.'},
+    {role:'Independent Builder & Designer',organization:'Self-employed',dates:'Feb 2026–present',description:'Designing payment and operational workflows for a restaurant client, auditing websites for design and usability, and building web tools around specific user needs. Producing visuals for live performances and digital campaigns.'},
+    {role:'Contract Designer',organization:'Amplift.AI',dates:'Jun–Jul 2026',description:'Turned an initial concept into a visual identity for a digital product. Delivered the logo, motion variations for different product functions and states, and promotional animations.'},
+    {role:'Code Tutor',organization:'Parsons School of Design · The New School',dates:'Feb 2025–May 2026',description:'Guided students through interactive web and creative coding projects, from concept and visual structure to implementation and debugging with HTML, CSS and JavaScript.'}
   ],
-  research:'At the NSSR Perception Lab, I collaborate with professors and PhD researchers on visual perception research and experimental development (Jul 2026–present).',
-  education:'BFA in Communication Design · Parsons School of Design, 2022–2026. Graduated with Honors.',
+  research:'Visual perception research and experiment design at the NSSR Perception Lab, alongside independent research (Jul 2026–present).',
+  education:'BFA in Communication Design · Parsons School of Design, 2021–2026. Graduated with Honors.',
   tools:'I move between visual design, web development, real-time graphics and sound. My working tools include TouchDesigner, JavaScript, motion design software and audio environments.',
   events:[{
     id:'saga-mini-gems-5',title:'SAGA · 5th Mini Gems',project:'photoetching',personalUrl:'../?work=photoetching',

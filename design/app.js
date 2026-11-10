@@ -5,10 +5,12 @@
   const params=new URLSearchParams(location.search), reduced=matchMedia('(prefers-reduced-motion: reduce)');
   let selected=allProjects.find(p=>p.id===(params.get('project')==='iron-fulu'?'echoes':params.get('project')))||projects[0];
   let filter=params.get('filter')||'all', mediaIndex=Math.max(0,Number(params.get('media'))||0), preview=null, lightboxTrigger=null, lastProjectTrigger=null;
-  const filters=['all',...['music','type','web','print','game','motion'].filter(category=>projects.some(p=>p.category.split(' ').includes(category)))];
+  const filterLabels={all:'All',identity:'Ideas → identities',experience:'Stories → experiences',music:'Sound → visuals',tools:'Inputs → tools'};
+  const filters=Object.keys(filterLabels);
+  filter=({type:'tools',web:'experience',print:'identity',motion:'experience'})[filter]||filter;
   if(!filters.includes(filter))filter='all';
   const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const matches=p=>filter==='all'||p.category.split(' ').includes(filter);
+  const matches=p=>filter==='all'||p.businessGroup===filter;
   const index=document.querySelector('.project-index'), gallery=$('gallery');
   const inlineMotion=layout==='b'||layout==='c';
   let entryMotion=null,miniPreview=null;
@@ -24,7 +26,7 @@
     const multiple=selected.media.length>1;
     projectStage.hidden=projectLabel.hidden=!multiple;$('frame').hidden=multiple;
     viewer.classList.toggle('has-media-orbit',multiple);$('enlarge').textContent='Enlarge';
-    if(multiple){pauseWithin($('frame'));$('frame').replaceChildren();projectOrbit.start(selected.media,mediaIndex);}
+    if(multiple){pauseWithin($('frame'));$('frame').replaceChildren();projectOrbit.start(selected.media.map((m,i)=>({...m,preview:window.NODE_PREVIEWS?.[selected.id+':'+i],poster:m.poster||window.NODE_PREVIEWS?.[selected.id+':'+i]})),mediaIndex);}
     else projectOrbit.stop();
   }
   function updateLinks(){
@@ -43,7 +45,7 @@
     const el=document.createElement(m.type==='video'?'video':'img');
     el.src=encodeURI(m.src);el.dataset.original=m.original||p.originalCover||'';
     if(m.type==='video'){
-      el.controls=true;el.playsInline=true;el.preload='metadata';if(m.poster)el.poster=encodeURI(m.poster);el.setAttribute('aria-label',m.label);
+      el.controls=true;el.playsInline=true;el.preload='metadata';const poster=m.poster||window.NODE_PREVIEWS?.[p.id+':'+i];if(poster)el.poster=encodeURI(poster);el.setAttribute('aria-label',m.label);
       el.addEventListener('loadedmetadata',()=>{
         const time=playheads.get(el.src);
         if(time>0&&time<el.duration)el.currentTime=time;
@@ -121,22 +123,25 @@
     if(layout==='c'&&open){
       $('projects').classList.remove('expanded');const toggle=document.querySelector('.index-toggle');if(toggle){toggle.textContent='Index';toggle.setAttribute('aria-expanded','false');}document.querySelector('#orbitStage')?.removeAttribute('inert');window.artMotion.setIndexMode?.(false);
       if(!$('projectDialog').open){$('projectDialog').showModal();document.body.style.overflow='hidden';}
-      $('projectDialog').scrollTop=0;renderProjectOrbit();updateLinks();$('backToOverview').focus({preventScroll:true});requestAnimationFrame(()=>window.artMotion.enter?.());
+      $('projectDialog').scrollTop=0;renderProjectOrbit();updateLinks();$('backToOverview').focus({preventScroll:true});requestAnimationFrame(async()=>{if(!$('projectDialog').open||closingProject)return;projectOrbit.suspend(true);try{await window.artMotion.enter?.();}finally{if($('projectDialog').open&&!closingProject)projectOrbit.suspend(false);}});
     }
     $('status').textContent='Selected '+p.title+'.';
   }
   function restore(){preview=null;renderFrame(selected,mediaIndex);}
   function bindProjectButton(button,p,hover=true){
-    button.dataset.project=p.id;button.setAttribute('aria-label',p.number+' '+p.title+' '+p.category.replaceAll(' ', ', '));
+    button.dataset.project=p.id;button.setAttribute('aria-label',p.number+' '+p.title+' '+(p.outcome||p.scope||p.meta));
     button.addEventListener('click',()=>{lastProjectTrigger=button;commit(p);});
     if(hover){
       button.addEventListener('pointerenter',e=>{
-        if(e.pointerType!=='mouse'||layout==='c')return;
+        if(e.pointerType!=='mouse')return;
+        if(layout==='c'){window.artMotion.highlightProject?.(p.id);return;}
         if(layout==='b'){miniPreview?.show(p);return;}
         if(p.id===selected.id)return;
         preview=p;renderFrame(p,-1,true);
       });
-      button.addEventListener('pointerleave',()=>{if(layout==='b')miniPreview?.idle();else if(preview)restore();});
+      button.addEventListener('focus',()=>{if(layout==='c'&&button.matches(':focus-visible'))window.artMotion.highlightProject?.(p.id);});
+      button.addEventListener('blur',()=>{if(layout==='c')window.artMotion.highlightProject?.(null);});
+      button.addEventListener('pointerleave',()=>{if(layout==='c')window.artMotion.highlightProject?.(null);else if(layout==='b')miniPreview?.idle();else if(preview)restore();});
     }
   }
   function renderIndex(){
@@ -144,14 +149,14 @@
     projects.filter(matches).forEach(p=>{
       const li=document.createElement('li');li.className='project-row';
       const button=document.createElement('button');
-      button.innerHTML=`<span class="number">${p.number}</span><span class="title">${escape(p.title)}</span><span class="category">${escape(p.category.replaceAll(' ', ', '))}</span>`;
+      button.innerHTML=`<span class="number">${p.number}</span><span class="title">${escape(p.title)}</span><span class="category">${escape((p.outcome||p.scope||p.meta))}</span>`;
       button.style.setProperty('--node-color',window.projectNodeColor?.(p.id)||'#80b8c2');bindProjectButton(button,p);li.append(button);index.append(li);
-      if(p.cover&&layout==='c'){
+      if(p.cover&&layout==='c'&&!inlineMotion){
         const article=document.createElement('article');article.className='artwork';article.dataset.work=p.id;
         const open=document.createElement('button');open.className='art-open';
         const img=makeMedia(p,0,true);img.alt='';img.loading=gallery.children.length<3?'eager':'lazy';
         open.append(img);const caption=document.createElement('span');caption.className='caption';
-        caption.innerHTML=`<span class="number">${p.number}</span><span class="title">${escape(p.title)}</span><span class="category">${escape(p.category.replaceAll(' ', ', '))}</span>`;
+        caption.innerHTML=`<span class="number">${p.number}</span><span class="title">${escape(p.title)}</span><span class="category">${escape((p.outcome||p.scope||p.meta))}</span>`;
         open.append(caption);bindProjectButton(open,p,false);article.append(open);gallery.append(article);
       }
     });
@@ -162,16 +167,17 @@
     });
     renderDetails();
   }
-  document.querySelector('.filters').innerHTML=filters.map(f=>`<button data-filter="${f}" aria-pressed="${filter===f}">${f[0].toUpperCase()+f.slice(1)}</button>`).join('<span aria-hidden="true">/</span>');
+  document.querySelector('.filters').innerHTML=filters.map(f=>`<button data-filter="${f}" aria-pressed="${filter===f}">${filterLabels[f]}</button>`).join('<span aria-hidden="true">/</span>');
   document.querySelectorAll('[data-filter]').forEach(b=>b.addEventListener('click',()=>{
     filter=b.dataset.filter;
     if(!matches(selected)){selected=projects.find(matches);mediaIndex=0;}
     preview=null;
     document.querySelectorAll('[data-filter]').forEach(f=>f.setAttribute('aria-pressed',String(f===b)));
-    renderIndex();renderFrame(selected,0);updateLinks();if(inlineMotion&&entryMotion&&!entryMotion.hidden)showEntry();
+    renderIndex();if(layout!=='c'||$('projectDialog').open)renderFrame(selected,0);updateLinks();if(inlineMotion&&entryMotion&&!entryMotion.hidden)showEntry();
     $('status').textContent='Showing '+projects.filter(matches).length+' projects. Selected '+selected.title+'.';
   }));
   function changeMedia(delta){
+    if(closingProject)return;window.artMotion.cancelTransition?.();
     if(preview)preview=null;
     if(!selected.media.length)return;
     mediaIndex=(mediaIndex+delta+selected.media.length)%selected.media.length;
@@ -189,11 +195,13 @@
     pauseWithin(viewer);$('projectDialog').close();document.body.style.overflow='';closingProject=false;updateLinks();
     if(inlineMotion&&layout==='c'){if(window.createNodeNetwork&&params.get('home')!=='orbit')window.artMotion.suspend(false);else showEntry(false);}
     (lastProjectTrigger?.isConnected&&lastProjectTrigger.getClientRects().length?lastProjectTrigger:document.querySelector('.orbit-art[aria-current=true]')||gallery.querySelector(`[data-project="${selected.id}"]`))?.focus({preventScroll:true});
+    window.artMotion.clearHighlight?.();
   }
   $('backToOverview').addEventListener('click',closeProject);
   $('projectDialog').addEventListener('cancel',e=>{e.preventDefault();closeProject();});
   const isPreviewMedia=(p,i)=>Boolean(preview)||i===-1;
   function openLightbox(){
+    if(closingProject)return;window.artMotion.cancelTransition?.();
     const p=preview||selected,i=preview?-1:mediaIndex;
     lightboxTrigger=document.activeElement;
     pauseWithin(viewer);projectOrbit.suspend(true);$('lightboxTitle').textContent=p.title;
@@ -279,7 +287,7 @@
   });
   document.addEventListener('portfolio:open-project',event=>{const work=allProjects.find(p=>p.id===event.detail?.id);if(work){lastProjectTrigger=event.detail.trigger||document.activeElement;commit(work);}});
   document.addEventListener('visibilitychange',()=>{if(document.hidden)document.querySelectorAll('video').forEach(v=>v.pause());});
-  normalizeIndex();renderIndex();renderFrame(selected,mediaIndex);updateLinks();
+  normalizeIndex();renderIndex();if(layout!=='c')renderFrame(selected,mediaIndex);updateLinks();
   if(inlineMotion)installInlineMotion();
   if(layout==='c'&&params.has('project')){const initialMedia=mediaIndex;commit(selected);mediaIndex=initialMedia;normalizeIndex();renderProjectOrbit();if(projectStage.hidden)renderFrame(selected,mediaIndex);updateLinks();}
   window.addEventListener('portfolio:palette',()=>{

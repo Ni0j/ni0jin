@@ -184,3 +184,14 @@ body[data-layout=c] .site-header .identity h1{font-weight:400}
 .booking-prices{margin:24px 0;font:400 14px/22px "ABC Areal",sans-serif}.booking-prices>div{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:12px 0;border-top:1px solid color-mix(in srgb,var(--ink) 20%,transparent)}.booking-prices dt,.booking-prices dd{margin:0}.booking-prices dd{text-align:right}.booking-prices dd span{font-size:12px;line-height:18px;color:var(--muted)}
 
 .booking-live .booking-rate-note{font-size:12px;line-height:19px;color:var(--muted);margin-bottom:20px}
+
+/* Filtering keeps the whole network visible; the selected group retains its color. */
+#orbitStage .network-node.is-filtered-out img,#orbitStage .network-node.is-filtered-out video{filter:grayscale(1)}
+body.node-home:has(#projects.expanded) #orbitStage{opacity:1;transform:none;pointer-events:none}
+body.node-home #projects.expanded .project-index{grid-template-columns:1fr}
+body.node-home #projects.expanded{width:min(640px,calc(100vw - 48px))}
+body.node-home .project-row button{grid-template-columns:30px minmax(0,1fr) minmax(0,1.25fr)}
+body.node-home .project-row .category{white-space:normal;text-align:left}
+.experience-resume{margin-top:24px}
+.experience-resume a{text-decoration:underline;text-underline-offset:3px}
+@media(max-width:800px){body.node-home #projects.expanded{width:calc(100vw - 32px)}body.node-home .project-row button{grid-template-columns:24px minmax(0,1fr)}body.node-home .project-row .category{grid-column:2}}
