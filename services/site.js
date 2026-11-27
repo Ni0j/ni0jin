@@ -1,110 +1,104 @@
-const stories = [
+// Keep approved menu structure, prices and UI behavior when editing copy.
+// Each dish stays a short client-facing proposition plus possible deliverables.
+// Do not replace Reviews/Ordered with a generic Work view, or describe story
+// projects as imagined/simulated. Their examples explain how the work functions.
+// Reveal words name the outcome that the deliverables below make concrete.
+// Stable dish numbers connect the menu, examples and enquiry emails.
+const menu = [
   {
-    id: 'fictional-worlds',
-    direction: 'Make a fictional world feel real',
-    title: 'How do you make a fictional world feel real?',
-    description: 'A ticket or a dossier can make your world feel as if it existed before the audience arrived.',
-    cases: ['devil-return', 'lost-horizon']
+    id: 'fictional-worlds', number: 'I',
+    name: 'Give your fictional world objects that feel real',
+    ingredients: 'Invitations, records, story objects, digital archives',
+    price: '$1,600', timing: '5 working days',
+    projects: ['lost-horizon', 'devil-return']
   },
   {
-    id: 'visual-identity',
-    direction: 'Give a brand a visual identity',
-    title: 'What could make people take a second look at your brand?',
-    description: 'Patterns on New York manhole covers and Fulu talismans became the visual identity of a book and mobile site.',
-    cases: ['echoes']
+    id: 'visual-identity', number: 'II',
+    name: 'Give your overlooked subject a new form',
+    ingredients: 'Visual identity, publication, web presentation',
+    price: '$3,200', timing: '10 working days',
+    projects: ['echoes']
   },
   {
-    id: 'type-and-worlds',
-    direction: 'Show a world through type',
-    title: 'What could give people their first glimpse of your world?',
-    description: 'Pcell’s letterforms disperse into a field of points that moves with your hands.',
-    cases: ['pcell']
+    id: 'type-and-worlds', number: 'III',
+    name: 'Give your world its own typeface',
+    ingredients: 'Custom letterforms, font files, type specimens, pictographic scripts to decipher',
+    price: '$6,400', timing: '1 month',
+    projects: ['pcell']
   },
   {
-    id: 'music-visuals',
-    direction: 'Give music a visual language',
-    title: 'What should listeners see when they hear your music?',
-    description: 'The track’s rhythm sets the cuts, its tension sets the pauses, and its atmosphere shapes the images.',
-    cases: ['gala', 'deep-learning']
+    id: 'music-visuals', number: 'IV',
+    name: 'Give your music an immersive visual experience',
+    ingredients: 'Release visuals, live visual sets, projected music visuals',
+    price: '$120',
+    projects: ['gala', 'deep-learning']
   },
   {
-    id: 'audience-participation',
-    direction: 'Make the audience part of the work',
-    title: 'What could audiences do with the work you’ve already made?',
-    description: 'An experience that responds to its audience can give people something to play with, capture or share.',
-    cases: ['the-one', 'lost-horizon']
+    id: 'audience-participation', number: 'V',
+    name: 'Give your audience a part to play in your work',
+    ingredients: 'Gesture interaction, responsive visuals, interactive prototypes',
+    price: 'Price and timing on enquiry',
+    projects: ['pcell', 'the-one', 'lost-horizon']
+  },
+  {
+    id: 'event-identity', number: 'VI',
+    name: 'Give your event its own identity and campaign',
+    ingredients: 'Event identity, invitations, tickets, campaign material',
+    price: '$640', timing: '2–3 working days',
+    projects: ['devil-return']
+  },
+  {
+    id: 'regular', number: 'VII',
+    name: 'Regular',
+    ingredients: 'Temporary design and technical help for your project',
+    price: '$40/hr',
+    projects: []
   }
 ];
-
+// Read from finding a subject to giving audiences a way to take part.
+const menuOrder = ['visual-identity', 'type-and-worlds', 'fictional-worlds', 'music-visuals', 'event-identity', 'audience-participation', 'regular'];
+menu.sort((a, b) => menuOrder.indexOf(a.id) - menuOrder.indexOf(b.id));
+menu.forEach((dish, index) => { dish.number = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'][index]; });
 const edits = {
   'devil-return': {
-    media: [0, 2, 1],
-    labels: ['Campaign ephemera', 'Printed campaign detail', 'Campaign poster'],
-    description: 'Posters, a mailed ticket and a film give an imagined gathering for the returning comet one visual identity.'
+    media: [0, 2],
+    description: 'For an exclusive comet return event, a mailed invitation and ticket make the experience begin before guests arrive.'
   },
   'lost-horizon': {
-    cover: 'assets/images--the_Lost_Horizon--010.jpg',
-    media: [1, 0, 2, 3],
-    labels: ['Printed dossier', 'Desktop simulation', 'Archive detail', 'Archive detail'],
-    description: 'Clues hidden in a printed dossier unlock a desktop simulation.'
+    title: 'Lost Horizon',
+    media: [1, 0],
+    description: 'Clues in a physical dossier unlock a digital archive, turning readers into investigators.'
   },
   echoes: {
-    cover: 'assets/echoes/publication-7.jpg',
-    media: [0, 1, 3, 4]
+    media: [0, 3],
+    description: 'Patterns underfoot become a visual identity, connecting New York manhole covers with Fulu talismans in a book and mobile site.'
   },
   pcell: {
-    media: [1, 0, 2]
+    title: 'Pcell',
+    media: [1, 0],
+    description: 'Letterforms give a first glimpse of another world, opening into a field of points that responds to your hands.'
   },
   gala: {
     media: [0],
-    description: 'Live visuals performed in real time to XG’s “GALA”.'
+    description: 'Live visuals performed to GALA by XG follow the track in real time.'
   },
   'deep-learning': {
     source: 'music',
     title: 'Deep Learning',
-    description: 'A motion study set to “Deep Learning” by BLASÉ.',
     cover: '../services/deep-learning.jpg',
     media: [7],
-    labels: ['Release visual study']
+    description: 'Rhythm and tension in Deep Learning by BLASÉ guide the movement and cuts.'
   },
   'the-one': {
-    media: [0, 1, 2],
-    description: 'An installation that responds to participants becomes a book of images, ink and transcripts.'
+    media: [0, 1],
+    description: 'Participants shape the sound and light, with a book carrying the experience beyond the installation.'
   }
 };
 
 const portfolio = new URL('../design/', document.baseURI);
 const asset = path => new URL(path, portfolio).href;
 const projects = new Map(window.PROJECTS.map(project => [project.id, project]));
-const caseFor = id => {
-  const edit = edits[id];
-  const project = projects.get(edit.source || id);
-  return {
-    ...project,
-    ...edit,
-    portfolioId: project.id,
-    media: edit.media.map((index, order) => ({
-      ...project.media[index],
-      label: edit.labels?.[order] || project.media[index].label
-    }))
-  };
-};
-
 const $ = id => document.getElementById(id);
-const dialog = $('case-dialog');
-const directionDialog = $('direction-dialog');
-const directionOptions = $('direction-options');
-const videoToggle = $('case-video-toggle');
-const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-const easing = 'cubic-bezier(.22, .68, .26, 1)';
-const emailAddress = 'niojin.noi@gmail.com';
-const emailLabel = $('email').textContent;
-let currentCase;
-let previousFocus;
-let mediaIndex;
-let closing = false;
-let dialogAnimation;
-let directionTrigger;
 
 function element(tag, className, text) {
   const node = document.createElement(tag);
@@ -113,290 +107,577 @@ function element(tag, className, text) {
   return node;
 }
 
-function animate(node, frames, options) {
-  if (!reducedMotion.matches) return node.animate(frames, { easing, ...options });
-}
+const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
+const textObserver = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
+  for (const entry of entries) {
+    if (!entry.isIntersecting) {
+      entry.target.dataset.entered = 'false';
+      continue;
+    }
+    if (entry.target.dataset.entered === 'true') continue;
+    entry.target.dataset.entered = 'true';
+    entry.target.dataset.replays = String(Number(entry.target.dataset.replays || 0) + 1);
+    if (!reducedMotion.matches) {
+      entry.target.getAnimations().forEach(animation => animation.cancel());
+      entry.target.animate([
+        { opacity: 0, filter: 'blur(4px)' },
+        { opacity: 1, filter: 'blur(0px)' }
+      ], { duration: 1000, easing: 'ease-out' });
+    }
+  }
+}, { threshold: 0, rootMargin: '-8% 0px -8% 0px' }) : null;
 
-function projectUrl(project) {
-  return new URL('index.html?project=' + project.portfolioId, portfolio).href;
-}
+document.querySelectorAll('.story-copy').forEach(copy => textObserver?.observe(copy));
 
-function makeExamplesTrigger(story) {
-  const single = story.cases.length === 1;
-  const button = element('button', 'text-link story-examples', single ? 'See a past project' : 'See past projects');
-  button.type = 'button';
-  button.setAttribute('aria-haspopup', 'dialog');
-  button.setAttribute('aria-controls', single ? dialog.id : directionDialog.id);
-  button.addEventListener('click', () => {
-    if (single) {
-      openCase(caseFor(story.cases[0]), button);
+const preview = new URLSearchParams(location.search);
+document.documentElement.dataset.blend = preview.get('blend') || 'difference';
+const reviewLayout = preview.get('layout') === 'c' || preview.get('layout') === 'a' ? 'c' : 'b';
+document.documentElement.dataset.reviewLayout = reviewLayout;
+const revealWords = {
+  'visual-identity': 'new form',
+  'type-and-worlds': 'typeface',
+  'fictional-worlds': 'objects',
+  'music-visuals': 'visual experience',
+  'event-identity': 'identity',
+  'audience-participation': 'part to play'
+};
+
+function addDeliverablesReveal(dish, name, ingredients) {
+  const word = revealWords[dish.id];
+  const offset = dish.name.indexOf(word);
+  name.textContent = '';
+  const trigger = element('button', 'objects-trigger', word);
+  trigger.type = 'button';
+  trigger.setAttribute('aria-expanded', 'false');
+  trigger.setAttribute('aria-controls', dish.id + '-deliverables');
+  name.append(document.createTextNode(dish.name.slice(0, offset)), trigger, document.createTextNode(dish.name.slice(offset + word.length)));
+  ingredients.id = dish.id + '-deliverables';
+  ingredients.classList.add('objects-deliverables');
+  ingredients.setAttribute('aria-hidden', 'true');
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 120 42');
+  svg.setAttribute('aria-hidden', 'true');
+  svg.classList.add('hand-mark');
+  const path = document.createElementNS(svg.namespaceURI, 'path');
+  path.setAttribute('d', 'M4 9 C24 13 70 10 99 6 C109 4 114 8 108 12 C94 20 72 20 67 27 C63 31 62 35 64 39');
+  path.setAttribute('pathLength', '1');
+  svg.append(path);
+  trigger.append(svg);
+  let opened = false;
+  const reveal = () => {
+    if (opened) return;
+    opened = true;
+    trigger.setAttribute('aria-expanded', 'true');
+    ingredients.setAttribute('aria-hidden', 'false');
+    if (reducedMotion.matches) {
+      ingredients.style.opacity = '1';
       return;
     }
-    const entries = story.cases.map(id => {
-      const project = caseFor(id);
-      return indexLink(project.title, projectUrl(project), () => openCase(project, button));
-    });
-    openIndex('Past project examples', entries, button);
-  });
-  return button;
+    path.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 700, fill: 'forwards', easing: 'ease-in-out' });
+    ingredients.animate([
+      { opacity: 0, clipPath: 'inset(0 100% 0 0)' },
+      { opacity: 1, clipPath: 'inset(0 0% 0 0)' }
+    ], { duration: 1300, delay: 600, easing: 'ease-out', fill: 'forwards' });
+  };
+  trigger.addEventListener('pointerenter', reveal);
+  trigger.addEventListener('focus', reveal);
+  trigger.addEventListener('click', reveal);
 }
 
-function makeDirectionTrigger(current) {
-  const label = current ? current.direction + ' (change direction)' : 'Explore design services';
-  const button = element('button', 'direction-trigger', label);
-  button.type = 'button';
-  button.setAttribute('aria-haspopup', 'dialog');
-  button.setAttribute('aria-controls', directionDialog.id);
-  button.addEventListener('click', () => openDirections(current, button));
-  return button;
-}
-
-function openDirections(current, trigger) {
-  const choices = stories.filter(story => story !== current).map(story => {
-    return indexLink(story.direction, '#' + story.id, () => {
-      const target = $(story.id);
-      if (location.hash !== '#' + target.id) history.pushState(null, '', '#' + target.id);
-      target.focus({ preventScroll: true });
-      target.scrollIntoView({ block: 'start' });
-    });
-  });
-  openIndex('Design services', choices, trigger);
-}
-
-function indexLink(label, href, activate) {
-  const link = element('a', 'direction-option', label);
-  link.href = href;
-  link.addEventListener('click', event => {
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    directionDialog.close();
-    activate();
-  });
-  return link;
-}
-
-function openIndex(label, choices, trigger) {
-  directionTrigger = trigger;
-  directionDialog.setAttribute('aria-label', label);
-  directionOptions.setAttribute('aria-label', label);
-  directionOptions.classList.toggle('is-short', choices.length <= 2);
-  directionOptions.replaceChildren(...choices);
-  if (choices.length > 2) {
-    const more = element('button', 'direction-option', 'More directions');
-    more.type = 'button';
-    more.addEventListener('click', () => {
-      choices[1].focus({ preventScroll: true });
-      choices[1].scrollIntoView({ block: 'start', behavior: reducedMotion.matches ? 'instant' : 'smooth' });
-    });
-    choices[0].after(more);
-  }
-  directionDialog.showModal();
-  directionOptions.scrollTop = 0;
-  animate(directionDialog.querySelector('.direction-sheet'), [
-    { opacity: 0, transform: 'translateY(13px)' },
-    { opacity: 1, transform: 'none' }
-  ], { duration: 420 });
-}
-
-function closeDirections() {
-  directionDialog.close();
-  directionTrigger?.focus({ preventScroll: true });
-}
-
-$('direction-close').addEventListener('click', closeDirections);
-directionDialog.addEventListener('cancel', event => {
-  event.preventDefault();
-  closeDirections();
-});
-
-$('site-intro').append(makeDirectionTrigger());
-
-stories.forEach(story => {
-  const section = element('section', 'story');
-  section.id = story.id;
-  section.tabIndex = -1;
-  const copy = element('header', 'story-copy measure');
-  const title = element('h2', 'visually-hidden', story.title);
-  title.id = story.id + '-title';
-  section.setAttribute('aria-labelledby', title.id);
-  copy.append(title, makeDirectionTrigger(story));
-  section.append(copy, element('p', 'story-note measure', story.description), makeExamplesTrigger(story));
-  $('stories').append(section);
-});
-
-const linkedStory = $(location.hash.slice(1));
-if (linkedStory?.classList.contains('story')) linkedStory.scrollIntoView({ behavior: 'instant' });
-
-function openCase(project, trigger) {
-  currentCase = project;
-  previousFocus = trigger;
-  const title = $('case-full');
-  title.textContent = project.title;
-  title.setAttribute('aria-label', 'See the full project: ' + project.title);
-  title.href = projectUrl(project);
-  $('case-note-toggle').hidden = false;
-  $('case-note-toggle').setAttribute('aria-expanded', 'false');
-  $('case-text').hidden = true;
-  $('case-controls').hidden = project.media.length < 2;
-  showMedia(0, 0);
-  dialog.showModal();
-  dialog.scrollTop = 0;
-  dialogAnimation = animate(dialog, [
-    { opacity: 0, transform: 'translateY(16px)' },
-    { opacity: 1, transform: 'none' }
-  ], { duration: 780 });
-  animate(dialog.querySelector('.case-copy'), [
-    { opacity: 0, transform: 'translateY(17px)' },
-    { opacity: 1, transform: 'none' }
-  ], { duration: 610, delay: 180, fill: 'backwards' });
-}
-
-function revealCaseNote(moveFocus) {
-  const note = $('case-text');
-  const disclosure = $('case-note-toggle');
-  disclosure.setAttribute('aria-expanded', 'true');
-  note.hidden = false;
-  if (moveFocus) note.focus({ preventScroll: true });
-  disclosure.hidden = true;
-  animate(note, [{ opacity: 0, transform: 'translateY(6px)' }, { opacity: 1, transform: 'none' }], { duration: 380 });
-}
-
-$('case-note-toggle').addEventListener('click', () => revealCaseNote(true));
-
-function showMedia(index, delta) {
-  mediaIndex = index;
-  const item = currentCase.media[index];
-  const container = $('case-media');
+function makeMedia(item, project, title) {
+  const figure = element('figure', 'project-media');
   const isVideo = item.type === 'video';
   const media = element(isVideo ? 'video' : 'img');
-  const description = $('case-text');
-  description.textContent = currentCase.description;
-  videoToggle.hidden = !isVideo;
-  videoToggle.textContent = 'Play video';
-  $('case-return').hidden = isVideo && currentCase.media.length > 1;
   if (isVideo) {
     media.preload = 'none';
     media.playsInline = true;
-    media.poster = asset(item.poster || currentCase.cover);
-    media.setAttribute('aria-label', item.label);
-    const updateVideoLabel = () => {
-      if (media === container.lastElementChild) videoToggle.textContent = media.paused ? 'Play video' : 'Pause video';
+    const posterName = item.src.split('/').pop().replace(/\.[^.]+$/, '.jpg');
+    media.poster = item.poster ? asset(item.poster) : new URL('assets/posters/' + posterName, document.baseURI).href;
+    media.setAttribute('aria-label', title);
+    const controls = element('figcaption', 'video-controls');
+    const toggle = element('button', 'text-link', 'Play video');
+    toggle.type = 'button';
+    toggle.setAttribute('aria-label', 'Play video for ' + title);
+    toggle.addEventListener('click', async () => {
+      if (!media.paused) return media.pause();
+      document.querySelectorAll('video').forEach(other => {
+        if (other !== media) other.pause();
+      });
+      try {
+        await media.play();
+      } catch (error) {
+        if (error.name !== 'AbortError') toggle.textContent = 'Retry playback';
+      }
+    });
+    const updateLabel = () => {
+      toggle.textContent = media.paused ? 'Play video' : 'Pause video';
+      toggle.setAttribute('aria-label', toggle.textContent + ' for ' + title);
     };
-    ['play', 'pause', 'ended'].forEach(event => media.addEventListener(event, updateVideoLabel));
+    ['play', 'pause', 'ended'].forEach(event => media.addEventListener(event, updateLabel));
+    toggle.addEventListener('keydown', event => {
+      if (!['ArrowLeft', 'ArrowRight'].includes(event.key) || !Number.isFinite(media.duration)) return;
+      event.preventDefault();
+      media.currentTime = Math.max(0, Math.min(media.duration, media.currentTime + (event.key === 'ArrowLeft' ? -5 : 5)));
+    });
+    const mute = element('button', 'audio-toggle');
+    mute.type = 'button';
+    mute.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="sound-waves" d="M16 8c2 2 2 6 0 8M19 5c4 4 4 10 0 14"/><path class="sound-off" d="M16 8l6 8M22 8l-6 8"/></svg>';
+    const updateMute = () => {
+      mute.setAttribute('aria-label', (media.muted ? 'Unmute ' : 'Mute ') + title);
+      mute.setAttribute('aria-pressed', String(media.muted));
+      mute.title = media.muted ? 'Unmute' : 'Mute';
+    };
+    mute.addEventListener('click', () => { media.muted = !media.muted; });
+    media.addEventListener('volumechange', updateMute);
+    updateMute();
+    controls.append(toggle, mute);
+    figure.append(media, controls);
   } else {
-    media.alt = currentCase.title + ': ' + item.label;
+    media.alt = title + ': ' + item.label;
+    media.loading = 'lazy';
+    media.decoding = 'async';
+    if (item.width && item.height) {
+      media.width = item.width;
+      media.height = item.height;
+    }
+    figure.append(media);
   }
   media.addEventListener('error', () => {
-    if (media !== container.lastElementChild) return;
-    const message = isVideo ? 'Video unavailable' : 'Image unavailable';
-    description.textContent = message + '.';
-    if (description.hidden) revealCaseNote(document.activeElement === $('case-note-toggle'));
-    $('media-label').textContent = item.label + ': ' + message;
-    videoToggle.hidden = true;
-    $('case-return').hidden = false;
-    media.remove();
+    figure.replaceChildren(element('p', 'media-error', isVideo ? 'Video unavailable' : 'Image unavailable'));
   }, { once: true });
   media.src = asset(item.src);
-  const outgoing = container.lastElementChild;
-  container.querySelectorAll('[inert]').forEach(node => node.remove());
-  outgoing?.matches('video') && outgoing.pause();
-  if (!delta || !outgoing || reducedMotion.matches || outgoing.matches('video')) {
-    outgoing?.remove();
-  } else {
-    outgoing.inert = true;
-    const departure = animate(outgoing, [
-      { opacity: 1, transform: 'none' },
-      { opacity: 0, transform: 'translateX(' + (-delta * 13) + 'px)' }
-    ], { duration: 340, fill: 'both' });
-    departure.finished.then(() => outgoing.remove(), () => outgoing.remove());
-  }
-  container.append(media);
-  $('media-label').textContent = item.label;
-  if (delta) animate(media, [
-    { opacity: 0, transform: 'translateY(' + (delta * 22) + 'px) scale(1.015)' },
-    { opacity: 1, transform: 'none' }
-  ], { duration: 630 });
+  return figure;
 }
 
-videoToggle.addEventListener('click', async () => {
-  const video = $('case-media').querySelector('video');
-  if (!video) return;
-  if (!video.paused) {
-    video.pause();
+
+function dishLink(dish, label) {
+  const link = element('a', 'text-link', label);
+  const body = 'Dish ' + dish.number + ': ' + dish.name + '\n\nProject details:\n\nDeliverables needed:\n\nTimeline:\n';
+  link.href = 'mailto:niojin.noi@gmail.com?subject=' + encodeURIComponent('Enquiry for ' + dish.number + ' ' + dish.name) + '&body=' + encodeURIComponent(body);
+  return link;
+}
+
+const menuIndex = element('nav', 'menu-index');
+menuIndex.setAttribute('aria-label', 'Menu index, seven dishes');
+for (const dish of menu) {
+  const entry = element('article', 'menu-entry measure');
+  entry.id = dish.id;
+  const body = element('div', 'dish-body');
+  const heading = element('h2', 'dish-heading');
+  const number = dishLink(dish, dish.number);
+  number.className = 'dish-number';
+  number.setAttribute('aria-label', 'Enquire about dish ' + dish.number);
+  heading.append(number);
+  const name = element('p', 'dish-name', dish.name);
+  const ingredients = element('p', 'ingredients', dish.ingredients);
+  ingredients.setAttribute('aria-label', 'Possible deliverables: ' + dish.ingredients);
+  const price = dishLink(dish, '');
+  price.className = 'dish-price';
+  price.append(element('span', '', dish.price));
+  if (dish.timing) price.append(element('span', 'dish-timing', dish.timing));
+  if (revealWords[dish.id]) addDeliverablesReveal(dish, name, ingredients);
+  body.append(heading, name, ingredients, price);
+  entry.append(body);
+  $('menu-items').append(entry);
+  textObserver?.observe(body);
+  const jump = element('a', '', dish.number);
+  jump.href = '#' + dish.id;
+  jump.setAttribute('aria-label', dish.number + ': ' + dish.name);
+  jump.addEventListener('click', event => {
+    event.preventDefault();
+    history.replaceState(null, '', '#' + dish.id);
+    body.scrollIntoView({ behavior: reducedMotion.matches ? 'instant' : 'smooth', block: 'center' });
+  });
+  menuIndex.append(jump);
+}
+$('menu-view').append(menuIndex);
+const packageNote = element('section', 'menu-entry package-note measure');
+packageNote.id = 'prix-fixe';
+packageNote.append(element('h2', '', 'Prix fixe'), element('p', '', 'Sample package to follow.'));
+const packageContact = element('a', 'text-link', 'Enquire');
+packageContact.href = 'mailto:niojin.noi@gmail.com?subject=Prix%20fixe%20project%20enquiry';
+packageNote.append(packageContact);
+$('menu-items').append(packageNote);
+
+let indexScheduled = false;
+function updateMenuIndex() {
+  indexScheduled = false;
+  updateReviewScale();
+  const entries = menu.map(dish => $(dish.id).querySelector('.dish-body'));
+  const nearest = entries.reduce((best, node) => Math.abs(node.getBoundingClientRect().top - innerHeight / 3) < Math.abs(best.getBoundingClientRect().top - innerHeight / 3) ? node : best);
+  menuIndex.classList.toggle('is-visible', $('menu-items').getBoundingClientRect().top < innerHeight * .85);
+  [...menuIndex.children].forEach((link, index) => {
+    if (entries[index] === nearest) link.setAttribute('aria-current', 'location');
+    else link.removeAttribute('aria-current');
+  });
+}
+addEventListener('scroll', () => {
+  if (!indexScheduled) { indexScheduled = true; requestAnimationFrame(updateMenuIndex); }
+}, { passive: true });
+updateMenuIndex();
+
+function caseFor(id, dish) {
+  const edit = edits[id];
+  const source = projects.get(edit.source || id);
+  const project = { ...source, ...edit, sourceId: source.id };
+  if (id === 'devil-return') project.description = 'An identity and promotional campaign for an exclusive comet return event, carried through its invitations, tickets and public material.';
+  if (id === 'echoes') project.description = 'New York manhole covers take a new form through a visual identity that connects their patterns with Fulu talismans.';
+  if (id === 'pcell' && dish.id === 'audience-participation') {
+    project.description = 'Hand gestures reshape a field of points, giving visitors something they can play with, capture and share.';
+    project.mediaIndices = [0];
+  } else {
+    project.mediaIndices = edit.media;
+  }
+  project.items = project.mediaIndices.map(index => source.media[index]);
+  return project;
+}
+
+function reviewEntries() {
+  const grouped = new Map();
+  for (const dish of menu) {
+    for (const id of dish.projects) {
+      if (!grouped.has(id)) grouped.set(id, { dish, dishes: [], project: caseFor(id, dish) });
+      grouped.get(id).dishes.push(dish);
+    }
+  }
+  const order = ['devil-return', 'pcell', 'echoes', 'lost-horizon', 'gala', 'the-one', 'deep-learning'];
+  const entries = order.map(id => grouped.get(id)).filter(Boolean);
+  const music = entries.find(entry => entry.project.sourceId === 'music');
+  if (music) {
+    music.project.title = 'Music visuals';
+    music.project.items = projects.get('music').media.slice(1);
+  }
+  return entries;
+}
+const reviews = reviewEntries();
+const nextCursor = element('span', 'asset-next-cursor', 'next');
+nextCursor.hidden = true;
+nextCursor.setAttribute('aria-hidden', 'true');
+document.body.append(nextCursor);
+addEventListener('scroll', () => { nextCursor.hidden = true; }, {passive:true});
+const reviewNotes = {
+  'devil-return': {
+    field: 'Events', delivered: '3 formats: posters, mailed tickets, film',
+    opening: 'An exclusive event begins with the invitation.',
+    approach: 'A mailed invitation and ticket establish a personal connection before guests arrive. The same visual identity carries into the posters and film, making each encounter recognisably part of the event.'
+  },
+  pcell: {
+    field: 'Typography and interaction', delivered: '1 typeface, 1 hand-responsive experience',
+    opening: 'A typeface becomes a world you can touch.',
+    approach: 'Benzene-ring ambigrams give the letterforms their structure. That structure extends into a field of points that responds to hand gestures, letting the audience reshape the visual language.'
+  },
+  echoes: {
+    field: 'Everyday objects', delivered: '1 publication, 1 mobile website',
+    opening: 'A second look at what lies underfoot.',
+    approach: 'The patterns on New York manhole covers become the starting point. Their connection with Fulu talismans gives the publication and mobile website a shared visual language, inviting readers to look again at a familiar object.'
+  },
+  'lost-horizon': {
+    field: 'Storytelling', delivered: '1 printed dossier, 1 interactive digital archive',
+    opening: 'A story discovered through its evidence.',
+    approach: 'The dossier gives readers something to examine. Clues on the page unlock the digital archive, so moving between physical evidence and the screen becomes part of piecing the story together.'
+  },
+  gala: {
+    field: 'Music visuals', delivered: '1 live visual performance for 1 track',
+    opening: 'The performance follows the track in real time.',
+    approach: 'Visuals for XG’s GALA were operated by hand at Volvox Labs. Real-time control lets changes on screen follow the track as it unfolds.'
+  },
+  'the-one': {
+    field: 'Installation', delivered: '1 responsive installation, 1 publication',
+    opening: 'The audience changes what happens in the room.',
+    approach: 'Participants shape the installation’s sound and light. A companion book translates the experience into images, ink and transcripts, carrying it into a form that can be revisited.'
+  },
+  music: {
+    field: 'Music visuals', delivered: '8 visual works for 8 tracks',
+    opening: 'Each track sets its own pace.',
+    approach: 'Visual sequences for tracks by BLASÉ, CRO, Sophie Powers and others take their timing from the music. Rhythm, tension and atmosphere guide the movement and cuts.'
+  }
+};
+let routeKey = '';
+const positions = new Map();
+history.scrollRestoration = 'manual';
+
+function courseLabels(dishes, key) {
+  const ordered = element('p', 'review-meta-line', 'Ordered ');
+  const courseNames = element('div', 'ordered-course-names');
+  dishes.forEach((dish, index) => {
+    if (index) ordered.append(document.createTextNode(', '));
+    const number = element('button', 'ordered-number', dish.number);
+    number.type = 'button';
+    number.insertAdjacentHTML('beforeend', '<svg class="hand-mark" viewBox="0 0 120 42" aria-hidden="true"><path d="M4 9 C24 13 70 10 99 6 C109 4 114 8 108 12 C94 20 72 20 67 27 C63 31 62 35 64 39" pathLength="1"/></svg>');
+    number.setAttribute('aria-expanded', 'false');
+    number.setAttribute('aria-controls', 'ordered-' + key + '-' + dish.id);
+    const name = element('p', 'ordered-course-name', dish.name);
+    name.id = 'ordered-' + key + '-' + dish.id;
+    name.hidden = true;
+    number.addEventListener('click', () => {
+    const open = number.getAttribute('aria-expanded') !== 'true';
+    number.setAttribute('aria-expanded', String(open));
+    name.hidden = !open;
+    if (open && !reducedMotion.matches) name.animate([{opacity:0,clipPath:'inset(0 100% 0 0)'},{opacity:1,clipPath:'inset(0 0 0 0)'}],{duration:900,easing:'ease-out'});
+    });
+    ordered.append(number);
+    courseNames.append(name);
+  });
+  return { ordered, courseNames };
+}
+
+function renderReviews() {
+  const view = $('reviews-view');
+  if (view.dataset.loaded) return;
+  const overall = element('header', 'opening reviews-overall');
+  const openingCopy = element('div', 'measure');
+  openingCopy.append(element('h1', '', 'Reviews'), element('p', '', 'A look at what came out of the kitchen. Each project brings together its own selection from the menu.'));
+  overall.append(openingCopy);
+  view.append(overall);
+  const rail = element('div', 'reviews-rail');
+  const track = element('div', 'reviews-track');
+  const viewport = element('div', 'reviews-viewport');
+  viewport.append(track);
+  rail.append(viewport);
+  view.append(rail);
+  for (const { dishes, project } of reviews) {
+    const entry = element('article', 'review-entry');
+    entry.id = 'review-' + project.sourceId;
+    const notes = reviewNotes[project.sourceId];
+    const copy = element('div', 'review-copy');
+    const title = element('h2', 'review-project-title', project.title);
+    const { ordered, courseNames } = courseLabels(dishes, project.sourceId);
+    copy.append(ordered, courseNames, element('p', 'review-field', notes.field));
+    copy.append(element('p', 'review-deliveries', notes.delivered));
+    const analysis = element('div', 'review-analysis');
+    analysis.append(element('p', 'review-opening-note', notes.opening), element('p', '', notes.approach));
+    copy.append(analysis);
+    const media = element('div', 'review-images');
+    const items = project.items;
+    const assetLabel = project.sourceId === 'music' ? element('p', 'review-asset-caption') : null;
+    if (assetLabel) copy.prepend(assetLabel);
+    const slides = items.map(item => makeMedia(item, project, items.length > 1 ? project.title + ': ' + item.label.replace(/simulation/gi, 'experience') : project.title));
+    let selected = 0;
+    const show = () => {
+      if (assetLabel) assetLabel.textContent = items[selected].label;
+      slides.forEach((slide, index) => {
+        const active = index === selected;
+        slide.classList.toggle('is-active', active);
+        slide.inert = !active;
+        slide.setAttribute('aria-hidden', String(!active));
+      });
+    };
+    const select = index => {
+      slides[selected].querySelector('video')?.pause();
+      selected = index;
+      show();
+    };
+    slides.forEach((slide, index) => {
+      if (slides.length > 1) {
+        const surface = slide.querySelector('img, video');
+        if (surface) {
+          surface.classList.add('next-asset-surface');
+          surface.tabIndex = 0;
+          surface.setAttribute('role', 'button');
+          surface.setAttribute('aria-label', 'Next asset for ' + project.title);
+          surface.addEventListener('click', () => select((selected + 1) % slides.length));
+          surface.addEventListener('keydown', event => {
+            if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); select((selected + 1) % slides.length); }
+          });
+
+        }
+      }
+      media.append(slide);
+    });
+    media.addEventListener('pointermove', event => {
+      nextCursor.hidden = event.pointerType !== 'mouse' || !event.target.closest('.next-asset-surface');
+      nextCursor.style.left = event.clientX + 'px';
+      nextCursor.style.top = event.clientY + 'px';
+    });
+    media.addEventListener('pointerleave', () => { nextCursor.hidden = true; });
+    show();
+    const courseHeader = element('div', 'review-course-heading');
+    for (const dish of dishes) {
+      const heading = element('div', 'review-course-label');
+      heading.append(element('span', 'course-code', dish.number), element('span', 'course-title', dish.name));
+      courseHeader.append(heading);
+    }
+    copy.prepend(title);
+    entry.append(courseHeader, media, copy);
+    if (reviewLayout === 'c') textObserver?.observe(copy);
+    track.append(entry);
+
+  }
+  if (reviewLayout === 'b') mountReviewGroups(view, overall, rail, track);
+  const close = element('a', 'text-link reviews-end', 'Back to menu');
+  close.href = '#menu';
+  view.append(close);
+  view.dataset.loaded = 'true';
+}
+
+let reviewGroups = null;
+function mountReviewGroups(view, overall, rail, track) {
+  const originalPanels = new Map(reviews.map(entry => [entry.project.sourceId, $('review-' + entry.project.sourceId)]));
+  const index = element('nav', 'review-group-index');
+  index.setAttribute('aria-label', 'Review index');
+  index.append(element('h2', '', 'On the table'));
+  const choices = new Map();
+  const music = reviews.find(entry => entry.project.sourceId === 'music');
+  const musicCards = music.project.items.map((item, i) => {
+    const panel = element('article', 'review-entry');
+    panel.id = 'review-music-track-' + i;
+    const title = element('h2', 'review-project-title', item.label);
+    const media = element('div', 'review-images');
+    const figure = makeMedia(item, music.project, item.label);
+    figure.classList.add('is-active');
+    media.append(figure);
+    const copy = element('div', 'review-copy');
+    const { ordered, courseNames } = courseLabels(music.dishes, 'music-track-' + i);
+    const analysis = element('div', 'review-analysis');
+    analysis.append(element('p', 'review-opening-note', reviewNotes.music.opening), element('p', '', reviewNotes.music.approach));
+    copy.append(title, ordered, courseNames, element('p', 'review-deliveries', '1 visual work for 1 track'), analysis);
+    panel.append(media, copy);
+    return panel;
+  });
+  const back = element('button', 'text-link group-back', 'Back to index');
+  back.type = 'button';
+  back.hidden = true;
+  const courseHeading = element('div', 'active-course-heading');
+  courseHeading.hidden = true;
+  rail.hidden = true;
+  const showIndex = () => {
+    document.querySelectorAll('video').forEach(video => video.pause());
+    overall.hidden = false;
+    index.hidden = false;
+    rail.hidden = true;
+    back.hidden = true;
+    courseHeading.hidden = true;
+    reviewGroups.active = false;
+    window.scrollTo({top:index.getBoundingClientRect().top + scrollY, behavior:'instant'});
+    choices.get(reviewGroups.current)?.focus({preventScroll:true});
+  };
+  back.addEventListener('click', showIndex);
+  const open = (entry, requestedCourse) => {
+    const course = entry.dishes.some(dish => dish.number === requestedCourse) ? requestedCourse : entry.dishes[entry.dishes.length - 1].number;
+    const group = reviews.filter(candidate => candidate.dishes.some(dish => dish.number === course));
+    const start = group.indexOf(entry);
+    const sequence = [...group.slice(start), ...group.slice(0, start)];
+    const panels = sequence.flatMap(candidate => candidate.project.sourceId === 'music' ? musicCards : [originalPanels.get(candidate.project.sourceId)]);
+    document.querySelectorAll('video').forEach(video => video.pause());
+    track.replaceChildren(...panels);
+    panels.forEach(panel => {
+      panel.addEventListener('focusin', () => {
+        if (reviewGroups.active) window.scrollTo({top:rail.getBoundingClientRect().top + scrollY + panel.offsetLeft, behavior:'instant'});
+      }, {once:true});
+    });
+    overall.hidden = true;
+    index.hidden = true;
+    rail.hidden = false;
+    back.hidden = false;
+    reviewGroups.active = true;
+    reviewGroups.current = course;
+    const dish = menu.find(dish => dish.number === course);
+    courseHeading.replaceChildren(element('span', 'course-code', course), element('span', 'course-title', dish.name));
+    courseHeading.hidden = false;
+    track.style.transform = 'translateX(0px)';
+    updateReviewScale();
+    window.scrollTo({top:0, behavior:'instant'});
+    if (!reducedMotion.matches) rail.animate([{opacity:0,transform:'translateX(15vw)'},{opacity:1,transform:'translateX(0)'}],{duration:700,easing:'cubic-bezier(.22,.61,.36,1)'});
+  };
+  menu.filter(dish => dish.projects.length).forEach(dish => {
+    const row = element('div', 'review-group-choice');
+    const choice = element('button', 'review-group-project');
+    choice.type = 'button';
+    choice.append(element('span', 'index-course-code', dish.number), element('span', '', dish.name));
+    choice.addEventListener('click', () => {
+      const entry = dish.number === 'IV' ? music : reviews.find(candidate => candidate.dishes.some(course => course.number === dish.number));
+      open(entry, dish.number);
+    });
+    choices.set(dish.number, choice);
+    row.append(choice);
+    index.append(row);
+  });
+  view.insertBefore(index, rail);
+  view.append(back, courseHeading);
+  reviewGroups = { open, active:false, current:null };
+}
+
+// A panel grows towards the viewport centre and recedes as it passes it.
+// Its centre is unchanged by a centre-origin transform, avoiding layout feedback.
+function updateReviewScale() {
+  if ($('reviews-view').hidden) return;
+  if (reviewLayout === 'b') {
+    if (!reviewGroups?.active) return;
+    const rail = document.querySelector('.reviews-rail');
+    const track = document.querySelector('.reviews-track');
+    if (!rail || !track) return;
+    const travel = Math.max(0, track.scrollWidth - rail.clientWidth);
+    rail.style.height = (innerHeight + travel) + 'px';
+    const progress = Math.min(travel, Math.max(0, -rail.getBoundingClientRect().top));
+    track.style.transform = 'translateX(' + -progress + 'px)';
+    track.querySelectorAll('.review-entry').forEach(panel => {
+      const proximity = Math.max(0, 1 - Math.abs(panel.offsetLeft - progress) / innerWidth);
+      const media = panel.querySelector('.review-images');
+      const copy = panel.querySelector('.review-copy');
+      media.style.transform = 'scale(' + (reducedMotion.matches ? 1 : .95 + .15 * proximity).toFixed(5) + ')';
+      copy.style.filter = reducedMotion.matches ? 'none' : 'blur(' + (4 * (1 - proximity)).toFixed(2) + 'px)';
+      copy.style.opacity = reducedMotion.matches ? '1' : String(.35 + .65 * proximity);
+    });
     return;
   }
-  try {
-    await video.play();
-  } catch (error) {
-    if (video.isConnected && error.name !== 'AbortError') videoToggle.textContent = 'Retry video playback';
-  }
-});
-
-videoToggle.addEventListener('keydown', event => {
-  if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
-  const video = $('case-media').querySelector('video');
-  if (!video || !Number.isFinite(video.duration)) return;
-  event.preventDefault();
-  const delta = event.key === 'ArrowLeft' ? -5 : 5;
-  video.currentTime = Math.min(video.duration, Math.max(0, video.currentTime + delta));
-});
-
-function stepMedia(delta) {
-  if (closing) return;
-  const count = currentCase.media.length;
-  showMedia((mediaIndex + delta + count) % count, delta);
+  document.querySelectorAll('.review-entry').forEach(entry => {
+    const bounds = entry.getBoundingClientRect();
+    const distance = Math.abs(bounds.top + bounds.height / 2 - innerHeight / 2);
+    const proximity = Math.max(0, 1 - distance / (innerHeight * .7));
+    const scale = reducedMotion.matches ? 1 : .95 + .15 * proximity;
+    entry.style.transform = 'scale(' + scale.toFixed(5) + ')';
+  });
 }
-$('case-prev').addEventListener('click', () => stepMedia(-1));
-$('case-next').addEventListener('click', () => stepMedia(1));
+addEventListener('resize', () => requestAnimationFrame(updateReviewScale));
+reducedMotion.addEventListener('change', () => requestAnimationFrame(updateReviewScale));
 
-let swipeStart;
-$('case-media').addEventListener('pointerdown', event => {
-  if (event.pointerType !== 'touch' || !event.isPrimary || !event.target.matches('img')) return;
-  swipeStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
-});
-$('case-media').addEventListener('pointercancel', () => { swipeStart = null; });
-$('case-media').addEventListener('pointerup', event => {
-  if (swipeStart?.id !== event.pointerId) return;
-  const dx = event.clientX - swipeStart.x;
-  const dy = event.clientY - swipeStart.y;
-  swipeStart = null;
-  if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy) * 1.5) stepMedia(dx < 0 ? 1 : -1);
-});
-
-async function closeCase() {
-  if (closing) return;
-  closing = true;
-  $('case-media').querySelector('video')?.pause();
-  const opacity = getComputedStyle(dialog).opacity;
-  dialogAnimation?.cancel();
-  const exit = animate(dialog, [
-    { opacity, transform: 'none' },
-    { opacity: 0, transform: 'translateY(16px)' }
-  ], { duration: 365, fill: 'forwards' });
-  if (exit) await exit.finished;
-  dialog.close();
-  exit?.cancel();
-  $('case-media').replaceChildren();
-  closing = false;
-  previousFocus?.focus({ preventScroll: true });
+function renderGallery() {
+  const view = $('gallery-view');
+  if (view.dataset.loaded) return;
+  const seen = new Set();
+  for (const { dish, project } of reviews) {
+    if (seen.has(project.id)) continue;
+    seen.add(project.id);
+    const entry = element('article', 'gallery-entry');
+    const item = project.items[0];
+    entry.append(makeMedia(item, project, project.title));
+    const link = element('a', 'text-link', project.title);
+    link.href = '#reviews/' + dish.number + '/' + project.id;
+    entry.append(link);
+    view.append(entry);
+  }
+  view.dataset.loaded = 'true';
 }
 
-dialog.querySelectorAll('[data-close-case]').forEach(button => button.addEventListener('click', closeCase));
-dialog.addEventListener('cancel', event => {
-  event.preventDefault();
-  closeCase();
-});
-$('copy-email').addEventListener('click', async () => {
-  try {
-    await navigator.clipboard.writeText(emailAddress);
-    $('copy-status').textContent = 'Email address copied.';
-    $('copy-email').textContent = 'Address copied';
-    $('email').textContent = emailLabel;
-  } catch {
-    $('copy-status').textContent = 'Couldn’t copy. Select the email address to copy it.';
-    $('copy-email').textContent = 'Retry copy';
-    $('email').textContent = emailAddress;
+function navigate() {
+  if (routeKey) positions.set(routeKey, window.scrollY);
+  document.querySelectorAll('video').forEach(video => video.pause());
+  const parts = location.hash.slice(1).split('/');
+  const name = ['reviews', 'about', 'gallery'].includes(parts[0]) ? parts[0] : 'menu';
+  const nextKey = name === 'reviews' ? parts.join('/') : name;
+  for (const view of ['menu', 'reviews', 'about', 'gallery']) $(view + '-view').hidden = view !== name;
+  document.querySelectorAll('[data-view]').forEach(link => {
+    if (link.dataset.view === name) link.setAttribute('aria-current', 'page');
+    else link.removeAttribute('aria-current');
+  });
+  if (name === 'reviews') {
+    renderReviews();
   }
-  animate($('copy-email'), [{ opacity: 0, transform: 'translateY(4px)' }, { opacity: 1, transform: 'none' }], { duration: 280 });
-});
-
+  if (name === 'gallery') renderGallery();
+  const legacy = parts[0] === 'temporary-support' || parts[0] === 'design-partner' ? 'regular' : parts[0];
+  const targetDish = name === 'menu' && menu.some(dish => dish.id === legacy) ? $(legacy) : null;
+  document.title = name[0].toUpperCase() + name.slice(1) + ' | Nio Jin';
+  routeKey = nextKey;
+  const reviewTarget = name === 'reviews' && parts[2] ? reviews.find(entry => entry.project.id === parts[2] && entry.dishes.some(dish => dish.number === parts[1])) || reviews.find(entry => entry.project.id === parts[2]) : null;
+  if (reviewTarget) {
+    const entry = $('review-' + reviewTarget.project.sourceId);
+    if (reviewLayout === 'b') {
+      reviewGroups.open(reviewTarget, parts[1]);
+    } else entry.scrollIntoView({ block: 'center', behavior: 'instant' });
+  }
+  else if (targetDish) targetDish.querySelector('h2').scrollIntoView({ block: 'center', behavior: 'instant' });
+  else window.scrollTo({ top: positions.get(nextKey) || 0, behavior: 'instant' });
+  requestAnimationFrame(updateReviewScale);
+}
+window.addEventListener('hashchange', navigate);
+navigate();

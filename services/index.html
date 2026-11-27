@@ -3,64 +3,65 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Design services for fictional worlds, visual identities, music and audience participation.">
-  <title>Design Services &amp; Selected Work | Nio Jin</title>
+  <meta name="description" content="A menu of art, design and interactive experiences by Nio Jin, with selected work and project enquiries.">
+  <title>Menu | Nio Jin</title>
   <link rel="canonical" href="https://niojin.com/services/">
-  <link rel="stylesheet" href="site.css">
+  <link rel="stylesheet" href="site.css?v=cloth-menu-18">
   <script src="../design/projects.js" defer></script>
-  <script src="site.js" defer></script>
+  <script src="site.js?v=cloth-menu-18" defer></script>
 </head>
 <body>
+  <nav class="site-nav" aria-label="Main navigation">
+    <a class="signature" href="#menu">Nio Jin</a>
+    <a href="#menu" data-view="menu">Menu</a>
+    <a href="#reviews" data-view="reviews">Reviews</a>
+    <a href="#about" data-view="about">About</a>
+    <a href="#gallery" data-view="gallery">Gallery</a>
+    <a href="mailto:niojin.noi@gmail.com?subject=Project%20enquiry">Contact</a>
+  </nav>
   <main>
-    <header class="opening" aria-labelledby="commission-title">
-      <div class="opening-copy" id="site-intro">
-        <h1 id="commission-title">What do you want your audience to see, remember or do?</h1>
-        <p class="opening-service">Make a fictional world feel real, get people to look twice at a product, give a track a visual identity, or turn viewers into participants.</p>
-      </div>
-    </header>
-    <div id="stories"></div>
-    <section class="inquiry measure" id="inquiry" aria-labelledby="inquiry-title">
-      <h2 id="inquiry-title">Discuss a project</h2>
-      <div class="inquiry-actions">
-        <a class="text-link" id="email" href="mailto:niojin.noi@gmail.com?subject=Design%20project%20inquiry">Email Nio Jin</a>
-        <button class="text-link" id="copy-email" type="button">Copy address</button>
-      </div>
-      <p class="visually-hidden" id="copy-status" role="status"></p>
-    </section>
-  </main>
-
-  <dialog id="direction-dialog" aria-label="Design services">
-    <div class="direction-sheet">
-      <button class="text-link" id="direction-close" type="button" autofocus>Close</button>
-      <nav class="direction-options" id="direction-options" aria-label="Project directions"></nav>
-    </div>
-  </dialog>
-
-  <dialog id="case-dialog" aria-labelledby="case-title">
-    <div class="case-bar">
-      <button id="case-close" type="button" data-close-case autofocus>Back to the story</button>
-    </div>
-    <article class="case-body">
-      <header class="case-copy measure">
-        <h2 id="case-title"><a id="case-full"></a></h2>
-        <div class="case-note">
-          <button class="text-link" id="case-note-toggle" type="button" aria-controls="case-text" aria-expanded="false">About this work</button>
-          <p id="case-text" tabindex="-1" hidden></p>
+    <section id="menu-view" aria-label="Menu">
+      <header class="opening">
+        <div class="measure">
+          <h1>Give your project another way to reach people.</h1>
+          <p>Art, design and interaction, à la carte.</p>
         </div>
       </header>
-      <figure class="case-figure">
-        <div class="case-media" id="case-media"></div>
-        <figcaption class="case-caption">
-          <p class="visually-hidden" id="media-label" aria-live="polite"></p>
-          <button class="text-link" id="case-video-toggle" type="button" aria-keyshortcuts="ArrowLeft ArrowRight" hidden>Play video</button>
-          <div id="case-controls">
-            <button type="button" id="case-prev" aria-label="Previous media">Previous</button>
-            <button type="button" id="case-next" aria-label="Next media">Next</button>
+      <div id="menu-items"></div>
+    </section>
+    <section id="reviews-view" aria-label="Reviews" hidden></section>
+    <section id="about-view" aria-label="About" hidden>
+      <div class="about-story">
+        <section class="story-page">
+          <div class="story-copy measure">
+            <h1>Nio Jin</h1>
+            <p>After graduating with honors from Parsons School of Design, Nio Jin followed her questions about design into an AI startup.</p>
           </div>
-          <button class="text-link" id="case-return" type="button" data-close-case>Back to the story</button>
-        </figcaption>
-      </figure>
-    </article>
-  </dialog>
+        </section>
+        <section class="story-page">
+          <div class="story-copy measure">
+            <p>What began as a website audit became a firsthand encounter with AI’s possibilities, its blind spots, and the judgment design still demands.</p>
+          </div>
+        </section>
+        <section class="story-page">
+          <div class="story-copy measure">
+            <p>A three-hour conversation at a meetup opened another path, through a cognitive science conference and into a perception lab.</p>
+          </div>
+        </section>
+        <section class="story-page">
+          <div class="story-copy measure">
+            <p>Contributing technical support and joining its discussions gave her new ways to think about how people see and make sense of things.</p>
+          </div>
+        </section>
+        <section class="story-page">
+          <div class="story-copy measure">
+            <p>She brings these perspectives back into design.</p>
+            <p>Technology, perception and visual practice inform one another, shaping how she approaches each project.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+    <section id="gallery-view" aria-label="Gallery" hidden></section>
+  </main>
 </body>
 </html>
