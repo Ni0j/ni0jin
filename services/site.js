@@ -146,10 +146,8 @@ function addDeliverablesReveal(dish, name, ingredients) {
   const word = revealWords[dish.id];
   const offset = dish.name.indexOf(word);
   name.textContent = '';
-  const trigger = element('button', 'objects-trigger', word);
-  trigger.type = 'button';
-  trigger.setAttribute('aria-expanded', 'false');
-  trigger.setAttribute('aria-controls', dish.id + '-deliverables');
+  const trigger = element('span', 'objects-trigger', word);
+  trigger.dataset.revealed = 'false';
   name.append(document.createTextNode(dish.name.slice(0, offset)), trigger, document.createTextNode(dish.name.slice(offset + word.length)));
   ingredients.id = dish.id + '-deliverables';
   ingredients.classList.add('objects-deliverables');
@@ -159,7 +157,7 @@ function addDeliverablesReveal(dish, name, ingredients) {
   svg.setAttribute('aria-hidden', 'true');
   svg.classList.add('hand-mark');
   const path = document.createElementNS(svg.namespaceURI, 'path');
-  path.setAttribute('d', 'M4 9 C24 13 70 10 99 6 C109 4 114 8 108 12 C94 20 72 20 67 27 C63 31 62 35 64 39');
+  path.setAttribute('d', 'M7 12 C-5 -2 112 -7 116 10 C122 28 -8 30 3 10 C10 1 101 -3 112 8 M63 25 C78 29 66 34 65 40');
   path.setAttribute('pathLength', '1');
   svg.append(path);
   trigger.append(svg);
@@ -167,10 +165,11 @@ function addDeliverablesReveal(dish, name, ingredients) {
   const reveal = () => {
     if (opened) return;
     opened = true;
-    trigger.setAttribute('aria-expanded', 'true');
+    trigger.dataset.revealed = 'true';
     ingredients.setAttribute('aria-hidden', 'false');
     if (reducedMotion.matches) {
       ingredients.style.opacity = '1';
+      path.style.strokeDashoffset = '0';
       return;
     }
     path.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 700, fill: 'forwards', easing: 'ease-in-out' });
@@ -179,9 +178,23 @@ function addDeliverablesReveal(dish, name, ingredients) {
       { opacity: 1, clipPath: 'inset(0 0% 0 0)' }
     ], { duration: 1300, delay: 600, easing: 'ease-out', fill: 'forwards' });
   };
-  trigger.addEventListener('pointerenter', reveal);
-  trigger.addEventListener('focus', reveal);
-  trigger.addEventListener('click', reveal);
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      for (const entry of entries) {
+        if (entry.isIntersecting && entry.intersectionRatio >= .6) reveal();
+        else if (!entry.isIntersecting) {
+          opened = false;
+          path.getAnimations().forEach(animation => animation.cancel());
+          ingredients.getAnimations().forEach(animation => animation.cancel());
+          path.style.strokeDashoffset = '1';
+          ingredients.style.opacity = '0';
+          ingredients.setAttribute('aria-hidden', 'true');
+          trigger.dataset.revealed = 'false';
+        }
+      }
+    }, { threshold: [0, .6], rootMargin: '-15% 0px -15% 0px' });
+    observer.observe(name);
+  } else reveal();
 }
 
 function makeMedia(item, project, title) {

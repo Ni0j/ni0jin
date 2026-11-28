@@ -283,3 +283,5 @@ html, body, .review-entry { scrollbar-width: none; }
 @media (max-width: 700px) {
   :root[data-review-layout="b"] .review-entry { grid-template-rows: auto auto; align-content: start; row-gap: 88px; }
 }
+
+.dish-name .objects-trigger .hand-mark { top: -.15em; height: 2em; }
