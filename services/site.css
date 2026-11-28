@@ -3,7 +3,7 @@
 @font-face { font-family: "Times Dot"; src: url("fonts/TimesDotItalic.otf") format("opentype"); font-weight: 400; font-style: italic; font-display: swap; }
 :root { color-scheme: light; --paper: #fff; --ink: #000; --edge: clamp(24px, 6vw, 96px); }
 *, *::before, *::after { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; background: var(--paper); }
 body { margin: 0; background: var(--paper); color: var(--ink); font: 18px/1.25 "Times Dot", "Times New Roman", Times, serif; text-align: center; }
 h1, h2, h3, p, figure { margin: 0; font: inherit; }
 h1, h2 { font-style: normal; font-weight: 400; }
@@ -14,7 +14,7 @@ button { color: inherit; font: inherit; background: none; border: 0; padding: 0;
 [hidden] { display: none !important; }
 .measure { width: min(calc(100% - 2 * var(--edge)), 46ch); margin-inline: auto; }
 .text-link, .site-nav a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; }
-.site-nav { position: fixed; inset: auto 0 0; z-index: 5; display: flex; align-items: center; gap: clamp(20px, 3vw, 48px); padding: 12px var(--edge) max(12px, env(safe-area-inset-bottom)); background: transparent; font-size: 18px; }
+.site-nav { position: fixed; inset: auto 0 0; z-index: 5; display: flex; align-items: center; gap: clamp(20px, 3vw, 48px); padding: 12px var(--edge) max(12px, env(safe-area-inset-bottom)); background: var(--paper); color: var(--ink); font-size: 18px; }
 .signature { margin-right: auto; }
 .site-nav [aria-current] { font-style: italic; }
 main { padding-bottom: 100px; }
@@ -49,7 +49,7 @@ main { padding-bottom: 100px; }
 @keyframes text-resolve { from { opacity: 0; filter: blur(4px); } to { opacity: 1; filter: blur(0); } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
-/* Keep the navigation blend isolated against the white page. */
+/* Keep the menu index blend isolated against the white page. */
 body { isolation: isolate; }
 
 .dish-number:is(:hover, :focus-visible) { font-style: normal; }
@@ -64,7 +64,7 @@ body { isolation: isolate; }
 .menu-index.is-visible { opacity: 1; visibility: visible; }
 .menu-index a { display: inline-flex; align-items: center; justify-content: center; min-width: 24px; min-height: 44px; opacity: .45; }
 .menu-index a[aria-current], .menu-index a:hover, .menu-index a:focus-visible { opacity: 1; font-style: normal; }
-:root[data-blend="difference"] :is(.site-nav, .menu-index) { color: white; mix-blend-mode: difference; }
+:root[data-blend="difference"] .menu-index { color: white; mix-blend-mode: difference; }
 
 @media (max-width: 700px) { .hand-mark { height: .8em; top: .8em; } }
 
@@ -283,4 +283,28 @@ html, body, .review-entry { scrollbar-width: none; }
   :root[data-review-layout="b"] .review-entry { grid-template-rows: auto auto; align-content: start; row-gap: 88px; }
 }
 
-.dish-name .objects-trigger .hand-mark { top: -.15em; height: 2em; }
+.dish-name .objects-trigger .hand-mark { top: .65em; height: 1.65em; }
+
+/* Gallery wall: an open, asymmetric hanging, separate from the menu's rhythm. */
+#gallery-view { padding: 120px 0 160px; }
+.gallery-wall { position: relative; width: min(100%, 1800px); height: min(310vw, 5580px); margin-inline: auto; }
+.gallery-wall-piece { position: absolute; left: calc(var(--x) * 1%); top: calc(var(--y) * 1% / 3.1); width: calc(var(--width) * 1%); margin: 0; }
+.gallery-wall-piece img { display: block; width: 100%; height: auto; }
+@media (max-width: 700px) {
+  #gallery-view { padding-top: 88px; }
+  .gallery-wall { height: 460vw; }
+  .gallery-wall-piece { left: calc((var(--x) * .83 + 2) * 1%); top: calc(var(--y) * 1% / 3.1); width: calc((var(--width) * 1.2) * 1%); }
+}
+
+.menu-rate-note { margin-top: 8svh; margin-bottom: 20svh; text-wrap: balance; }
+
+/* Two menu chapters, with the dishes retaining their shared numbering. */
+.menu-section-title { font-style: italic; padding-bottom: 36svh; }
+.menu-section > .menu-entry:last-child { padding-bottom: 64svh; }
+
+.site-nav [aria-disabled="true"], .site-nav [aria-disabled="true"]:hover { cursor: default; font-style: normal; }
+.dish-addon { display: block; margin-top: 16px; font-size: 18px; font-style: italic; }
+#about-view .about-story { padding-block: 16svh 20svh; }
+#about-view .about-story h1 { margin-bottom: 48px; }
+#about-view .about-story > p { text-wrap: pretty; }
+#about-view .about-story > p + p { margin-top: 40px; }

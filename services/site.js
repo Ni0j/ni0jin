@@ -7,30 +7,31 @@
 const menu = [
   {
     id: 'fictional-worlds', number: 'I',
-    name: 'Give your fictional world objects that feel real',
-    ingredients: 'Invitations, records, story objects, digital archives',
+    name: 'Give people evidence of your fictional world',
+    ingredients: 'Invitations, records, objects from the story, digital archives',
     price: '$1,600', timing: '5 working days',
     projects: ['lost-horizon', 'devil-return']
   },
   {
     id: 'visual-identity', number: 'II',
-    name: 'Give your overlooked subject a new form',
-    ingredients: 'Visual identity, publication, web presentation',
+    name: 'Give an everyday thing a distinctive identity',
+    ingredients: 'Visual identity, publications, websites',
     price: '$3,200', timing: '10 working days',
     projects: ['echoes']
   },
   {
     id: 'type-and-worlds', number: 'III',
-    name: 'Give your world its own typeface',
-    ingredients: 'Custom letterforms, font files, type specimens, pictographic scripts to decipher',
+    name: 'Give your project a typeface of its own',
+    ingredients: 'Custom letterforms, font files, type specimens. A pictographic script for readers to decipher can be commissioned too.',
     price: '$6,400', timing: '1 month',
     projects: ['pcell']
   },
   {
     id: 'music-visuals', number: 'IV',
-    name: 'Give your music an immersive visual experience',
-    ingredients: 'Release visuals, live visual sets, projected music visuals',
+    name: 'Give your music a visual identity on record and on stage',
+    ingredients: 'Release artwork, live visuals, projections',
     price: '$120',
+    priceUnit: ' / project',
     projects: ['gala', 'deep-learning']
   },
   {
@@ -42,21 +43,21 @@ const menu = [
   },
   {
     id: 'event-identity', number: 'VI',
-    name: 'Give your event its own identity and campaign',
-    ingredients: 'Event identity, invitations, tickets, campaign material',
+    name: 'Give your event a look of its own',
+    ingredients: 'Event identity, invitations, tickets, campaign materials',
     price: '$640', timing: '2–3 working days',
     projects: ['devil-return']
   },
   {
     id: 'regular', number: 'VII',
-    name: 'Regular',
-    ingredients: 'Temporary design and technical help for your project',
+    name: 'Bring in an extra pair of hands',
+    ingredients: 'Temporary design and technical support',
     price: '$40/hr',
     projects: []
   }
 ];
 // Read from finding a subject to giving audiences a way to take part.
-const menuOrder = ['visual-identity', 'type-and-worlds', 'fictional-worlds', 'music-visuals', 'event-identity', 'audience-participation', 'regular'];
+const menuOrder = ['visual-identity', 'fictional-worlds', 'type-and-worlds', 'event-identity', 'music-visuals', 'regular', 'audience-participation'];
 menu.sort((a, b) => menuOrder.indexOf(a.id) - menuOrder.indexOf(b.id));
 menu.forEach((dish, index) => { dish.number = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'][index]; });
 const edits = {
@@ -134,11 +135,11 @@ document.documentElement.dataset.blend = preview.get('blend') || 'difference';
 const reviewLayout = preview.get('layout') === 'c' || preview.get('layout') === 'a' ? 'c' : 'b';
 document.documentElement.dataset.reviewLayout = reviewLayout;
 const revealWords = {
-  'visual-identity': 'new form',
+  'visual-identity': 'identity',
   'type-and-worlds': 'typeface',
-  'fictional-worlds': 'objects',
-  'music-visuals': 'visual experience',
-  'event-identity': 'identity',
+  'fictional-worlds': 'evidence',
+  'music-visuals': 'visual identity',
+  'event-identity': 'look of its own',
   'audience-participation': 'part to play'
 };
 
@@ -157,7 +158,7 @@ function addDeliverablesReveal(dish, name, ingredients) {
   svg.setAttribute('aria-hidden', 'true');
   svg.classList.add('hand-mark');
   const path = document.createElementNS(svg.namespaceURI, 'path');
-  path.setAttribute('d', 'M7 12 C-5 -2 112 -7 116 10 C122 28 -8 30 3 10 C10 1 101 -3 112 8 M63 25 C78 29 66 34 65 40');
+  path.setAttribute('d', 'M4 9 C24 13 70 10 99 6 C109 4 114 8 108 12 C94 20 72 20 67 27 C63 31 62 35 64 39');
   path.setAttribute('pathLength', '1');
   svg.append(path);
   trigger.append(svg);
@@ -172,11 +173,11 @@ function addDeliverablesReveal(dish, name, ingredients) {
       path.style.strokeDashoffset = '0';
       return;
     }
-    path.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 700, fill: 'forwards', easing: 'ease-in-out' });
+    path.animate([{ strokeDashoffset: 1 }, { strokeDashoffset: 0 }], { duration: 900, fill: 'forwards', easing: 'ease-in-out' });
     ingredients.animate([
       { opacity: 0, clipPath: 'inset(0 100% 0 0)' },
       { opacity: 1, clipPath: 'inset(0 0% 0 0)' }
-    ], { duration: 1300, delay: 600, easing: 'ease-out', fill: 'forwards' });
+    ], { duration: 1300, delay: 950, easing: 'ease-out', fill: 'forwards' });
   };
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => {
@@ -272,6 +273,19 @@ function dishLink(dish, label) {
 
 const menuIndex = element('nav', 'menu-index');
 menuIndex.setAttribute('aria-label', 'Menu index, seven dishes');
+const menuSections = new Map();
+for (const [id, title] of [['specialities', 'House Specialties'], ['regular-menu', 'Regular']]) {
+  const section = element('section', 'menu-section');
+  section.id = id;
+  const titleNode = element('h2', 'menu-section-title measure', title);
+  titleNode.id = id + '-title';
+  section.setAttribute('aria-labelledby', titleNode.id);
+  section.append(titleNode);
+  $('menu-items').append(section);
+  menuSections.set(id, section);
+  textObserver?.observe(titleNode);
+}
+const specialityIds = new Set(['visual-identity', 'fictional-worlds']);
 for (const dish of menu) {
   const entry = element('article', 'menu-entry measure');
   entry.id = dish.id;
@@ -281,21 +295,27 @@ for (const dish of menu) {
   number.className = 'dish-number';
   number.setAttribute('aria-label', 'Enquire about dish ' + dish.number);
   heading.append(number);
+  if (dish.id === 'audience-participation') heading.append(element('span', 'dish-addon', 'Add-on'));
   const name = element('p', 'dish-name', dish.name);
   const ingredients = element('p', 'ingredients', dish.ingredients);
   ingredients.setAttribute('aria-label', 'Possible deliverables: ' + dish.ingredients);
   const price = dishLink(dish, '');
   price.className = 'dish-price';
-  price.append(element('span', '', dish.price));
-  if (dish.timing) price.append(element('span', 'dish-timing', dish.timing));
+  // All listed fees and lead times are baselines, never fixed quotes.
+  const basePrice = dish.price.startsWith('$') && dish.id !== 'regular' ? dish.price + '+' : dish.price;
+  price.append(element('span', '', basePrice + (dish.priceUnit || '')));
+  if (dish.timing) price.append(element('span', 'dish-timing', dish.timing.replace(/^(\d+(?:–\d+)?)/, '$1+')));
+  price.title = 'Base pricing and minimum lead time; confirmed with project scope.';
   if (revealWords[dish.id]) addDeliverablesReveal(dish, name, ingredients);
   body.append(heading, name, ingredients, price);
   entry.append(body);
-  $('menu-items').append(entry);
+  menuSections.get(specialityIds.has(dish.id) ? 'specialities' : 'regular-menu').append(entry);
   textObserver?.observe(body);
   const jump = element('a', '', dish.number);
   jump.href = '#' + dish.id;
-  jump.setAttribute('aria-label', dish.number + ': ' + dish.name);
+  const indexLabel = dish.number + ': ' + (dish.id === 'audience-participation' ? 'Add-on — ' : '') + dish.name;
+  jump.setAttribute('aria-label', indexLabel);
+  jump.title = indexLabel;
   jump.addEventListener('click', event => {
     event.preventDefault();
     history.replaceState(null, '', '#' + dish.id);
@@ -304,13 +324,8 @@ for (const dish of menu) {
   menuIndex.append(jump);
 }
 $('menu-view').append(menuIndex);
-const packageNote = element('section', 'menu-entry package-note measure');
-packageNote.id = 'prix-fixe';
-packageNote.append(element('h2', '', 'Prix fixe'), element('p', '', 'Sample package to follow.'));
-const packageContact = element('a', 'text-link', 'Enquire');
-packageContact.href = 'mailto:niojin.noi@gmail.com?subject=Prix%20fixe%20project%20enquiry';
-packageNote.append(packageContact);
-$('menu-items').append(packageNote);
+const rateNote = element('p', 'menu-rate-note measure', 'Base pricing · Minimum lead times · Confirmed with project scope.');
+$('menu-items').append(rateNote);
 
 let indexScheduled = false;
 function updateMenuIndex() {
@@ -319,7 +334,7 @@ function updateMenuIndex() {
   const entries = menu.map(dish => $(dish.id).querySelector('.dish-body'));
   const nearest = entries.reduce((best, node) => Math.abs(node.getBoundingClientRect().top - innerHeight / 3) < Math.abs(best.getBoundingClientRect().top - innerHeight / 3) ? node : best);
   menuIndex.classList.toggle('is-visible', $('menu-items').getBoundingClientRect().top < innerHeight * .85);
-  [...menuIndex.children].forEach((link, index) => {
+  [...menuIndex.querySelectorAll('a')].forEach((link, index) => {
     if (entries[index] === nearest) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
   });
@@ -644,29 +659,56 @@ function updateReviewScale() {
 addEventListener('resize', () => requestAnimationFrame(updateReviewScale));
 reducedMotion.addEventListener('change', () => requestAnimationFrame(updateReviewScale));
 
+// A fixed scatter keeps the wall composed and prevents images jumping on refresh.
+const galleryWall = [
+  ['book+booklet_edited.png', 'Book and booklet', 7, 0, 34],
+  ['3.png', 'Graphic study', 70, 12, 13],
+  ['IMG_8250 2.png', 'Studio photograph', 46, 48, 24],
+  ['Image_20251119_0005.jpg', 'Printed study', 9, 78, 16],
+  ['theone.png', 'The One', 60, 101, 31],
+  ['6.jpg', 'Printed Matter open call', 22, 133, 14],
+  ['book5_edited.png', 'Book detail', 5, 169, 36],
+  ['fromland_tolab.png', 'From land to lab', 70, 195, 20],
+  ['ps1.jpg', 'Publication detail', 42, 225, 17],
+  ['book5.png', 'Publication composition', 8, 264, 25]
+];
 function renderGallery() {
   const view = $('gallery-view');
   if (view.dataset.loaded) return;
-  const seen = new Set();
-  for (const { dish, project } of reviews) {
-    if (seen.has(project.id)) continue;
-    seen.add(project.id);
-    const entry = element('article', 'gallery-entry');
-    const item = project.items[0];
-    entry.append(makeMedia(item, project, project.title));
-    const link = element('a', 'text-link', project.title);
-    link.href = '#reviews/' + dish.number + '/' + project.id;
-    entry.append(link);
-    view.append(entry);
-  }
+  const wall = element('div', 'gallery-wall');
+  galleryWall.forEach(([file, description, x, y, width]) => {
+    const entry = element('figure', 'gallery-wall-piece');
+    entry.style.setProperty('--x', x);
+    entry.style.setProperty('--y', y);
+    entry.style.setProperty('--width', width);
+    const image = document.createElement('img');
+    image.src = 'assets/gallery/' + encodeURIComponent(file);
+    image.alt = description;
+    image.loading = y < 70 ? 'eager' : 'lazy';
+    image.decoding = 'async';
+    entry.append(image);
+    wall.append(entry);
+  });
+  view.append(wall);
   view.dataset.loaded = 'true';
 }
+
+// Keep the review and gallery implementations for a later release.
+const pausedViews = new Set(['reviews', 'gallery']);
+document.querySelectorAll('[data-view]').forEach(link => {
+  if (!pausedViews.has(link.dataset.view)) return;
+  link.removeAttribute('href');
+  link.setAttribute('aria-disabled', 'true');
+  link.setAttribute('role', 'link');
+  link.tabIndex = -1;
+  link.addEventListener('click', event => event.preventDefault());
+});
 
 function navigate() {
   if (routeKey) positions.set(routeKey, window.scrollY);
   document.querySelectorAll('video').forEach(video => video.pause());
   const parts = location.hash.slice(1).split('/');
-  const name = ['reviews', 'about', 'gallery'].includes(parts[0]) ? parts[0] : 'menu';
+  const name = !pausedViews.has(parts[0]) && ['reviews', 'about', 'gallery'].includes(parts[0]) ? parts[0] : 'menu';
   const nextKey = name === 'reviews' ? parts.join('/') : name;
   for (const view of ['menu', 'reviews', 'about', 'gallery']) $(view + '-view').hidden = view !== name;
   document.querySelectorAll('[data-view]').forEach(link => {
@@ -679,7 +721,7 @@ function navigate() {
   if (name === 'gallery') renderGallery();
   const legacy = parts[0] === 'temporary-support' || parts[0] === 'design-partner' ? 'regular' : parts[0];
   const targetDish = name === 'menu' && menu.some(dish => dish.id === legacy) ? $(legacy) : null;
-  document.title = name[0].toUpperCase() + name.slice(1) + ' | Nio Jin';
+  document.title = name[0].toUpperCase() + name.slice(1) + ' | N°3';
   routeKey = nextKey;
   const reviewTarget = name === 'reviews' && parts[2] ? reviews.find(entry => entry.project.id === parts[2] && entry.dishes.some(dish => dish.number === parts[1])) || reviews.find(entry => entry.project.id === parts[2]) : null;
   if (reviewTarget) {
@@ -688,9 +730,9 @@ function navigate() {
       reviewGroups.open(reviewTarget, parts[1]);
     } else entry.scrollIntoView({ block: 'center', behavior: 'instant' });
   }
-  else if (targetDish) targetDish.querySelector('h2').scrollIntoView({ block: 'center', behavior: 'instant' });
+  else if (targetDish) targetDish.querySelector('.dish-body').scrollIntoView({ block: 'center', behavior: 'instant' });
   else window.scrollTo({ top: positions.get(nextKey) || 0, behavior: 'instant' });
-  requestAnimationFrame(updateReviewScale);
+  requestAnimationFrame(updateMenuIndex);
 }
 window.addEventListener('hashchange', navigate);
 navigate();
