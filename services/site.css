@@ -49,8 +49,9 @@ main { padding-bottom: 100px; }
 @keyframes text-resolve { from { opacity: 0; filter: blur(4px); } to { opacity: 1; filter: blur(0); } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
-/* Keep the menu index blend isolated against the white page. */
+/* Keep the cloth still behind the scrolling page. */
 body { isolation: isolate; }
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; background: #e8e3d7 url("assets/bg.jpg") center / cover no-repeat; pointer-events: none; }
 
 .dish-number:is(:hover, :focus-visible) { font-style: normal; }
 
